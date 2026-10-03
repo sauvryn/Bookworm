@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#eaf0e1">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="description" content="Bookworm: raise British insects by reading books.">
+<meta name="description" content="Bookworm: raise insects by reading books.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 34 20%22%3E%3Crect x=%221%22 y=%226%22 width=%2226%22 height=%2212%22 rx=%226%22 fill=%22%23fbfbf4%22 stroke=%22%231b1b1b%22 stroke-width=%221.5%22/%3E%3Crect x=%229%22 y=%226%22 width=%223%22 height=%2212%22 fill=%22%23f2c230%22/%3E%3Ccircle cx=%2227%22 cy=%2211%22 r=%226%22 fill=%22%231b1b1b%22/%3E%3C/svg%3E">
 <title>Bookworm</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +16,7 @@
 /* Layout: a single phone-width app column, milkweed-leaf greens with monarch orange as the one accent; bottom tab bar. */
 :root{
   --bg:#eaf0e1; --surface:#fbfcf7; --surface-2:#f2f6ea; --ink:#1f2a1c; --muted:#5a6852;
-  --line:#d3dbc6; --leaf:#77a24f; --leaf-dark:#4d7631; --accent:#d4621a; --accent-soft:#fbe3cf;
+  --line:#d3dbc6; --leaf:#77a24f; --leaf-dark:#4d7631; --link:#3b6620; --accent:#d4621a; --accent-soft:#fbe3cf;
   --on-accent:#ffffff; --warn:#b5651d; --warn-soft:#f8e6d2; --danger-soft:#f6dcd6; --danger:#a63d2a;
   --ok:#3f7a3a; --ok-soft:#dcebd2; --rare:#6a3fa0; --rare-soft:#ece2f7; --ice:#2b6a8c; --ice-soft:#dcecf5; --shadow:0 6px 24px rgba(40,60,30,.10);
   --f-display:"Grandstander","Comic Neue","Trebuchet MS",system-ui,sans-serif;
@@ -25,12 +25,12 @@
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#111710; --surface:#1a2218; --surface-2:#212b1e; --ink:#e5ecd9; --muted:#9dab92;
-  --line:#2e3a2a; --leaf:#5f8c3c; --leaf-dark:#3f6427; --accent:#f08a3c; --accent-soft:#3a2516;
+  --line:#2e3a2a; --leaf:#5f8c3c; --leaf-dark:#3f6427; --link:#a9d47e; --accent:#f08a3c; --accent-soft:#3a2516;
   --on-accent:#1a0e04; --warn:#e9a35c; --warn-soft:#38291a; --danger-soft:#3b1f19; --danger:#f0937f;
   --ok:#8fcf7f; --ok-soft:#1f3320; --rare:#c9a8f0; --rare-soft:#2c2040; --ice:#8fcbea; --ice-soft:#1b2c37; --shadow:0 6px 24px rgba(0,0,0,.35); color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#111710; --surface:#1a2218; --surface-2:#212b1e; --ink:#e5ecd9; --muted:#9dab92;
-  --line:#2e3a2a; --leaf:#5f8c3c; --leaf-dark:#3f6427; --accent:#f08a3c; --accent-soft:#3a2516;
+  --line:#2e3a2a; --leaf:#5f8c3c; --leaf-dark:#3f6427; --link:#a9d47e; --accent:#f08a3c; --accent-soft:#3a2516;
   --on-accent:#1a0e04; --warn:#e9a35c; --warn-soft:#38291a; --danger-soft:#3b1f19; --danger:#f0937f;
   --ok:#8fcf7f; --ok-soft:#1f3320; --rare:#c9a8f0; --rare-soft:#2c2040; --ice:#8fcbea; --ice-soft:#1b2c37; --shadow:0 6px 24px rgba(0,0,0,.35); color-scheme:dark}
 
@@ -129,6 +129,13 @@ button:disabled{opacity:.45;cursor:not-allowed}
 
 /* collection */
 .seg{display:flex;flex-wrap:wrap;gap:4px;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:4px}
+.flag-btn{padding:6px;border-radius:10px;line-height:0;align-self:center}
+.flag{width:36px;height:18px;display:block;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.15)}
+.opt.country{flex-direction:row;align-items:center;gap:12px}
+.opt.country span{display:flex;flex-direction:column}
+.opt.country .flag{width:48px;height:24px;flex:none}
+.seg.two{display:grid;grid-template-columns:1fr 1fr}
+.field-label{font-size:14px;font-weight:700}
 .seg button{flex:1 1 auto;border:0;background:transparent;color:var(--muted);padding:8px 10px;white-space:nowrap;font-size:14px}
 .seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .coll-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
@@ -142,6 +149,9 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px}
 .kv dt{color:var(--muted)}
 .kv dd{margin:0;min-width:0}
+.links{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.links a{color:var(--link);overflow-wrap:anywhere}
+.learn{border-top:1px solid var(--line);padding-top:12px}
 .facts{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px}
 
 /* tabs */
@@ -197,6 +207,9 @@ details.tools .in{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .season-key{color:var(--ok);display:inline-flex;vertical-align:-2px}
 .ms-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
 #mc-season:empty{display:none}
+.ach-h{display:flex;align-items:center;gap:8px}
+.ach-flag{display:inline-flex;vertical-align:-3px;margin-right:6px}
+.ach-flag .flag{width:22px;height:11px}
 .ach-list{display:flex;flex-direction:column;gap:8px}
 .ach{display:grid;grid-template-columns:52px minmax(0,1fr);gap:12px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2)}
 .ach-medal{color:var(--line);display:flex}
@@ -248,8 +261,9 @@ details.tools .in{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
         <svg viewBox="0 0 34 20" aria-hidden="true"><rect x="1" y="6" width="26" height="12" rx="6" fill="#fbfbf4" stroke="#1b1b1b" stroke-width="1.5"/><rect x="6" y="6" width="3" height="12" fill="#1b1b1b"/><rect x="12" y="6" width="3" height="12" fill="#f2c230"/><rect x="18" y="6" width="3" height="12" fill="#1b1b1b"/><circle cx="27" cy="11" r="6" fill="#1b1b1b"/><circle cx="29" cy="10" r="1.4" fill="#fff"/><path d="M24 6 Q22 1 19 1" stroke="#1b1b1b" stroke-width="1.5" fill="none"/></svg>
         Bookworm
       </div>
-      <div class="sub">Prototype · up to 5 books at once · 197 British species</div>
+      <div class="sub" id="sub">Prototype · up to 5 books at once</div>
     </div>
+    <button type="button" class="flag-btn" id="flag-btn" aria-haspopup="dialog"></button>
   </header>
 
   <!-- SHELF -->
@@ -375,12 +389,15 @@ details.tools .in{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
   <!-- COLLECTION -->
   <section id="screen-ach" hidden>
     <div class="card">
-      <div class="stat-line">
-        <h2>Achievements</h2>
-        <span class="chip mono" id="ach-count"></span>
-      </div>
+      <h2>Achievements</h2>
       <p class="muted small">Raise every species in a category to complete its achievement. Only species raised from your books count, not sightings.</p>
+      <div class="stat-line"><h3 class="ach-h" id="ach-country-h"></h3><span class="chip mono" id="ach-count"></span></div>
       <div class="ach-list" id="ach-list"></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="stat-line"><h3>Meta achievements</h3><span class="chip mono" id="meta-count"></span></div>
+      <p class="muted small">These are the same in every country. Each one counts the whole collection for its country.</p>
+      <div class="ach-list" id="meta-list"></div>
     </div>
   </section>
 
@@ -430,6 +447,10 @@ details.tools .in{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="me-h">
     <h2 id="me-h">Edit book</h2>
     <form id="edit-form" class="stack" autocomplete="off">
+      <div class="stack" style="gap:6px"><span class="field-label">Track progress by</span>
+        <div class="seg two" role="group" aria-label="Track progress by"><button type="button" id="e-mode-pages" aria-pressed="true">Page numbers</button><button type="button" id="e-mode-pct" aria-pressed="false">Percentage</button></div>
+        <p class="small muted" id="e-mode-note" hidden></p>
+      </div>
       <label>Title <input id="e-title" type="text" required></label>
       <label>Author <input id="e-author" type="text"></label>
       <div class="grid2">
@@ -504,8 +525,23 @@ details.tools .in{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
     <dl class="kv" id="ms-kv"></dl>
     <p class="small note" id="ms-locked">Raise one from a book to unlock its field notes.</p>
     <div id="ms-facts-wrap" class="stack"><h3>Field notes</h3><ul class="facts" id="ms-facts"></ul></div>
+    <div class="stack learn" id="ms-learn-wrap"><h3>Want To Learn More?</h3>
+      <p class="small muted">Free guides from conservation charities and public bodies. Links open in a new tab.</p>
+      <ul class="links" id="ms-learn"></ul></div>
+    <div class="stack learn" id="ms-src-wrap"><h3>Additional Sources</h3>
+      <ul class="links" id="ms-src"></ul><p class="small muted" id="ms-src-note"></p></div>
     <div id="ms-raised-wrap" class="stack"><h3>Raised from your books</h3><div id="ms-list" class="results"></div></div>
     <button type="button" class="primary" id="ms-close">Close</button>
+  </div>
+</div>
+
+<!-- Country -->
+<div class="overlay" id="m-country" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mco-h">
+    <h2 id="mco-h">Choose your country</h2>
+    <p class="small muted">Each country has its own species, books and collection. Switching keeps your progress in both.</p>
+    <div class="opts" id="country-list"></div>
+    <button type="button" class="ghost" id="mco-close">Close</button>
   </div>
 </div>
 
@@ -646,12 +682,10 @@ const SPECIES = [
 ];
 /* More butterflies from the Wildlife Trusts' British list. Same row format as moths. */
 const BFLY_ROWS = [
- ["essex-skipper","Essex Skipper","Thymelicus lineola","Hesperiidae","Common","26–30 mm",22,"Grasses such as cock's-foot and creeping soft-grass","July–August","Common in the south-east and spreading",
-  ["Tell it from the Small Skipper by its antenna tips, which are black underneath as if dipped in ink.","It wasn't recognised as a separate British species until 1889.","It spends the winter as an egg tucked inside a grass sheath."]],
  ["large-skipper","Large Skipper","Ochlodes sylvanus","Hesperiidae","Common","29–36 mm",28,"Grasses such as cock's-foot and purple moor-grass","June–August","Common in England and Wales",
   ["It rests like a little jet fighter, hindwings flat and forewings half raised.","Males perch on sunny leaves and dart out at anything that passes.","The caterpillar lives in a tube made from a grass blade folded together with silk."]],
  ["small-skipper","Small Skipper","Thymelicus sylvestris","Hesperiidae","Common","27–34 mm",22,"Mainly Yorkshire fog grass","June–August","Common in England and Wales",
-  ["Its antenna tips are orange-brown underneath, unlike the Essex Skipper's.","Caterpillars hatch in late summer and go straight into hibernation without eating.","It darts low and fast over long grass."]],
+  ["Its almost identical twin, the Essex Skipper, can only be told apart by the tips of its antennae: orange-brown underneath on the Small Skipper, black underneath on the Essex, as if dipped in ink.","Caterpillars hatch in late summer and go straight into hibernation without eating.","It darts low and fast over long grass.","The Essex Skipper wasn't recognised as a separate British species until 1889."]],
  ["dingy-skipper","Dingy Skipper","Erynnis tages","Hesperiidae","Uncommon","27–34 mm",20,"Common bird's-foot-trefoil and horseshoe vetch","May–June","Widespread but local and declining",
   ["At night it rests with its wings wrapped round a dead flowerhead, just like a moth.","It's often mistaken for a day-flying moth.","The caterpillar spends the winter rolled up in a tent of leaves."]],
  ["grizzled-skipper","Grizzled Skipper","Pyrgus malvae","Hesperiidae","Uncommon","23–29 mm",18,"Wild strawberry, agrimony and creeping cinquefoil","April–June","Local in southern England; declining",
@@ -660,8 +694,8 @@ const BFLY_ROWS = [
   ["It's Britain's only member of the metalmark family.","Males fight fiercely over small sunny patches of scrubby grassland.","Males walk on four legs, because their front pair is tiny. Females use six."]],
  ["scotch-argus","Scotch Argus","Erebia aethiops","Nymphalidae","Uncommon","35–42 mm",25,"Purple moor-grass and blue moor-grass","July–September","Widespread in Scotland; just two English sites",
   ["It flies only in sunshine and drops into the grass as soon as a cloud passes over.","In England it survives at just two sites, both in Cumbria.","Its dark wings soak up warmth in cool northern summers."]],
- ["wood-white","Wood White","Leptidea sinapis","Pieridae","Uncommon","42–48 mm",20,"Meadow vetchling, bird's-foot-trefoil and tufted vetch","May–August","Rare and declining, in scattered woodland colonies",
-  ["It has a slow, floppy flight and almost never rests with its wings open.","In courtship, the male waves his head and antennae in front of the female.","A near-identical species, the Cryptic Wood White, was only recognised in 2011."]],
+ ["wood-white","Wood White","Leptidea sinapis","Pieridae","Uncommon","42–48 mm",20,"Meadow vetchling, bird's-foot-trefoil and tufted vetch","May–August","Rare and declining in Britain; its look-alike, the Cryptic Wood White, is widespread in Northern Ireland",
+  ["It has a slow, floppy flight and almost never rests with its wings open.","In courtship, the male waves his head and antennae in front of the female.","A near-identical species, the Cryptic Wood White, was only recognised in 2011. The two can only be told apart by DNA or under a microscope.","In the UK, the Cryptic Wood White lives only in Northern Ireland."]],
  ["large-heath","Large Heath","Coenonympha tullia","Nymphalidae","Uncommon","35–40 mm",25,"Hare's-tail cottongrass","June–July","Local on wet bogs in northern Britain and Wales",
   ["It lives on wet peat bogs, where its food plant grows.","It always rests with its wings closed.","Its eyespots vary a lot from place to place, from bold rings to almost none."]],
  ["high-brown-fritillary","High Brown Fritillary","Fabriciana adippe","Nymphalidae","Rare","50–64 mm",35,"Common dog-violet and hairy violet","June–August","Endangered; very few sites remain",
@@ -818,6 +852,22 @@ const MOTH_ROWS = [
   ["It's Britain's only member of the silk moth family.","Males can pick up a female's scent from a long way off with their feathery antennae.","Each wing carries a large eyespot."]],
  ["six-spot-burnet","Six-spot Burnet","Zygaena filipendulae","Zygaenidae","Common","30–38 mm",22,"Bird's-foot-trefoil","June–August","Common in grassland",
   ["Its red spots warn that it's poisonous: it contains cyanide compounds.","It flies by day and is often seen on knapweed and thistles.","Its papery cocoon is spun high up on a grass stem."]]
+ ,["poplar-hawk-moth","Poplar Hawk-moth","Laothoe populi","Sphingidae","Common","70–100 mm",65,"Poplar, aspen and willow","May–August","Common",
+  ["At rest it holds its hindwings forward of its forewings, looking like a bunch of dead leaves.","When disturbed it flashes a rusty-red patch on its hindwings.","Adults can't feed and live for only a few days.","It's one of the commonest hawk-moths."]]
+ ,["eyed-hawk-moth","Eyed Hawk-moth","Smerinthus ocellata","Sphingidae","Common","75–95 mm",70,"Willow and apple","May–July","Common",
+  ["When threatened, it flashes big blue-and-black eyespots on its hindwings to scare off birds.","Its green caterpillar has a blue horn at the tail end.","Adults can't feed."]]
+ ,["ruby-tiger","Ruby Tiger","Phragmatobia fuliginosa","Erebidae","Common","28–34 mm",35,"Docks, dandelions and heather","April–September, in two broods","Common",
+  ["Its forewings are a rich rusty red, and its hindwings are pinkish red.","Its hairy caterpillars are often seen in autumn, wandering in search of a place to hibernate.","It can fly by day as well as at night."]]
+ ,["white-ermine","White Ermine","Spilosoma lubricipeda","Erebidae","Common","34–48 mm",45,"Many low plants","May–July","Common",
+  ["It's white with black dots, and has a yellow, black-spotted abdomen.","If attacked, it plays dead and oozes a bitter yellow fluid.","Its very hairy caterpillar is brown with a red stripe down its back.","The Buff Ermine looks similar, but is pale yellow-buff with lines of dark dots."]]
+ ,["muslin-moth","Muslin Moth","Diaphora mendica","Erebidae","Common","30–38 mm",40,"Many low plants","April–June","Common",
+  ["Unusually, males and females look different: males are grey-brown and females are white, both dotted with black.","Its thin, lightly spotted wings look like muslin cloth.","Its hairy caterpillars feed on docks, dandelions and other low plants."]]
+ ,["swallow-tailed-moth","Swallow-tailed Moth","Ourapteryx sambucaria","Geometridae","Common","40–62 mm",50,"Ivy, hawthorn and blackthorn","June–August","Common",
+  ["It's pale lemon-yellow with short tails on its hindwings, like a butterfly.","Its caterpillar looks exactly like a brown twig.","It spends the winter as a small caterpillar."]]
+ ,["white-plume-moth","White Plume Moth","Pterophorus pentadactyla","Pterophoridae","Common","26–34 mm",15,"Bindweed","May–August","Common",
+  ["Its wings are split into feathery plumes, and it rests with them held out in a T shape.","It's pure white and often comes to lit windows.","Its caterpillars feed on bindweed."]]
+ ,["burnished-brass","Burnished Brass","Diachrysia chrysitis","Noctuidae","Common","28–36 mm",35,"Nettle, mint and dead-nettles","June–September","Common",
+  ["Its wings have two broad bands of shiny metallic green-gold, like polished brass.","A near-identical species, the Cryptic Burnished Brass, was only recently told apart from it.","Its caterpillar is green with white diagonal lines."]]
 ];
 MOTH_ROWS.forEach(([id,name,sci,family,rarity,wing,len,food,season,status,facts])=>SPECIES.push({id,name,sci,family,rarity,wing,len,food,season,status,facts,kind:"moth"}));
 SPECIES.forEach(s=>{ if(!s.kind) s.kind="butterfly"; });
@@ -833,7 +883,7 @@ const BEEWASP_ROWS = [
  ["bee-wolf","Bee-wolf","Philanthus triangulum","Crabronidae","Uncommon","12–17 mm",18,"Honey bees, caught and paralysed by its mother","July–September","Once very rare; now locally common in the south",
   ["Females hunt honey bees, paralyse them with a sting and carry them home to feed their larvae.","It was a great rarity in Britain until the 1980s, then spread fast.","Mothers smear the nest with helpful bacteria that protect their cocoons from mould."],"wasp"],
  ["ivy-bee","Ivy Bee","Colletes hederae","Colletidae","Uncommon","10–13 mm",11,"Ivy pollen and nectar","September–November","A newcomer, spreading north",
-  ["It was first found in Britain in 2001, in Dorset.","It times its flight to match ivy flowering in autumn.","It nests in big groups in sandy banks and lawns."],"bee"],
+  ["It was first found in Britain in 2001, in Dorset.","It times its flight to match ivy flowering in autumn.","It nests in big groups in sandy banks and lawns.","The Heather Colletes looks very similar, but flies earlier in the year in heather country."],"bee"],
  ["buff-tailed-bumblebee","Buff-tailed Bumblebee","Bombus terrestris","Apidae","Common","11–22 mm",18,"Pollen and nectar","February–October; some colonies through winter","Very common",
   ["Queens are among the first bees out in spring.","In southern towns some colonies now keep going all winter, feeding on winter-flowering garden plants.","Queens have a buff tail, but workers' tails look white."],"bee"],
  ["hairy-footed-flower-bee","Hairy-footed Flower Bee","Anthophora plumipes","Apidae","Common","14–16 mm",14,"Pollen and nectar","February–June","Common in England and Wales",
@@ -853,13 +903,13 @@ const BEEWASP_ROWS = [
  ["white-tailed-bumblebee","White-tailed Bumblebee","Bombus lucorum","Apidae","Common","11–22 mm",18,"Pollen and nectar","March–October","Very common",
   ["It has lemon-yellow bands and a clean white tail.","It's really a group of near-identical species that need DNA tests to tell apart.","It's one of the first bumblebees to wake in spring."],"bee"],
  ["red-tailed-bumblebee","Red-tailed Bumblebee","Bombus lapidarius","Apidae","Common","11–20 mm",16,"Pollen and nectar","March–October","Very common",
-  ["Queens and workers are black with a red tail. Males also have yellow faces.","It loves yellow flowers such as bird's-foot-trefoil.","It often nests under stones and in old walls."],"bee"],
+  ["Queens and workers are black with a red tail. Males also have yellow faces.","It loves yellow flowers such as bird's-foot-trefoil.","It often nests under stones and in old walls.","The much rarer Red-shanked Carder Bee looks similar, but has a duller red tail and red hairs on its back legs."],"bee"],
  ["common-carder-bee","Common Carder Bee","Bombus pascuorum","Apidae","Common","10–18 mm",15,"Pollen and nectar","March–November","Very common",
-  ["It's gingery-brown all over.","It's named for 'carding', combing moss and grass together to cover its nest.","It has one of the longest flying seasons of any bumblebee."],"bee"],
+  ["It's gingery-brown all over.","It's named for 'carding', combing moss and grass together to cover its nest.","It has one of the longest flying seasons of any bumblebee.","The Large Carder Bee, also called the Moss Carder Bee, looks similar but is brighter ginger with no black hairs."],"bee"],
  ["honey-bee","Honey Bee","Apis mellifera","Apidae","Common","12–20 mm",16,"Bee bread and royal jelly from nurse bees","All year (as a colony)","Common; mostly kept in hives",
   ["A colony can hold tens of thousands of bees in summer.","Workers do a 'waggle dance' to tell others where to find flowers.","A larva fed only on royal jelly grows into a queen."],"bee"],
  ["patchwork-leaf-cutter-bee","Patchwork Leaf-cutter Bee","Megachile centuncularis","Megachilidae","Common","10–12 mm",11,"Pollen and nectar","June–August","Common",
-  ["It cuts neat circles from rose leaves to build its nest cells.","It nests in holes in wood, walls and even plant pots.","It carries pollen on a brush of hairs under its belly, not on its legs."],"bee"],
+  ["It cuts neat circles from rose leaves to build its nest cells.","It nests in holes in wood, walls and even plant pots.","It carries pollen on a brush of hairs under its belly, not on its legs.","Several other leaf-cutter bees look very similar. All of them cut neat circles from leaves."],"bee"],
  ["red-mason-bee","Red Mason Bee","Osmia bicornis","Megachilidae","Common","8–12 mm",11,"Pollen and nectar","March–June","Common",
   ["It builds a row of cells in hollow stems, sealing each one with a mud wall.","It's one of the most common visitors to bee hotels.","Females have two tiny horns on the face."],"bee"],
  ["tawny-mining-bee","Tawny Mining Bee","Andrena fulva","Andrenidae","Common","10–12 mm",10,"Pollen and nectar","March–May","Common",
@@ -870,6 +920,22 @@ const BEEWASP_ROWS = [
   ["Workers feed the larvae insects, and the larvae give back sugary droplets in return.","Its nest is made of chewed wood pulp and can hold thousands of wasps.","Only newly mated queens survive the winter."],"wasp"],
  ["ruby-tailed-wasp","Ruby-tailed Wasp","Chrysis ignita","Chrysididae","Uncommon","7–10 mm",8,"The larva of another bee or wasp","April–September","Widespread",
   ["It has a metallic blue-green head and a ruby-red abdomen.","It lays eggs in other bees' and wasps' nests, and its larva eats the owner's larva.","If attacked, it rolls into a tight armoured ball."],"wasp"]
+ ,["birch-clubhorn","Birch Clubhorn","Cimbex femoratus","Cimbicidae","Uncommon","about 18–25 mm",45,"Birch, and sometimes alder and willow","May–July","Widespread but local in birch woods",
+  ["It's one of the biggest sawflies, with clubbed antennae.","Sawfly larvae look like caterpillars, but have six or more pairs of stubby back legs, where a caterpillar has five at most.","Its big green larva can squirt a foul-tasting fluid from glands along its sides.","It spends the winter inside a tough cocoon before turning into a pupa."],"sawfly"]
+ ,["gooseberry-sawfly","Gooseberry Sawfly","Nematus ribesii","Tenthredinidae","Common","6–7 mm",20,"Gooseberry and redcurrant leaves","April–September, in several broods","Common, especially in gardens",
+  ["Its green, black-spotted larvae can strip a gooseberry bush bare in days.","Females lay their eggs in neat rows along the veins under a leaf.","When disturbed, the larvae rear their tail ends up into an S shape.","It has several generations a year, from April to September."],"sawfly"]
+ ,["solomons-seal-sawfly","Solomon's-seal Sawfly","Phymatocera aterrima","Tenthredinidae","Common","8–10 mm",20,"Solomon's-seal leaves","May–June","Common in gardens",
+  ["The all-black adults are easy to miss, but their grey larvae can strip a garden Solomon's-seal to bare stems.","It has just one generation a year, flying in May and June.","The larvae drop to the soil to pupate, and spend the winter there."],"sawfly"]
+ ,["great-yellow-bumblebee","Great Yellow Bumblebee","Bombus distinguendus","Apidae","Rare","13–22 mm",16,"Pollen and nectar, especially red clover and knapweed","June–September","Rare; coasts and islands of north and west Scotland",
+  ["It's one of the rarest bumblebees in Britain and Ireland, clinging on in flower-rich coastal grassland.","Its golden coat has a single black band between the wings, which makes it stand out.","It emerges late, so it needs flowers right through late summer, especially clovers and knapweed.","It has declined because flower-rich hay meadows were replaced by silage fields."],"bee"]
+ ,["orange-tailed-mining-bee","Orange-tailed Mining Bee","Andrena haemorrhoa","Andrenidae","Common","10–12 mm",10,"Pollen and nectar from spring flowers","March–June","Common and widespread",
+  ["Females have a fox-red thorax, a black abdomen and a bright orange tip to the tail.","It's one of the commonest spring mining bees, nesting in burrows in lawns and banks.","It's an important pollinator of fruit trees in spring."],"bee"]
+ ,["wool-carder-bee","Wool-carder Bee","Anthidium manicatum","Megachilidae","Common","11–17 mm",12,"Pollen and nectar","June–August","Common in England and Wales; scarcer further north",
+  ["Females comb the woolly hairs off plants like lamb's-ear to line their nests.","Unusually for bees, males are bigger than females. They guard flower patches and ram intruders with spines on their tails.","It's black with a row of yellow spots down each side of the abdomen."],"bee"]
+ ,["nomad-bee","Nomad Bee","Nomada species","Apidae","Common","6–14 mm",8,"Food stored by another bee in its nest","March–August","Common",
+  ["Nomad bees look like small wasps, banded red, yellow and black, with almost no hair.","They're cuckoos: females sneak into other bees' nests to lay eggs, and their larvae eat the host's stored food.","There are dozens of nomad bee species, and most need a microscope to tell apart.","Look for them patrolling low over banks where mining bees nest."],"bee"]
+ ,["violet-carpenter-bee","Violet Carpenter Bee","Xylocopa violacea","Apidae","Rare","20–28 mm",20,"Pollen and nectar stored in a tunnel in dead wood","April–September","Rare; breeding in England since 2007",
+  ["It's one of Europe's largest bees, with a glossy black body and violet-blue wings.","Females chew nesting tunnels into dead wood.","It was first found breeding in Britain in 2007, in Leicestershire.","Despite its size, it's gentle and rarely stings."],"bee"]
 ];
 const BEETLE_ROWS = [
  ["pea-leaf-weevil","Pea-leaf Weevil","Sitona lineatus","Curculionidae","Common","4–5 mm",6,"Root nodules of peas, beans and clovers","March–October","Common",
@@ -905,7 +971,7 @@ const BEETLE_ROWS = [
  ["violet-click-beetle","Violet Click Beetle","Limoniscus violaceus","Elateridae","Rare","10–12 mm",20,"Wood mould in hollow ancient trees","May–June","Very rare; protected by law",
   ["It's one of Britain's rarest beetles, known from just a few sites.","Its larvae live in wood mould at the base of ancient hollow beech and ash trees.","It's protected by law."],"beetle"],
  ["whirligig-beetle","Whirligig Beetle","Gyrinus substriatus","Gyrinidae","Common","5–7 mm",12,"Small creatures underwater","All year","Common on ponds and slow rivers",
-  ["It spins around on the water's surface in groups.","Each eye is split in two: one half sees above the water and the other half below.","It senses prey from the ripples they make."],"beetle"],
+  ["It spins around on the water's surface in groups.","Each eye is split in two: one half sees above the water and the other half below.","It senses prey from the ripples they make.","There are about a dozen near-identical whirligig beetles, which need a microscope to tell apart."],"beetle"],
  ["great-diving-beetle","Great Diving Beetle","Dytiscus marginalis","Dytiscidae","Common","27–35 mm",60,"Tadpoles, insects and small fish","All year","Common in ponds",
   ["It carries a bubble of air under its wing cases to breathe underwater.","Its larvae are ferocious hunters with hollow jaws that inject digestive juices.","Adults fly between ponds at night."],"beetle"],
  ["green-tortoise-beetle","Green Tortoise Beetle","Cassida viridis","Chrysomelidae","Uncommon","7–10 mm",8,"Mints and woundworts","April–September","Widespread in damp places",
@@ -931,7 +997,7 @@ const BEETLE_ROWS = [
  ["eyed-ladybird","Eyed Ladybird","Anatis ocellata","Coccinellidae","Uncommon","8–9 mm",14,"Aphids on conifers","April–September","Widespread in conifer woods",
   ["It's Britain's largest ladybird.","Each black spot is ringed with cream, like an eye.","It lives on conifers and eats aphids."],"ladybird"],
  ["2-spot-ladybird","2-spot Ladybird","Adalia bipunctata","Coccinellidae","Common","4–5 mm",8,"Aphids","March–October","Common but declining",
-  ["It comes in red with two black spots, or black with red spots.","It has declined since the Harlequin Ladybird arrived.","It often hibernates inside houses."],"ladybird"],
+  ["It comes in red with two black spots, or black with red spots.","It has declined since the Harlequin Ladybird arrived.","It often hibernates inside houses.","The 10-spot Ladybird can look similar, but comes in many colour patterns, often with more spots."],"ladybird"],
  ["red-headed-cardinal-beetle","Red-headed Cardinal Beetle","Pyrochroa serraticornis","Pyrochroidae","Common","14–18 mm",25,"Small insects under the bark of dead trees","May–July","Common in England and Wales",
   ["It's bright red all over, including its head.","Its flat larvae live under the bark of dead trees for two or three years, hunting other insects.","It's named after the red robes of cardinals."],"beetle"],
  ["glow-worm","Glow-worm","Lampyris noctiluca","Lampyridae","Uncommon","15–25 mm (female)",20,"Snails and slugs","June–August","Local; declining",
@@ -960,12 +1026,20 @@ const BEETLE_ROWS = [
   ["When threatened, it raises its tail like a scorpion.","It can release a foul smell from glands in its tail.","Old folklore linked it with the devil."],"beetle"],
  ["green-tiger-beetle","Green Tiger Beetle","Cicindela campestris","Carabidae","Uncommon","12–15 mm",25,"Insects grabbed from its burrow","April–July","Widespread on heaths and dunes",
   ["It's one of the fastest-running insects in Britain.","Its larva waits at the top of a burrow, with its head plugging the entrance, to grab passing insects.","It's metallic green with cream spots."],"beetle"]
+ ,["cream-spot-ladybird","Cream-spot Ladybird","Calvia quattuordecimguttata","Coccinellidae","Common","4.5–6 mm",8,"Aphids and psyllids on trees","April–September","Common",
+  ["It's maroon-brown with 14 cream spots.","It lives on deciduous trees and hedges.","It spends the winter in leaf litter or under bark."],"ladybird"]
+ ,["kidney-spot-ladybird","Kidney-spot Ladybird","Chilocorus renipustulatus","Coccinellidae","Common","4–5 mm",7,"Scale insects on tree bark","April–October","Common",
+  ["It's shiny black with two red kidney-shaped spots, shaped like a tiny helmet.","It eats scale insects on the bark of trees like willow and ash.","Its larvae are grey and spiky."],"ladybird"]
+ ,["pine-ladybird","Pine Ladybird","Exochomus quadripustulatus","Coccinellidae","Common","3–4.5 mm",6,"Scale insects and aphids","April–October","Common",
+  ["It's black with red comma-shaped marks near the front and two red spots behind.","Despite its name, it lives on many kinds of tree, not just pines.","It often spends the winter in groups on tree trunks."],"ladybird"]
+ ,["striped-ladybird","Striped Ladybird","Myzia oblongoguttata","Coccinellidae","Uncommon","6–8 mm",11,"Aphids on Scots pine","April–September","Local in pine woods",
+  ["It's chestnut-brown with cream stripes and spots, and is one of the largest ladybirds.","It lives almost only on Scots pine, hunting aphids.","Its brown colours blend in with pine bark and cones."],"ladybird"]
 ];
 const ANT_ROWS = [
  ["narrow-headed-ant","Narrow-headed Ant","Formica exsecta","Formicidae","Rare","4–7 mm",6,"Insects and honeydew, fed to it by workers","April–September","Very rare; Devon and the Scottish Highlands",
   ["It's one of Britain's rarest ants.","It has a notch in the back of its head.","It builds small mounds of grass and plant debris."],"ant"],
- ["southern-wood-ant","Southern Wood Ant","Formica rufa","Formicidae","Uncommon","6–10 mm",8,"Insects and honeydew, fed to it by workers","March–October","Local in woods",
-  ["It builds huge mound nests of pine needles that can hold hundreds of thousands of ants.","It sprays formic acid to defend itself.","It 'farms' aphids for their sugary honeydew."],"ant"],
+ ["wood-ant","Wood Ant","Formica rufa and relatives","Formicidae","Uncommon","6–10 mm",8,"Insects and honeydew, fed to it by workers","March–October","Local in woods",
+  ["It builds huge mound nests of pine needles that can hold hundreds of thousands of ants.","It sprays formic acid to defend itself.","It 'farms' aphids for their sugary honeydew.","Britain has three near-identical wood ants: the Southern, Hairy and Scottish Wood Ants. Telling them apart needs a hand lens to check for hairs on the eyes."],"ant"],
  ["red-ant","Red Ant","Myrmica rubra","Formicidae","Common","4–5 mm",5,"Insects and honeydew, fed to it by workers","April–October","Very common",
   ["Unlike the Black Garden Ant, it can sting.","Its colonies can have many queens.","It nests under stones and in soil in damp places."],"ant"],
  ["yellow-meadow-ant","Yellow Meadow Ant","Lasius flavus","Formicidae","Common","2–4 mm",4,"Honeydew from root aphids, fed to it by workers","April–October","Very common in old grassland",
@@ -989,11 +1063,11 @@ const FLY_ROWS = [
  ["narcissus-bulb-fly","Narcissus Bulb Fly","Merodon equestris","Syrphidae","Common","11–13 mm",18,"Daffodil and other bulbs","April–July","Common, especially in gardens",
   ["Its larvae eat daffodil bulbs from the inside.","It mimics bumblebees, and comes in several colour forms.","It arrived from continental Europe in the 1800s, carried in imported bulbs."],"hoverfly"],
  ["drone-fly","Drone-fly","Eristalis tenax","Syrphidae","Common","13–15 mm",20,"Rotting matter in stagnant water","All year; most often March–November","Very common",
-  ["It looks just like a male honey bee, called a drone.","Its 'rat-tailed maggot' larvae live in foul water and breathe through a telescopic tail.","An ancient myth said bees were born from dead oxen. The 'bees' were probably drone-flies."],"hoverfly"],
+  ["It looks just like a male honey bee, called a drone.","Its 'rat-tailed maggot' larvae live in foul water and breathe through a telescopic tail.","An ancient myth said bees were born from dead oxen. The 'bees' were probably drone-flies.","Several other drone-flies look very similar. This is the commonest."],"hoverfly"],
  ["hornet-mimic-hoverfly","Hornet Mimic Hoverfly","Volucella zonaria","Syrphidae","Uncommon","16–22 mm",22,"Debris in wasp nests","May–October","Local in the south; spreading",
   ["It's Britain's largest hoverfly.","It arrived from Europe in the 1940s and has been spreading north.","Its larvae live in wasp nests, eating debris and dead wasps."],"hoverfly"],
  ["common-banded-hoverfly","Common Banded Hoverfly","Syrphus ribesii","Syrphidae","Common","9–12 mm",12,"Aphids","April–November","Very common",
-  ["Its larvae eat huge numbers of aphids.","Males hover in sunny spots and give off a high-pitched whine.","It has bold black and yellow bands."],"hoverfly"],
+  ["Its larvae eat huge numbers of aphids.","Males hover in sunny spots and give off a high-pitched whine.","It has bold black and yellow bands.","Two other Syrphus hoverflies look almost identical, and even experts struggle to separate them from photos."],"hoverfly"],
  ["heineken-fly","Heineken Fly","Rhingia campestris","Syrphidae","Common","7–11 mm",12,"Cow dung","April–October","Common",
   ["Its long snout reaches nectar deep in flowers, which earned it a nickname from an old Heineken advert.","Its larvae grow up in cowpats.","It has a bright orange abdomen."],"hoverfly"],
  ["marmalade-fly","Marmalade Fly","Episyrphus balteatus","Syrphidae","Common","9–12 mm",12,"Aphids","All year; most in summer","Britain's commonest hoverfly",
@@ -1012,8 +1086,16 @@ const FLY_ROWS = [
   ["It's metallic green, and females have a violet-blue abdomen.","It's a soldierfly.","Its larvae live in compost heaps and help recycle waste."],"soldierfly"],
  ["st-marks-fly","St Mark's Fly","Bibio marci","Bibionidae","Common","10–12 mm",15,"Roots and rotting matter in soil","April–May","Very common",
   ["It appears around St Mark's Day, 25 April.","Males fly slowly with their legs dangling.","Its larvae live in groups in the soil."],"fly"],
- ["daddy-longlegs","Daddy Longlegs","Tipula paludosa","Tipulidae","Common","15–25 mm",35,"Grass roots","August–October","Very common",
-  ["Its larvae are 'leatherjackets', which eat grass roots.","Adults hardly feed at all.","It's harmless. The idea that it's venomous is a myth."],"cranefly"]
+ ["crane-fly","Crane Fly","Tipula paludosa","Tipulidae","Common","15–25 mm",35,"Grass roots","August–October","Very common",
+  ["In Britain and Ireland it's often called a daddy longlegs. Elsewhere that name can mean a harvestman or a cellar spider, which aren't insects.","Its larvae are 'leatherjackets', which eat grass roots.","Adults hardly feed at all.","It's harmless. The idea that it's venomous is a myth.","Several craneflies look very similar. This is the commonest of the big ones seen in autumn."],"cranefly"]
+ ,["pellucid-hoverfly","Pellucid Hoverfly","Volucella pellucens","Syrphidae","Common","15–16 mm",20,"Debris in wasp nests","May–September","Common",
+  ["It's black with a broad white band across the abdomen, so it's easy to recognise.","Its larvae live in wasp nests, scavenging debris and dead larvae.","Males hover at head height in sunny woodland rides.","It's one of the largest hoverflies."],"hoverfly"]
+ ,["two-banded-wasp-hoverfly","Two-banded Wasp Hoverfly","Chrysotoxum bicinctum","Syrphidae","Common","10–12 mm",12,"Root aphids, probably in ant nests","June–August","Common",
+  ["It mimics a wasp, with two widely spaced yellow bands.","Its long antennae, unusual for a hoverfly, help it pass as a wasp.","Its larvae are thought to live underground, eating root aphids that ants look after."],"hoverfly"]
+ ,["bog-hoverfly","Bog Hoverfly","Sericomyia silentis","Syrphidae","Common","12–16 mm",18,"Rotting plant matter in wet peat","May–September","Common on bogs, heaths and moors",
+  ["It's a big wasp mimic with yellow bars, found on bogs, heaths and moors.","Its rat-tailed larvae live in wet peat and boggy pools, breathing through a tail snorkel.","It's often seen feeding on heather and scabious in late summer."],"hoverfly"]
+ ,["pied-hoverfly","Pied Hoverfly","Scaeva pyrastri","Syrphidae","Uncommon","10–15 mm",12,"Aphids","June–October","Migrant; numbers vary from year to year",
+  ["It has three pairs of white, moon-shaped marks on a black abdomen.","Numbers vary a lot from year to year, because many arrive as migrants from Europe.","Its larvae eat aphids."],"hoverfly"]
 ];
 const OTHER_ROWS = [
  ["snow-flea","Snow Flea","Boreus hyemalis","Boreidae","Uncommon","3–5 mm",6,"Moss","October–March","Widespread but easily missed",
@@ -1030,6 +1112,10 @@ const OTHER_ROWS = [
   ["Its larvae are fierce 'aphid lions' that eat aphids by the hundred.","Adults turn pinkish-brown in winter and often hibernate inside houses.","Its eggs sit on top of thin silk stalks."],"lacewing"],
  ["cat-flea","Cat Flea","Ctenocephalides felis","Pulicidae","Common","1–3 mm",5,"Dried blood in adult flea droppings, and other debris","All year","Very common",
   ["Most fleas found on cats and dogs in Britain are cat fleas.","It can jump well over a hundred times its own body length.","Its pupa can wait for months in its cocoon until vibrations tell it a host is near."],"flea"]
+ ,["brown-lacewing","Brown Lacewing","Hemerobius and relatives","Hemerobiidae","Common","about 5–10 mm",8,"Aphids","Mostly spring to autumn; some all year","Common; dozens of look-alike species",
+  ["There are dozens of near-identical brown lacewings, which need a microscope to tell apart.","Their larvae hunt aphids, just like green lacewing larvae.","Most fly at night and often come to lit windows."],"lacewing"]
+ ,["giant-lacewing","Giant Lacewing","Osmylus fulvicephalus","Osmylidae","Uncommon","about 10–12 mm (wingspan about 50 mm)",15,"Small insect larvae at stream edges","May–July","Local along shaded streams in England and Wales",
+  ["It's Britain's largest lacewing, with spotted wings and an orange-red head.","Its larvae live in damp moss at stream edges, hunting other small insect larvae.","It's the only member of its family in Britain."],"lacewing"]
 ];
 [[FLY_ROWS,"fly"],[OTHER_ROWS,"other"]].forEach(([rows,kind])=>rows.forEach(([id,name,sci,family,rarity,wing,len,food,season,status,facts,noun])=>SPECIES.push({id,name,sci,family,rarity,wing,len,food,season,status,facts,kind,noun})));
 
@@ -1088,6 +1174,138 @@ function weightedPick(list){
 }
 
 
+/* ---------- countries ----------
+   Each country has its own species list, rarity tiers and save. Ireland's list comes from checking every UK
+   species against Irish sources (National Biodiversity Data Centre records, the Irish Red Lists, Butterfly
+   Conservation Ireland, MothsIreland and the All-Ireland Pollinator Plan). Species with no Irish records, or
+   only one-off strays, are left out (the Monarch stays as the app's original species). */
+const COUNTRIES={gb:{name:"United Kingdom",adj:"British",short:"British",inLabel:"In the UK",key:"bookworm-proto-v1"},ie:{name:"Ireland",adj:"Irish",short:"Irish",inLabel:"In Ireland",key:"bookworm-proto-v1-ie"}};
+let COUNTRY="gb"; try{ const c=localStorage.getItem("bookworm-country"); if(c && COUNTRIES[c]) COUNTRY=c; }catch(e){}
+/* Added because the UK collection includes Northern Ireland, and Ireland's collection needs it too. It isn't on the
+   Wildlife Trusts lists the rest of the UK collection came from. UK rarity and notes here; Irish ones in IE_RARITY/IE_NOTES. */
+const EXTRA=[
+ {id:"narrow-bordered-bee-hawk-moth",name:"Narrow-bordered Bee Hawk-moth",sci:"Hemaris tityus",family:"Sphingidae",rarity:"Rare",wing:"38–46 mm",len:40,kind:"moth",noun:"moth",
+  food:"Devil's-bit scabious",season:"May–June",status:"Scarce and declining in Britain; more widespread in Northern Ireland",
+  facts:["It's a convincing bumblebee mimic that flies by day, hovering at flowers.",
+   "Its wings lose most of their scales on its first flight, leaving clear panes.",
+   "Its caterpillars eat only devil's-bit scabious, the same food plant as the Marsh Fritillary.",
+   "It has declined in Britain and is now a scarce moth of damp grassland and moorland."]}
+];
+EXTRA.forEach(s=>{ s.months=parseMonths(s.season); SPECIES.push(s); });
+/* Irish collection only: absent from Britain */
+const IE_ONLY=[
+ {id:"burren-green",name:"Burren Green",sci:"Calamia tridens",family:"Noctuidae",rarity:"Rare",wing:"37–42 mm",len:30,kind:"moth",noun:"moth",
+  food:"Probably blue moor-grass",season:"July–August",status:"Rare; only in the Burren, County Clare",
+  facts:["It was discovered in the Burren in 1949, and lives nowhere else in Ireland.","It's bright green, unlike its brown relatives.","Its caterpillars are thought to feed on blue moor-grass, which grows on the Burren's limestone."]}
+];
+IE_ONLY.forEach(s=>{ s.ieOnly=true; s.months=parseMonths(s.season); SPECIES.push(s); });
+const C="Common",U="Uncommon",R="Rare";
+const IE_RARITY={
+  /* butterflies */ "peacock":C,"red-admiral":C,"small-tortoiseshell":C,"painted-lady":U,"small-copper":U,"orange-tip":U,"large-white":C,"small-white":C,
+  "green-veined-white":C,"brimstone":U,"meadow-brown":C,"speckled-wood":C,"holly-blue":U,"common-blue":U,"monarch":R,"small-skipper":R,
+  "dingy-skipper":U,"wood-white":U,"large-heath":U,"marsh-fritillary":U,"pearl-bordered-fritillary":R,"brown-hairstreak":R,"small-blue":R,"small-heath":C,
+  "ringlet":C,"gatekeeper":U,"grayling":U,"wall":R,"silver-washed-fritillary":U,"dark-green-fritillary":U,"comma":C,"clouded-yellow":U,"green-hairstreak":U,"purple-hairstreak":R,
+  /* moths */ "small-magpie":C,"early-grey":C,"double-striped-pug":C,"box-tree-moth":U,"deaths-head-hawk-moth":R,"winter-moth":C,"december-moth":U,"oak-eggar":U,
+  "herald":U,"large-emerald":U,"argent-and-sable":R,"mullein":R,"puss-moth":U,"yellow-tail":C,"knot-grass":C,"pale-tussock":C,"fox-moth":U,"chimney-sweeper":R,
+  "burnet-companion":C,"mother-shipton":U,"vapourer":C,"drinker":C,"magpie-moth":C,"angle-shades":C,"silver-y":C,"large-yellow-underwing":C,"cinnabar":C,
+  "garden-tiger":U,"buff-tip":C,"elephant-hawk-moth":C,"hummingbird-hawk-moth":U,"lime-hawk-moth":R,"peppered-moth":C,"brimstone-moth":C,"emperor-moth":U,"six-spot-burnet":C,"poplar-hawk-moth":C,"eyed-hawk-moth":U,"ruby-tiger":C,"white-ermine":C,"muslin-moth":C,"swallow-tailed-moth":C,"white-plume-moth":U,"burnished-brass":C,"burren-green":R,
+  /* bees and wasps */ "bilberry-bumblebee":U,"ashy-mining-bee":U,"ivy-bee":R,"buff-tailed-bumblebee":C,"hairy-footed-flower-bee":R,"heath-bumblebee":C,
+  "tree-bumblebee":U,"early-bumblebee":C,"garden-bumblebee":C,"shrill-carder-bee":R,"giant-horntail":U,"white-tailed-bumblebee":C,"red-tailed-bumblebee":U,
+  "common-carder-bee":C,"honey-bee":C,"patchwork-leaf-cutter-bee":R,"red-mason-bee":R,"tawny-mining-bee":U,"common-wasp":C,"ruby-tailed-wasp":U,"birch-clubhorn":U,"gooseberry-sawfly":C,"solomons-seal-sawfly":R,"great-yellow-bumblebee":R,"orange-tailed-mining-bee":C,"wool-carder-bee":R,"nomad-bee":C,
+  /* beetles */ "pea-leaf-weevil":C,"black-oil-beetle":U,"soldier-beetle":C,"black-snail-beetle":C,"rosemary-beetle":U,"black-spotted-longhorn":U,
+  "black-and-yellow-longhorn":C,"swollen-thighed-beetle":U,"whirligig-beetle":C,"great-diving-beetle":C,"green-tortoise-beetle":U,"bloody-nosed-beetle":R,
+  "wasp-beetle":U,"musk-beetle":U,"22-spot-ladybird":C,"14-spot-ladybird":C,"harlequin-ladybird":C,"orange-ladybird":U,"7-spot-ladybird":C,"eyed-ladybird":U,
+  "2-spot-ladybird":C,"red-headed-cardinal-beetle":C,"common-red-soldier-beetle":C,"coppery-click-beetle":U,"rose-chafer":U,"common-cockchafer":C,
+  "minotaur-beetle":U,"cream-spot-ladybird":C,"kidney-spot-ladybird":U,"pine-ladybird":R,"striped-ladybird":R,"rhinoceros-beetle":U,"common-sexton-beetle":C,"violet-ground-beetle":C,"devils-coach-horse":C,"green-tiger-beetle":U,
+  /* ants */ "red-ant":C,"yellow-meadow-ant":C,"black-garden-ant":C,
+  /* flies */ "ferruginous-bee-grabber":C,"the-footballer":C,"bumblebee-mimic-hoverfly":C,"batman-hoverfly":C,"narcissus-bulb-fly":C,"drone-fly":C,
+  "common-banded-hoverfly":C,"heineken-fly":C,"marmalade-fly":C,"twin-lobed-deer-fly":U,"notch-horned-cleg":C,"downlooker-snipefly":C,"broad-centurion":C,
+  "st-marks-fly":C,"crane-fly":C,"pellucid-hoverfly":C,"two-banded-wasp-hoverfly":C,"bog-hoverfly":C,"pied-hoverfly":U,
+  /* added for the island of Ireland */ "narrow-bordered-bee-hawk-moth":U,"wood-ant":R,
+  /* other insects */ "caddisfly":C,"scorpionfly":C,"alder-fly":C,"common-green-lacewing":C,"cat-flea":C,"brown-lacewing":C
+};
+/* Irish status lines, and an Irish fact where there's a notable one. */
+const IE_NOTES={
+  "small-skipper":["Rare; County Kildare, with its look-alike the Essex Skipper in County Wexford","Both skippers are rare in Ireland. The Small Skipper was confirmed in County Kildare in 2011, and its near-identical twin, the Essex Skipper, is known only from County Wexford."],
+  "wood-white":["Widespread as the look-alike Cryptic Wood White; the true Wood White is only in the eastern Burren","Most wood whites in Ireland are really the near-identical Cryptic Wood White, which is widespread. The true Wood White lives only in the Burren."],
+  "pearl-bordered-fritillary":["Endangered; only in the Burren (Clare and south-east Galway)","In Ireland it survives only on the limestone of the Burren."],
+  "brown-hairstreak":["The Burren and limestone country north to Lough Mask","In Ireland it lives only in the Burren and the limestone country north to Lough Mask."],
+  "small-blue":["Endangered; coastal dunes and limestone grassland"],
+  "wall":["Endangered; numbers fell by more than half in 15 years","Irish numbers fell by more than half in about 15 years, so it's now listed as Endangered."],
+  "gatekeeper":["Near Threatened; south and south-east coasts only","In Ireland it's found only along the south and south-east coasts."],
+  "purple-hairstreak":["Only at a few woodland sites"],
+  "brimstone":["Mainly the Burren and the Midlands","In Ireland it's found mainly in the Burren and the Midlands, where its buckthorn food plants grow."],
+  "comma":["Recent colonist; now across most of Ireland","The Comma is a recent arrival in Ireland. It spread from the south-east and now lives across most of the island."],
+  "holly-blue":["Across most of Ireland, having spread north and west"],
+  "silver-washed-fritillary":["Scattered; commoner in the south"],
+  "dark-green-fritillary":["Vulnerable; mainly coastal, also the Burren and Wicklow"],
+  "large-heath":["Vulnerable; blanket and raised bogs only"],
+  "marsh-fritillary":["Vulnerable; patchy, mainly in the centre and west"],
+  "dingy-skipper":["Near Threatened; mainly the Midlands and west"],
+  "grayling":["Near Threatened; coasts and limestone districts"],
+  "small-heath":["Near Threatened; dry grassland"],
+  "monarch":["Rare vagrant from North America"],
+  "red-admiral":["Resident, boosted each year by migrants"],
+  "painted-lady":["Summer migrant"],
+  "clouded-yellow":["Migrant that sometimes breeds"],
+  "box-tree-moth":["Recorded since 2017","It was first found in Ireland in 2017, at Tramore in County Waterford."],
+  "lime-hawk-moth":["Resident since 2010, mainly around Dublin","It was first found in Ireland in 2010, in Dublin, and has since been proved to breed here."],
+  "mullein":["Rediscovered in 2022 after 70 years","It was thought extinct in Ireland until its caterpillars were found in a north Dublin garden in 2022, the first record since 1952."],
+  "deaths-head-hawk-moth":["Rare migrant"],
+  "argent-and-sable":["Vulnerable; heaths and moorland with bog-myrtle"],
+  "chimney-sweeper":["Vulnerable; limestone grassland only"],
+  "hummingbird-hawk-moth":["Regular summer migrant"],
+  "bilberry-bumblebee":["Uplands; spreading since the 1970s","It was first found in Ireland in the Dublin and Wicklow mountains in the 1970s, and has since spread as far as Waterford and Northern Ireland."],
+  "ivy-bee":["New arrival (2021); spreading from Wexford","It was first found in Ireland in October 2021, nesting in their thousands at the Raven Nature Reserve in County Wexford."],
+  "hairy-footed-flower-bee":["New arrival (2022), Dublin","It was first seen in Ireland in Dublin City on 27 March 2022."],
+  "tree-bumblebee":["New arrival (2017); spreading fast","It was first recorded in Ireland in 2017, in St Stephen's Green in Dublin, and has spread quickly since."],
+  "shrill-carder-bee":["Endangered; a few isolated southern populations","In Ireland it survives only in a few isolated populations in the south."],
+  "patchwork-leaf-cutter-bee":["Near Threatened; known from very few sites"],
+  "red-mason-bee":["Scarce; probably introduced"],
+  "tawny-mining-bee":["Rediscovered in 2012 after 87 years; spreading","It was thought extinct in Ireland from 1925 until it was rediscovered in 2012, and has since spread to several counties."],
+  "red-tailed-bumblebee":["Near Threatened; declining in grassland"],
+  "ashy-mining-bee":["Local"],
+  "rosemary-beetle":["Recorded since 2016"],
+  "great-yellow-bumblebee":["Endangered; flower-rich coastal grassland in the west","It was found across Ireland before 1960, but now survives only on flower-rich coastal grassland and machair in the west."],
+  "wool-carder-bee":["New arrival (2015); spreading in the south-east","It was first seen in Ireland in County Wexford in 2015, and has since spread across the south-east."],
+  "pine-ladybird":["Rare; most Irish records are from 2018 onwards"],
+  "striped-ladybird":["Rare; pine woods; most Irish records are from 2015 onwards"],
+  "kidney-spot-ladybird":["Local"],
+  "eyed-hawk-moth":["Widespread but less common than the Poplar Hawk-moth"],
+  "pied-hoverfly":["Occasional migrant"],
+  "solomons-seal-sawfly":["Recent arrival; recorded since 2021","It's a recent arrival in Ireland, first recorded here in 2021."],
+  "birch-clubhorn":["Widespread but local in birch woods"],
+  "narrow-bordered-bee-hawk-moth":["Widespread but local","It has been recorded in over 200 of Ireland's 10 km map squares, far more widely than in Britain."],
+  "wood-ant":["Rare; a few woodland sites, mostly in the south (the Hairy Wood Ant)","Ireland's wood ant is the Hairy Wood Ant, found at only a small number of woodland sites. It looks almost identical to Britain's other wood ants."],
+  "harlequin-ladybird":["Invasive; recorded since 2009"],
+  "bloody-nosed-beetle":["Rare; only a handful of sites"]
+};
+const IE_STATUS={Common:"Widespread in Ireland",Uncommon:"Local in Ireland",Rare:"Rare in Ireland"};
+const PLACE_RE=/Brit|England|English|Scotland|Scottish|Wales|Welsh|London|Cumbria|Dorset|Norfolk|Isle of Wight|Somerset|Gloucestershire|Kent|Essex|Exmoor|Dartmoor|Morecambe|Oxford|Peterborough|\bYork\b|Thames|Midlands|Cornwall|Devon|East Anglia|Westminster|Channel Islands/;
+/* species lists for both countries, kept before filtering so the meta achievements can count either country */
+const COUNTRY_IDS={gb:SPECIES.filter(s=>!s.ieOnly).map(s=>s.id), ie:SPECIES.filter(s=>IE_RARITY[s.id]).map(s=>s.id)};
+if(COUNTRY==="gb"){ const keep=SPECIES.filter(s=>!s.ieOnly); SPECIES.length=0; keep.forEach(s=>SPECIES.push(s)); }
+if(COUNTRY==="ie"){
+  const keep=SPECIES.filter(s=>IE_RARITY[s.id]);
+  keep.forEach(s=>{
+    const n=IE_NOTES[s.id]||[];
+    s.rarity=IE_RARITY[s.id];
+    s.status=n[0]||(s.ieOnly?s.status:IE_STATUS[s.rarity]);
+    let f=s.facts.filter(x=>!PLACE_RE.test(x));
+    if(n[1]) f.unshift(n[1]);
+    if(!f.length) f=[`It's one of Ireland's ${s.rarity.toLowerCase()} ${KINDS[s.kind].label.toLowerCase()}.`];
+    s.facts=f;
+  });
+  SPECIES.length=0; keep.forEach(s=>SPECIES.push(s));
+}
+const COUNTRY_INFO=COUNTRIES[COUNTRY];
+let flagUid=0;
+function flagSVG(code){
+  const id="fl"+(++flagUid);
+  if(code==="ie") return `<svg class="flag" viewBox="0 0 60 30" aria-hidden="true"><rect width="20" height="30" fill="#169B62"/><rect x="20" width="20" height="30" fill="#fff"/><rect x="40" width="20" height="30" fill="#FF883E"/></svg>`;
+  return `<svg class="flag" viewBox="0 0 60 30" aria-hidden="true"><clipPath id="${id}"><path d="M30,15h30v15zv15h-30zh-30v-15zv-15h30z"/></clipPath><rect width="60" height="30" fill="#012169"/><path d="M0,0 60,30M60,0 0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 60,30M60,0 0,30" clip-path="url(#${id})" stroke="#C8102E" stroke-width="4"/><path d="M30,0v30M0,15h60" stroke="#fff" stroke-width="10"/><path d="M30,0v30M0,15h60" stroke="#C8102E" stroke-width="6"/></svg>`;
+}
+
 const SP = Object.fromEntries(SPECIES.map(s=>[s.id,s]));
 const RARITY_CHIP = {Common:"ok",Uncommon:"accent",Rare:"rare"};
 /* Pick a category (butterfly, moth, and any added later) with equal odds, then a species of the book's tier
@@ -1107,13 +1325,21 @@ function pickSpecies(tier){
 }
 
 /* ---------- state ---------- */
-const KEY = "bookworm-proto-v1";
+const KEY = COUNTRIES[COUNTRY].key;
 /* Saved data: books[] (status "reading" or "frozen"), waiting[] larvae from abandoned books, collection[] of raised adults. */
 function freshState(){ return {books:[],waiting:[],collection:[],seen:{},achievements:{},offset:0}; }
 let state = load() || freshState();
 if(state.book){ if(!state.book.species) state.book.species="monarch"; state.books=[{...state.book,id:"b1",status:"reading"}]; }
 delete state.book;
+/* species merged into a look-alike: saved progress moves to the main species */
+const MERGED={"daddy-longlegs":"crane-fly","essex-skipper":"small-skipper","cryptic-wood-white":"wood-white","southern-wood-ant":"wood-ant","hairy-wood-ant":"wood-ant"};
 state.books=state.books||[]; state.waiting=state.waiting||[]; state.collection=state.collection||[]; state.seen=state.seen||{}; state.achievements=state.achievements||{};
+(function migrateMerged(){
+  const m=id=>MERGED[id]||id; let changed=false;
+  [...state.books,...state.waiting,...state.collection].forEach(x=>{ if(MERGED[x.species]){ x.species=m(x.species); changed=true; } });
+  Object.keys(state.seen).forEach(id=>{ if(MERGED[id]){ const to=m(id); state.seen[to]=[...new Set([...(state.seen[to]||[]),...state.seen[id]])]; delete state.seen[id]; changed=true; } });
+  if(changed) save();
+})();
 function load(){try{const s=localStorage.getItem(KEY);return s?JSON.parse(s):null}catch(e){return null}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 const now = ()=>Date.now()+(state.offset||0);
@@ -1479,18 +1705,35 @@ $("btn-freeze").onclick=()=>{
 /* Edits are corrections, not reading: they don't feed the larva or show growth screens. The growth stage is
    recalculated from the corrected progress (so it can go down), and the species never changes, even if the
    new page count puts the book in a different length tier. Reaching 100% by an edit still finishes the book. */
+/* Switching between page numbers and percentage converts the current progress, always rounding up so the
+   larva never drops back a growth stage (page 99 of 331 is 29.9%, which would otherwise fall below 30%). */
+let editMode="pages";
+function setEditMode(m,convert){
+  if(convert && m!==editMode){
+    const pages=Math.round(+$("e-pages").value)||bookById(curId).pages, v=parseFloat($("e-prog").value);
+    if(!isNaN(v)) $("e-prog").value = m==="percent" ? Math.min(100,Math.ceil(v/pages*1000)/10) : Math.min(pages,Math.ceil(v*pages/100));
+    const was=bookById(curId).mode;
+    $("e-mode-note").hidden = m===was;
+    $("e-mode-note").textContent = m==="percent" ? "Your progress has been converted to a percentage. Useful if you've switched to an e-book." : "Your progress has been converted to a page number. Check it matches your copy.";
+  }
+  editMode=m;
+  $("e-mode-pages").setAttribute("aria-pressed",m==="pages"); $("e-mode-pct").setAttribute("aria-pressed",m==="percent");
+  $("e-prog-label").textContent = m==="pages" ? "Current page" : "Current %";
+  $("e-prog").step = m==="pages" ? "1" : "0.1";
+}
+$("e-mode-pages").onclick=()=>setEditMode("pages",true);
+$("e-mode-pct").onclick=()=>setEditMode("percent",true);
 $("btn-edit").onclick=()=>{
-  const b=bookById(curId), sp=SP[b.species], isP=b.mode==="pages";
+  const b=bookById(curId), sp=SP[b.species];
   $("e-title").value=b.title; $("e-author").value=b.author||""; $("e-pages").value=b.pages; $("e-prog").value=b.progress;
-  $("e-prog-label").textContent = isP ? "Current page" : "Current %";
-  $("e-prog").step = isP ? "1" : "0.1";
+  $("e-mode-note").hidden=true; setEditMode(b.mode,false);
   $("e-hint").textContent=`Use this to fix a mistyped page or a different edition's page count. Changes don't count as feeding, and your ${sp.name} stays the same species even if the book's length tier changes. Lowering your progress moves the ${KINDS[sp.kind].young} back to the matching growth stage.`;
   $("m-edit").hidden=false;
 };
 $("e-cancel").onclick=()=>{$("m-edit").hidden=true};
 $("edit-form").addEventListener("submit",e=>{
   e.preventDefault();
-  const b=bookById(curId), isP=b.mode==="pages";
+  const b=bookById(curId), isP=editMode==="pages";
   const title=$("e-title").value.trim(), pages=Math.round(+$("e-pages").value);
   let prog=isP?Math.round(+$("e-prog").value):Math.round(+$("e-prog").value*10)/10;
   if(!title || !(pages>0)){ toast("Add a title and the number of pages"); return; }
@@ -1498,7 +1741,7 @@ $("edit-form").addEventListener("submit",e=>{
   const max=isP?pages:100;
   if(prog>max){ toast(isP?`The book only has ${pages} pages`:"Progress can't be more than 100%"); return; }
   const before=b.stage;
-  b.title=title; b.author=$("e-author").value.trim(); b.pages=pages; b.progress=prog;
+  b.title=title; b.author=$("e-author").value.trim(); b.pages=pages; b.progress=prog; b.mode=editMode;
   b.stage=stageFor(pct(b)); save(); $("m-edit").hidden=true; renderRead();
   if(b.stage===10) { celebrate(b,10); return; }
   toast(b.stage===before ? "Book updated." : `Book updated. Your larva is now at growth stage ${Math.min(b.stage,9)}.`);
@@ -1599,7 +1842,7 @@ function celebrate(b,stage,moved){
     const entry={species:sp.id,title:b.title,author:b.author,pages:b.pages,date:new Date(now()).toISOString()};
     state.collection.push(entry); state.books=state.books.filter(x=>x.id!==b.id); save();
     const unlocked=checkAchievements();
-    if(unlocked.length){ $("mc-ach").innerHTML=unlocked.map(a=>`<span class="ach-medal">${MEDAL}</span><span><b>Achievement unlocked: ${esc(a.name)}</b><span class="small">${esc(a.desc)}. Every one of the ${a.total} raised!</span></span>`).join(""); $("mc-ach").hidden=false; }
+    if(unlocked.length){ $("mc-ach").innerHTML=unlocked.map(a=>`<span class="ach-medal">${MEDAL}</span><span><b>${a.country?"Meta achievement":"Achievement"} unlocked: ${esc(a.name)}</b><span class="small">Every one of the ${a.total} raised!</span></span>`).join(""); $("mc-ach").hidden=false; }
     $("mc-eyebrow").textContent=`Book finished · ${isNew?"New species!":"Added to collection"}`;
     $("mc-h").textContent=`A ${sp.name} emerged!`;
     $("mc-sub").textContent=`Raised on ${entry.title}. ${isNew?"It's a new species for your collection.":"You now have "+state.collection.filter(c=>c.species===sp.id).length+" of these."}`;
@@ -1611,33 +1854,56 @@ function celebrate(b,stage,moved){
   $("m-cel").hidden=false; confetti();
 }
 
-/* ---------- achievements ---------- */
-/* One "raise them all" achievement per category, built from KINDS so new categories get one automatically.
-   state.achievements[id] holds the date it was first completed; it stays unlocked once earned. */
-const ACH_NAMES={butterfly:["Butterfly House","Raise every butterfly"],moth:["Moth Trap","Raise every moth"],beewasp:["The Hive","Raise every bee and wasp"],
-  beetle:["Beetlemania","Raise every beetle"],ant:["Colony Complete","Raise every ant"],fly:["Lord of the Flies","Raise every fly"],other:["Cabinet of Curiosities","Raise every one of the other insects"]};
-const ACHIEVEMENTS=Object.keys(KINDS).map(k=>({id:"all-"+k,kind:k,name:(ACH_NAMES[k]||[`All ${KINDS[k].label}`])[0],desc:(ACH_NAMES[k]||[0,`Raise every species in ${KINDS[k].label}`])[1],
-  total:SPECIES.filter(s=>s.kind===k).length}));
+/* ---------- achievements ----------
+   Country achievements: one "collect them all" per category, built from KINDS, with names that differ by country.
+   They live in each country's own save (state.achievements), so the UK and Ireland each have their own.
+   Meta achievements: the same everywhere. Each counts one country's whole collection, reading the other country's
+   save when needed, and their unlock dates live in a shared key so they show on both. */
+const ACH_NAMES={
+  gb:{butterfly:"Butterfly House",moth:"Moth Trap",beewasp:"The Hive",beetle:"Beetlemania",ant:"Colony Complete",fly:"Lord of the Flies",other:"Cabinet of Curiosities"},
+  ie:{butterfly:"Emerald Wings",moth:"Bog Lanterns",beewasp:"The Bee-loud Glade",beetle:"Beetles of the Burren",ant:"The Little People",fly:"Flies of the Four Provinces",other:"The Book of Kells"}};
+const KIND_TITLE={butterfly:"Butterflies",moth:"Moths",beewasp:"Bees & Wasps",beetle:"Beetles",ant:"Ants",fly:"Flies",other:"Other Insects"};
+const ACHIEVEMENTS=Object.keys(KINDS).map(k=>({id:"all-"+k,kind:k,name:(ACH_NAMES[COUNTRY]||{})[k]||`All ${KIND_TITLE[k]||KINDS[k].label}`,
+  desc:`Collect all ${COUNTRY_INFO.short} ${KIND_TITLE[k]||KINDS[k].label}`,total:SPECIES.filter(s=>s.kind===k).length}));
+const META=[{id:"meta-gb",country:"gb",name:"Collect All British Species"},{id:"meta-ie",country:"ie",name:"Collect All Irish Species"}];
+META.forEach(m=>{ m.total=COUNTRY_IDS[m.country].length; m.desc=`Raise every species in the ${COUNTRIES[m.country].short} collection`; });
+const META_KEY="bookworm-meta";
+function loadMeta(){ try{ return JSON.parse(localStorage.getItem(META_KEY))||{}; }catch(e){ return {}; } }
+function collectionOf(country){
+  if(country===COUNTRY) return state.collection;
+  try{ const s=JSON.parse(localStorage.getItem(COUNTRIES[country].key)); return (s&&s.collection)||[]; }catch(e){ return []; }
+}
+function metaProgress(m){ const got=new Set(collectionOf(m.country).map(c=>c.species)); return COUNTRY_IDS[m.country].filter(id=>got.has(id)).length; }
 function achProgress(a){ const got=new Set(state.collection.map(c=>c.species)); return SPECIES.filter(s=>s.kind===a.kind && got.has(s.id)).length; }
 function checkAchievements(){
   const fresh=[];
   ACHIEVEMENTS.forEach(a=>{ if(!state.achievements[a.id] && achProgress(a)>=a.total){ state.achievements[a.id]=new Date(now()).toISOString(); fresh.push(a); } });
   if(fresh.length) save();
+  const meta=loadMeta(); let metaChanged=false;
+  META.forEach(m=>{ if(!meta[m.id] && metaProgress(m)>=m.total){ meta[m.id]=new Date(now()).toISOString(); metaChanged=true; fresh.push(m); } });
+  if(metaChanged){ try{ localStorage.setItem(META_KEY,JSON.stringify(meta)); }catch(e){} }
   return fresh;
 }
 const MEDAL='<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M16 4h7l-4 12h-7z" fill="currentColor" opacity=".55"/><path d="M32 4h-7l4 12h7z" fill="currentColor" opacity=".55"/><circle cx="24" cy="28" r="14" fill="currentColor"/><circle cx="24" cy="28" r="9.5" fill="none" stroke="var(--surface)" stroke-width="2"/><path d="m24 21.5 2 4.2 4.6.6-3.4 3.1.9 4.6-4.1-2.3-4.1 2.3.9-4.6-3.4-3.1 4.6-.6z" fill="var(--surface)"/></svg>';
+const fmtDate=d=>new Date(d).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"});
+function achCard(a,n,at,extra){
+  const p=Math.round(n/a.total*100);
+  return `<div class="ach${at?" done":""}">
+      <span class="ach-medal">${MEDAL}</span>
+      <span class="ach-meta"><b>${esc(a.name)}</b><span class="small muted">${extra||""}${esc(a.desc)} (${a.total} species)</span>
+        <span class="bar" aria-hidden="true"><i style="width:${p}%"></i></span>
+        <span class="ach-foot"><span class="mono small">${n} of ${a.total}</span>${at?`<span class="chip ok">Unlocked ${fmtDate(at)}</span>`:""}</span>
+      </span></div>`;
+}
 function renderAch(){
+  $("ach-country-h").innerHTML=`${flagSVG(COUNTRY)}<span>${COUNTRY_INFO.adj} achievements</span>`;
   const done=ACHIEVEMENTS.filter(a=>state.achievements[a.id]).length;
   $("ach-count").textContent=`${done} of ${ACHIEVEMENTS.length}`;
   const list=[...ACHIEVEMENTS].sort((a,b)=>(!!state.achievements[b.id])-(!!state.achievements[a.id]) || achProgress(b)/b.total-achProgress(a)/a.total);
-  $("ach-list").innerHTML=list.map(a=>{
-    const n=achProgress(a), at=state.achievements[a.id], p=Math.round(n/a.total*100);
-    return `<div class="ach${at?" done":""}">
-      <span class="ach-medal">${MEDAL}</span>
-      <span class="ach-meta"><b>${esc(a.name)}</b><span class="small muted">${esc(a.desc)} (${a.total} species)</span>
-        <span class="bar" aria-hidden="true"><i style="width:${p}%"></i></span>
-        <span class="ach-foot"><span class="mono small">${n} of ${a.total}</span>${at?`<span class="chip ok">Unlocked ${new Date(at).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"})}</span>`:""}</span>
-      </span></div>`;}).join("");
+  $("ach-list").innerHTML=list.map(a=>achCard(a,achProgress(a),state.achievements[a.id])).join("");
+  const meta=loadMeta();
+  $("meta-count").textContent=`${META.filter(m=>meta[m.id]).length} of ${META.length}`;
+  $("meta-list").innerHTML=META.map(m=>achCard(m,metaProgress(m),meta[m.id],`<span class="ach-flag">${flagSVG(m.country)}</span>`)).join("");
 }
 checkAchievements();
 
@@ -1659,7 +1925,7 @@ function renderColl(){
     : `<button type="button" class="slot locked" data-sp="${s.id}"><span class="q">?</span><span class="nm">${esc(s.name)}</span><span class="chip ${RARITY_CHIP[s.rarity]}">${s.rarity}</span>${seenNote(s)}${badge(s)}</button>`).join("");
   $("coll-grid").querySelectorAll(".slot").forEach(el=>el.onclick=()=>openSpecies(el.dataset.sp));
 }
-const FAMILY={Nymphalidae:"Nymphalidae (brush-footed butterflies)",Pieridae:"Pieridae (whites and yellows)",Lycaenidae:"Lycaenidae (blues, coppers and hairstreaks)",Hesperiidae:"Hesperiidae (skippers)",Riodinidae:"Riodinidae (metalmarks)",Papilionidae:"Papilionidae (swallowtails)",Crambidae:"Crambidae (grass moths and relatives)",Geometridae:"Geometridae (geometers, whose caterpillars are loopers)",Noctuidae:"Noctuidae (owlet moths)",Erebidae:"Erebidae (tigers, tussocks and relatives)",Lasiocampidae:"Lasiocampidae (eggars and lappets)",Sphingidae:"Sphingidae (hawk-moths)",Notodontidae:"Notodontidae (prominents)",Saturniidae:"Saturniidae (emperor and silk moths)",Zygaenidae:"Zygaenidae (burnets and foresters)",Megachilidae:"Megachilidae (mason and leaf-cutter bees)",Apidae:"Apidae (bumblebees, honey bees and relatives)",Andrenidae:"Andrenidae (mining bees)",Colletidae:"Colletidae (plasterer bees)",Crabronidae:"Crabronidae (digger wasps)",Siricidae:"Siricidae (horntails)",Vespidae:"Vespidae (social wasps and hornets)",Chrysididae:"Chrysididae (cuckoo wasps)",Curculionidae:"Curculionidae (weevils)",Meloidae:"Meloidae (oil and blister beetles)",Dytiscidae:"Dytiscidae (diving beetles)",Hydrophilidae:"Hydrophilidae (water scavenger beetles)",Cerambycidae:"Cerambycidae (longhorn beetles)",Cantharidae:"Cantharidae (soldier beetles)",Silphidae:"Silphidae (carrion and burying beetles)",Chrysomelidae:"Chrysomelidae (leaf beetles)",Scarabaeidae:"Scarabaeidae (chafers and scarabs)",Elateridae:"Elateridae (click beetles)",Gyrinidae:"Gyrinidae (whirligig beetles)",Oedemeridae:"Oedemeridae (false blister beetles)",Ptinidae:"Ptinidae (deathwatch and spider beetles)",Coccinellidae:"Coccinellidae (ladybirds)",Pyrochroidae:"Pyrochroidae (cardinal beetles)",Lampyridae:"Lampyridae (glow-worms and fireflies)",Geotrupidae:"Geotrupidae (dor beetles)",Lucanidae:"Lucanidae (stag beetles)",Carabidae:"Carabidae (ground beetles)",Staphylinidae:"Staphylinidae (rove beetles)",Formicidae:"Formicidae (ants)",Tachinidae:"Tachinidae (parasitic flies)",Conopidae:"Conopidae (thick-headed flies)",Syrphidae:"Syrphidae (hoverflies)",Asilidae:"Asilidae (robberflies)",Bombyliidae:"Bombyliidae (bee-flies)",Tabanidae:"Tabanidae (horseflies)",Rhagionidae:"Rhagionidae (snipeflies)",Stratiomyidae:"Stratiomyidae (soldierflies)",Bibionidae:"Bibionidae (St Mark's flies)",Tipulidae:"Tipulidae (craneflies)",Boreidae:"Boreidae (snow fleas)",Limnephilidae:"Limnephilidae (caddisflies)",Trichoptera:"Trichoptera (the caddisfly order, with many families)",Panorpidae:"Panorpidae (scorpionflies)",Sialidae:"Sialidae (alderflies)",Chrysopidae:"Chrysopidae (green lacewings)",Pulicidae:"Pulicidae (fleas)"};
+const FAMILY={Nymphalidae:"Nymphalidae (brush-footed butterflies)",Pieridae:"Pieridae (whites and yellows)",Lycaenidae:"Lycaenidae (blues, coppers and hairstreaks)",Hesperiidae:"Hesperiidae (skippers)",Riodinidae:"Riodinidae (metalmarks)",Papilionidae:"Papilionidae (swallowtails)",Crambidae:"Crambidae (grass moths and relatives)",Geometridae:"Geometridae (geometers, whose caterpillars are loopers)",Noctuidae:"Noctuidae (owlet moths)",Erebidae:"Erebidae (tigers, tussocks and relatives)",Lasiocampidae:"Lasiocampidae (eggars and lappets)",Sphingidae:"Sphingidae (hawk-moths)",Notodontidae:"Notodontidae (prominents)",Saturniidae:"Saturniidae (emperor and silk moths)",Zygaenidae:"Zygaenidae (burnets and foresters)",Megachilidae:"Megachilidae (mason and leaf-cutter bees)",Apidae:"Apidae (bumblebees, honey bees and relatives)",Andrenidae:"Andrenidae (mining bees)",Colletidae:"Colletidae (plasterer bees)",Crabronidae:"Crabronidae (digger wasps)",Siricidae:"Siricidae (horntails)",Vespidae:"Vespidae (social wasps and hornets)",Chrysididae:"Chrysididae (cuckoo wasps)",Curculionidae:"Curculionidae (weevils)",Meloidae:"Meloidae (oil and blister beetles)",Dytiscidae:"Dytiscidae (diving beetles)",Hydrophilidae:"Hydrophilidae (water scavenger beetles)",Cerambycidae:"Cerambycidae (longhorn beetles)",Cantharidae:"Cantharidae (soldier beetles)",Silphidae:"Silphidae (carrion and burying beetles)",Chrysomelidae:"Chrysomelidae (leaf beetles)",Scarabaeidae:"Scarabaeidae (chafers and scarabs)",Elateridae:"Elateridae (click beetles)",Gyrinidae:"Gyrinidae (whirligig beetles)",Oedemeridae:"Oedemeridae (false blister beetles)",Ptinidae:"Ptinidae (deathwatch and spider beetles)",Coccinellidae:"Coccinellidae (ladybirds)",Pyrochroidae:"Pyrochroidae (cardinal beetles)",Lampyridae:"Lampyridae (glow-worms and fireflies)",Geotrupidae:"Geotrupidae (dor beetles)",Lucanidae:"Lucanidae (stag beetles)",Carabidae:"Carabidae (ground beetles)",Staphylinidae:"Staphylinidae (rove beetles)",Formicidae:"Formicidae (ants)",Pterophoridae:"Pterophoridae (plume moths)",Cimbicidae:"Cimbicidae (club-horned sawflies)",Tenthredinidae:"Tenthredinidae (common sawflies)",Hemerobiidae:"Hemerobiidae (brown lacewings)",Osmylidae:"Osmylidae (giant lacewings)",Tachinidae:"Tachinidae (parasitic flies)",Conopidae:"Conopidae (thick-headed flies)",Syrphidae:"Syrphidae (hoverflies)",Asilidae:"Asilidae (robberflies)",Bombyliidae:"Bombyliidae (bee-flies)",Tabanidae:"Tabanidae (horseflies)",Rhagionidae:"Rhagionidae (snipeflies)",Stratiomyidae:"Stratiomyidae (soldierflies)",Bibionidae:"Bibionidae (St Mark's flies)",Tipulidae:"Tipulidae (craneflies)",Boreidae:"Boreidae (snow fleas)",Limnephilidae:"Limnephilidae (caddisflies)",Trichoptera:"Trichoptera (the caddisfly order, with many families)",Panorpidae:"Panorpidae (scorpionflies)",Sialidae:"Sialidae (alderflies)",Chrysopidae:"Chrysopidae (green lacewings)",Pulicidae:"Pulicidae (fleas)"};
 /* ---------- seen in the wild ---------- */
 /* state.seen[speciesId] = list of stage keys ("young", "pupa", "adult"). Eggs aren't included. A species
    counts as Seen while at least one stage is ticked; unticking them all removes it. */
@@ -1695,6 +1961,100 @@ function closeSeen(){
 $("sn-done").onclick=closeSeen;
 $("m-seen").addEventListener("click",e=>{ if(e.target===$("m-seen")) closeSeen(); });
 
+/* ---------- Want To Learn More? and Additional Sources ----------
+   "Want To Learn More?" links go only to non-commercial organisations: conservation charities, government bodies and
+   publicly funded data centres. Every link was checked before it was added. "Additional Sources" lists the pages actually
+   used when the species was added or its notes were written; anything else came from general knowledge. */
+const WT="https://www.wildlifetrusts.org/wildlife-explorer/invertebrates/";
+const WT_CAT={butterfly:"butterflies",moth:"moths",beewasp:"bees-and-wasps",beetle:"beetles",ant:"ants",fly:"flies",other:"other-insects"};
+/* species not taken from the Wildlife Trusts lists (added later, or the app's original Monarch) */
+const NOT_WT=new Set(["monarch","poplar-hawk-moth","eyed-hawk-moth","ruby-tiger","white-ermine","muslin-moth","swallow-tailed-moth","white-plume-moth",
+  "burnished-brass","narrow-bordered-bee-hawk-moth","burren-green","birch-clubhorn","gooseberry-sawfly","solomons-seal-sawfly","great-yellow-bumblebee",
+  "orange-tailed-mining-bee","wool-carder-bee","nomad-bee","violet-carpenter-bee","cream-spot-ladybird","kidney-spot-ladybird","pine-ladybird",
+  "striped-ladybird","pellucid-hoverfly","two-banded-wasp-hoverfly","bog-hoverfly","pied-hoverfly","brown-lacewing","giant-lacewing"]);
+/* where a Wildlife Trusts page name differs from ours */
+const WT_SLUG={"duke-of-burgundy":"duke-burgundy","wall":"wall-brown","argent-and-sable":"argent-sable","garden-tiger":"garden-tiger-moth","buff-tip":"buff-tip-moth",
+  "six-spot-burnet":"six-spot-burnet-moth","golden-bloomed-grey-longhorn":"golden-bloomed-grey-longhorn-beetle","black-spotted-longhorn":"black-spotted-longhorn-beetle",
+  "black-and-yellow-longhorn":"black-and-yellow-longhorn-beetle","wood-ant":"southern-wood-ant","ferruginous-bee-grabber":"ferruginous-beegrabber",
+  "notch-horned-cleg":"notch-horned-cleg-fly-horse-fly","crane-fly":"daddy-longlegs"};
+const wtURL=s=> s.id==="large-blue" ? WT+"butterflies-and-moths/large-blue" : WT+WT_CAT[s.kind]+"/"+(WT_SLUG[s.id]||s.id);
+/* Butterfly Conservation pages: most match our names; these differ, and null means it has no page for that species */
+const BC_SLUG={"magpie-moth":"magpie","argent-and-sable":"argent-sable","chalkhill-blue":"chalk-hill-blue","oak-eggar":"oak-eggar/northern-eggar",
+  "hummingbird-hawk-moth":"humming-bird-hawk-moth","mullein":"the-mullein","double-striped-pug":null,"yellow-tail":null,"reddish-buff":null,"knot-grass":null,
+  "white-plume-moth":null,"burren-green":null};
+const bcURL=s=>{ if(s.kind!=="butterfly" && s.kind!=="moth") return null;
+  const slug= s.id in BC_SLUG ? BC_SLUG[s.id] : s.id; return slug ? `https://butterfly-conservation.org/${s.kind==="moth"?"moths":"butterflies"}/${slug}` : null; };
+const BCT=new Set(["bilberry-bumblebee","buff-tailed-bumblebee","heath-bumblebee","tree-bumblebee","early-bumblebee","garden-bumblebee","shrill-carder-bee",
+  "white-tailed-bumblebee","red-tailed-bumblebee","common-carder-bee","great-yellow-bumblebee"]);
+/* National Biodiversity Data Centre species pages (Ireland) */
+const NBDC_ID={"lime-hawk-moth":78877,"eyed-hawk-moth":78878,"poplar-hawk-moth":78879,"narrow-bordered-bee-hawk-moth":78880,"garden-tiger":78933,"white-ermine":78935,
+  "muslin-moth":78938,"ruby-tiger":78939,"cinnabar":78944,"yellow-tail":78911,"mullein":79044,"box-tree-moth":296219,"swallow-tailed-moth":78842,"burnished-brass":79197,
+  "white-plume-moth":82469,"burren-green":83188,"rosemary-beetle":74850,"swollen-thighed-beetle":67388,"harlequin-ladybird":69735,"musk-beetle":65417,"black-oil-beetle":67393,
+  "minotaur-beetle":65655,"green-tiger-beetle":64785,"rose-chafer":65714,"red-headed-cardinal-beetle":67342,"rhinoceros-beetle":65650,"black-and-yellow-longhorn":74161,
+  "coppery-click-beetle":71278,"green-tortoise-beetle":65646,"bloody-nosed-beetle":76786,"wasp-beetle":65424,"cream-spot-ladybird":65310,"kidney-spot-ladybird":65292,
+  "pine-ladybird":65294,"striped-ladybird":65312,"giant-horntail":52802,"solomons-seal-sawfly":55315,"birch-clubhorn":62570,"tawny-mining-bee":55708,
+  "hairy-footed-flower-bee":55907,"ivy-bee":55193,"ferruginous-bee-grabber":89246,"twin-lobed-deer-fly":87633,"small-skipper":77376,"comma":77344,"wood-ant":56457};
+const nbdcURL=id=>"https://maps.biodiversityireland.ie/Species/"+id;
+const UKMOTHS=new Set(["poplar-hawk-moth","eyed-hawk-moth","ruby-tiger","white-ermine","muslin-moth","swallow-tailed-moth","white-plume-moth","burnished-brass",
+  "narrow-bordered-bee-hawk-moth","burren-green"]);
+const WIKI={"violet-carpenter-bee":["Xylocopa violacea","Xylocopa_violacea"],"hornet-robberfly":["Asilus crabroniformis","Asilus_crabroniformis"],
+  "golden-bloomed-grey-longhorn":["Agapanthia villosoviridescens","Agapanthia_villosoviridescens"],"broad-bordered-bee-hawk-moth":["Hemaris fuciformis","Hemaris_fuciformis"],
+  "brown-tail":["Euproctis chrysorrhoea","Euproctis_chrysorrhoea"]};
+const SAWFLIES=new Set(["gooseberry-sawfly","birch-clubhorn","solomons-seal-sawfly"]);
+const NEW_HOVERFLIES=new Set(["pellucid-hoverfly","two-banded-wasp-hoverfly","bog-hoverfly","pied-hoverfly"]);
+const HOVER_GUIDE={t:"National Biodiversity Data Centre: Beginners' guide to hoverflies in Ireland (PDF)",u:"https://biodiversityireland.ie/app/uploads/2015/07/Beginners-guide-to-Irish-hoverflies-July-2015.pdf"};
+const isHoverfly=s=>/hoverfly|drone-fly|marmalade|heineken|footballer|narcissus/.test(s.id);
+const isLadybird=s=>/ladybird/.test(s.id);
+const isBee=s=>s.kind==="beewasp" && /bee(?!-wolf)|bumblebee/.test(s.id);
+
+function learnLinks(s){
+  const L=[], ie=COUNTRY==="ie";
+  if(ie) L.push(NBDC_ID[s.id] ? {t:`National Biodiversity Data Centre: ${s.name} records and map`,u:nbdcURL(NBDC_ID[s.id])}
+                              : {t:"National Biodiversity Data Centre: search Biodiversity Maps for Irish records",u:"https://maps.biodiversityireland.ie/"});
+  if(!NOT_WT.has(s.id)) L.push({t:`The Wildlife Trusts: ${s.name}`,u:wtURL(s)});
+  const bc=bcURL(s); if(bc) L.push({t:`Butterfly Conservation: ${s.name}`,u:bc});
+  if(BCT.has(s.id)) L.push({t:`Bumblebee Conservation Trust: ${s.name}`,u:`https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/${s.id}/`});
+  if(ie && s.kind==="butterfly") L.push({t:"Butterfly Conservation Ireland",u:"https://butterflyconservation.ie/wp/"});
+  if(ie && (isBee(s) || isHoverfly(s))) L.push({t:"All-Ireland Pollinator Plan: free identification guides",u:"https://pollinators.ie/record-pollinators/id-guides/"});
+  if(!L.length || (L.length===1 && ie)) L.push({t:`The Wildlife Trusts: ${KINDS[s.kind].label}`,u:WT+WT_CAT[s.kind]});
+  return L;
+}
+function sourceLinks(s){
+  const S=[], ie=COUNTRY==="ie";
+  if(!NOT_WT.has(s.id)) S.push({t:`The Wildlife Trusts: Wildlife Explorer, ${KINDS[s.kind].label} (the list this species was chosen from)`,u:WT+WT_CAT[s.kind]});
+  if(UKMOTHS.has(s.id)) S.push({t:`UKMoths: ${s.sci}`,u:`https://www.ukmoths.org.uk/species/${s.sci.toLowerCase().replace(/\s+/g,"-")}/`});
+  if(SAWFLIES.has(s.id)){
+    if(s.id==="gooseberry-sawfly") S.push({t:"Sawflies.org.uk: Euura ribesii",u:"https://www.sawflies.org.uk/euura-ribesii/"});
+    S.push({t:"Sawflies.org.uk: UK checklist",u:"https://www.sawflies.org.uk/uk-checklist/"});
+    S.push({t:"Liston et al., Checklist of British and Irish Hymenoptera: Sawflies, 'Symphyta' (Biodiversity Data Journal)",u:"https://bdj.pensoft.net/article/1168/"});
+  }
+  if(s.id==="giant-lacewing") S.push({t:"Lacewings and Allies Recording Scheme: Osmylidae (giant lacewings) identification",u:"https://www.laars.jamesjepson.com/osmylidae-giant-lacewings-identification/"});
+  if(NEW_HOVERFLIES.has(s.id) || (ie && isHoverfly(s))) S.push(HOVER_GUIDE);
+  if(ie){
+    if(NBDC_ID[s.id]) S.push({t:`National Biodiversity Data Centre: ${s.name} (Irish records)`,u:nbdcURL(NBDC_ID[s.id])});
+    if(s.kind==="butterfly"){
+      S.push({t:"Regan et al., Ireland Red List No. 4: Butterflies (NPWS, PDF)",u:"https://www.npws.ie/sites/default/files/publications/pdf/RL_2010_Butterflies.pdf"});
+    } else if(/Vulnerable|Endangered|Near Threatened/.test(s.status)) S.push({t:"National Biodiversity Data Centre: Ireland's Red Lists",u:"https://biodiversityireland.ie/publications-category/red-lists/"});
+    if(s.id==="mullein") S.push({t:"MothsIreland: The Mullein rediscovered after 69 years",u:"https://www.mothsireland.com/73-058-the-mullein-cucullia-verbasci-rediscovered-after-69-years/"});
+    if(s.id==="wood-ant") S.push({t:"NPWS Irish Wildlife Manual 68: Species dossier for the Hairy Wood Ant (PDF)",u:"https://www.npws.ie/sites/default/files/publications/pdf/IWM68.pdf"});
+    if(isLadybird(s)) S.push({t:"Irish Wildlife Trust: Ladybird Survey",u:"https://iwt.ie/what-we-do/citizen-science/ladybird-survey/"});
+    if(isBee(s)) S.push({t:"All-Ireland Pollinator Plan: identification guides",u:"https://pollinators.ie/record-pollinators/id-guides/"});
+  }
+  if(WIKI[s.id]) S.push({t:`Wikipedia: ${WIKI[s.id][0]}`,u:"https://en.wikipedia.org/wiki/"+WIKI[s.id][1]});
+  if(ie && s.kind==="butterfly") S.push({t:"Wikipedia: List of butterflies of Ireland",u:"https://en.wikipedia.org/wiki/List_of_butterflies_of_Ireland"});
+  return S;
+}
+const linkLI=l=>`<li><a href="${esc(l.u)}" target="_blank" rel="noopener noreferrer">${esc(l.t)}</a></li>`;
+function renderLearn(s){
+  $("ms-learn").innerHTML=learnLinks(s).map(linkLI).join("");
+  const src=sourceLinks(s);
+  $("ms-src").innerHTML=src.map(linkLI).join("");
+  $("ms-src").hidden=!src.length;
+  $("ms-src-note").textContent= src.length
+    ? "Other details in these notes were written from general knowledge and haven't been checked against a source yet."
+    : "No specific pages were used for this species. Its notes were written from general knowledge and haven't been checked against a source yet.";
+}
+
 function openSpecies(id){
   const s=SP[id], raised=state.collection.some(c=>c.species===id);
   $("ms-h").textContent=s.name; $("ms-sci").textContent=s.sci; $("ms-kind").textContent=s.noun.charAt(0).toUpperCase()+s.noun.slice(1);
@@ -1706,17 +2066,39 @@ function openSpecies(id){
   $("ms-seen-note").classList.toggle("is-seen",sl.length>0);
   $("ms-seen").textContent = sl.length ? "Edit what I've seen" : "I've seen it!";
   $("ms-locked").hidden=raised; $("ms-facts-wrap").hidden=!raised; $("ms-raised-wrap").hidden=!raised;
-  $("ms-kv").innerHTML=[["Family",FAMILY[s.family]||s.family],[KINDS[s.kind].size,s.wing],[KINDS[s.kind].food,s.food],["When to see it",s.season],["In Britain",s.status]]
+  $("ms-kv").innerHTML=[["Family",FAMILY[s.family]||s.family],[KINDS[s.kind].size,s.wing],[KINDS[s.kind].food,s.food],["When to see it",s.season],[COUNTRY_INFO.inLabel,s.status]]
     .map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("");
   $("ms-facts").innerHTML=s.facts.map(f=>`<li>${esc(f)}</li>`).join("");
   $("ms-list").innerHTML=state.collection.filter(c=>c.species===id).map((c,i)=>`
     <div class="result" style="border:1px solid var(--line);border-radius:12px"><span class="spine" style="background:#e8741c"></span>
     <span class="meta"><b>#${i+1} · ${esc(c.title)}</b><span class="small muted">${esc(c.author||"Unknown author")} · <span class="mono">${c.pages} pp</span> · ${new Date(c.date).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"})}</span></span></div>`).join("");
+  renderLearn(s);
   $("ms-seen").dataset.id=id;
   $("m-sp").hidden=false;
 }
 $("ms-close").onclick=()=>{$("m-sp").hidden=true};
 $("ms-seen").onclick=()=>openSeen($("ms-seen").dataset.id);
+
+/* ---------- country picker ---------- */
+function renderCountryHeader(){
+  $("sub").textContent=`Prototype · up to 5 books at once · ${SPECIES.length} ${COUNTRY_INFO.adj} species`;
+  $("flag-btn").innerHTML=flagSVG(COUNTRY);
+  $("flag-btn").setAttribute("aria-label",`Country: ${COUNTRY_INFO.name}. Change country`);
+}
+$("flag-btn").onclick=()=>{
+  $("country-list").innerHTML=Object.entries(COUNTRIES).map(([code,c])=>`<button type="button" class="opt country" data-c="${code}" aria-pressed="${code===COUNTRY}">
+      ${flagSVG(code)}<span><b>${c.name}</b><span class="small muted">${code===COUNTRY?`${SPECIES.length} ${c.adj} species · current`:`${c.adj} species`}</span></span></button>`).join("");
+  $("country-list").querySelectorAll(".country").forEach(b=>b.onclick=()=>{
+    const c=b.dataset.c; if(c===COUNTRY){ $("m-country").hidden=true; return; }
+    save();
+    try{ localStorage.setItem("bookworm-country",c); sessionStorage.setItem("bookworm-switched",c); }catch(e){}
+    location.reload();
+  });
+  $("m-country").hidden=false;
+};
+$("mco-close").onclick=()=>{$("m-country").hidden=true};
+renderCountryHeader();
+try{ if(sessionStorage.getItem("bookworm-switched")){ sessionStorage.removeItem("bookworm-switched"); setTimeout(()=>toast(`Now showing ${COUNTRY_INFO.adj} species.`),300); } }catch(e){}
 
 /* ---------- tools ---------- */
 $("skip-day").onclick=()=>{state.offset=(state.offset||0)+DAY;save();show();toast("Skipped ahead one day");};
