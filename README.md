@@ -1,0 +1,329 @@
+# Bookworm
+
+**Read books, raise insects.** Bookworm is a reading tracker built as a virtual pet. Every book you start hatches an insect larva. Each page you read feeds it, and it grows through its life stages. When you finish the book, it emerges as an adult and joins your Species Collection, along with field notes about the real insect.
+
+It's meant to be educational and friendly for beginners in entomology. Every species card is fact-checked, links to free guides from conservation organisations, and lists its sources.
+
+> **Status:** single-file HTML prototype (October 2026). The plan is to turn it into an Android app. Please read [Before the Android build](#before-the-android-build) first.
+
+---
+
+## Contents
+
+- [Playing it](#playing-it)
+- [How the game works](#how-the-game-works)
+- [The species](#the-species)
+- [Countries: United Kingdom and Ireland](#countries-united-kingdom-and-ireland)
+- [Species cards](#species-cards)
+- [Fact-checking and sources](#fact-checking-and-sources)
+- [Book search](#book-search)
+- [Project files](#project-files)
+- [How the code is organised](#how-the-code-is-organised)
+- [Testing](#testing)
+- [Before the Android build](#before-the-android-build)
+- [Design decisions log](#design-decisions-log)
+
+---
+
+## Playing it
+
+- **Online:** open `index.html` from GitHub Pages, or the claude.ai artifact version.
+- **Locally:** open `index.html` in any modern browser. No install or build step is needed.
+- **Saves:** progress is stored in the browser's `localStorage`. Clearing site data wipes it, and each browser or device has its own save.
+
+## How the game works
+
+### Books and larvae
+- **One larva per book.** Starting a book hatches an egg. The larva's species is chosen at random, as described in [Choosing a species](#choosing-a-species).
+- **Logging progress.** You log reading as a **page number** or a **percentage**, and you can switch between the two at any time. The app converts between them, rounding up, and the larva never loses a stage when you switch.
+- **Growth.** The larva grows at every 10% of the book, and each growth stage has its own congratulations screen with a fact. At **90%** it becomes a pupa: a chrysalis for butterflies, a pupa or cocoon for everything else. At **100%** the adult emerges and joins your collection.
+- **Correcting progress.** If you enter the wrong page, the page-number editor lets you fix it.
+- **Logging reading.** The Log Reading box sits right under the larva, so you can watch it munch when you press **Feed**. Type the page you're on, or your percentage, and press Feed.
+- **Field notes while raising.** Each larva's page has a **See Field Notes** button under its hunger status. It opens a pop-up with the species' field notes, gardening tip and links as soon as the egg hatches. In the Species Collection, the field notes stay locked until you've raised the adult.
+- **Reading screen lists.** Below Your books there's a **Want To Read** list and a **Completed Books** list. Each shows the three most recent titles, and tapping one opens the whole list.
+- **Want To Read.** The Add a book page has an **Add to Want To Read list** button under "Next: choose how to track", and you can use it even when you're already reading 5 books. Each entry in the full list has **Start Reading**, which opens the "How do you want to track this book?" pop-up, and **Remove**.
+- **Re-reading.** You can add the same book again, because people re-read books. If a book matches one you're reading, have finished, or have on your list, the app first asks "You have added this book before. Are you reading it again?", with **Yes** or **No**. A book matches if the ISBNs match, or the titles match and the authors match (or one is blank).
+- **Nothing dies.** If you stop reading, the larva just gets "extremely hungry".
+
+### Rarity tiers (by page count)
+
+| Book length | Tier |
+|---|---|
+| under 450 pages | Common |
+| 450–799 pages | Uncommon |
+| 800+ pages | Rare |
+
+### Shelf limits
+- **Books:** you can read up to **5** books at once.
+- **Frozen:** you can freeze up to **5** books (paused reading). Frozen larvae don't grow.
+- **Waiting:** up to **5** larvae can wait without a book, and they don't take up a reading slot. Tap one to see what kind of insect it is (for example "common wasp"), or to release it.
+- **Abandoning a book:** you choose to either **release** the larva or **transfer** it to another book of a similar tier. A transfer gives you a random eligible larva and resets its growth.
+
+### Choosing a species
+1. **Unlocked categories only.** Every egg starts out as a butterfly. The other categories unlock as you raise butterflies (repeats count):
+
+   | Category | Unlocks after raising |
+   |---|---|
+   | Butterflies | from the start |
+   | Moths | 2 butterflies |
+   | Bees & wasps | 4 butterflies |
+   | Beetles | 6 butterflies |
+   | Flies | 8 butterflies |
+   | Ants | 10 butterflies |
+   | Other insects | 12 butterflies |
+
+   Unlocks are shown on the Achievements screen, get a banner on the "emerged" screen, and appear as a note on locked collection tabs.
+2. **All uncollected species of the book's tier, ignoring category.** Bigger categories come up more often and small ones like ants fill slowly. (The first prototype picked a category first with equal odds, which gave out ants far too quickly.)
+3. **Season.** Species that are **in season this month** are weighted **3:1**, and they get an "In season now!" chip.
+4. **Exclusions.** It skips any species currently being raised, frozen or waiting.
+5. **Fallback.** Only when nothing new is left in the tier can a repeat hatch.
+
+"This month" comes from the device clock. The **Prototype tools** panel can override it for testing.
+
+### Male and female forms
+32 species have adult males and females that a beginner could tell apart from a photo, for example the Orange-tip, Common Blue, Vapourer, Stag Beetle and Scorpionfly. The rules for choosing them are the same as the look-alike rule: obvious differences only, so no sex brands, eye spacing or hand-lens features.
+
+- **Hatching.** These species hatch as a **male** or a **female**. The larva's page shows ♂ Male or ♀ Female under its length.
+- **Collecting.** Raising either form counts the species as collected, so its field notes unlock and it counts towards achievements.
+- **The other form.** The collection shows which forms you have. The missing form still counts as "uncollected" when an egg is picked, and a pick gives you the missing form.
+- **Species card.** It describes every form. Once forms are raised, it shows art for each.
+- **One at a time.** Only one larva of a species can be raised at once, even when another form is still missing.
+
+### Queens and workers
+19 social species have **queen** and **worker** forms: all 5 ants, the Honey Bee, all 11 bumblebees, the Common Wasp and the Hornet. The Red-tailed Bumblebee also keeps its distinctive male (yellow face and bands), so it has three forms.
+
+- **No other castes.** Ordinary males of the other social species aren't included, because they're short-lived and look too much like the females. There are no soldiers either, because no British or Irish ant has a true soldier caste.
+- **Hatching.** A larva of these species hatches as a female, apart from the Red-tailed Bumblebee male.
+- **Queen or worker? It depends on feeding, as in real colonies.**
+  - She becomes a **queen** if she never gets **Hungry** while her book is read.
+  - She becomes a **worker** if she does.
+  - The larva's page tells you which way she's heading.
+  - The "emerged" screen explains the real science: royal jelly for honey bees, extra food late in the season for bumblebees, special well-fed queen cells for wasps, and nutrition (plus other factors in some species) for ants.
+- **Spring queens.** Bumblebees, the Common Wasp and the Hornet have a field note explaining that the big ones seen in early spring are queens fresh out of hibernation.
+- **Old saves.** Larvae and adults in older saves were given a form. Previously raised social species became workers, and larvae became females whose caste is still to be decided.
+
+### I've Seen It!
+On any species card you can mark which life stages you've seen in the wild: egg, larva, pupa or adult. Seen species get a marker in the collection. This works even for species you haven't raised yet.
+
+### Achievements
+- **Category achievements:** "Collect all British Butterflies", "Collect all Irish Moths" and so on, one per category per country.
+- **Meta achievements:** "Collect All British Species" and "Collect All Irish Species". These read both countries' saves, and they're stored separately in `bookworm-meta`.
+
+## The species
+
+### Rules for inclusion
+1. **Complete metamorphosis only.** Every species goes through egg, larva, pupa and adult. Insects such as dragonflies, grasshoppers and true bugs are left out.
+2. **Novice-distinguishable only.** A species gets its own entry only if a beginner could tell it apart by eye or from a decent photo. Near-identical look-alikes are explained in the main species' field notes instead:
+
+| Collectible | Look-alike folded in (old save ID → new) |
+|---|---|
+| Small Skipper | Essex Skipper (`essex-skipper` → `small-skipper`) |
+| Wood White | Cryptic Wood White (`cryptic-wood-white` → `wood-white`) |
+| Wood Ant | Southern, Hairy and Scottish Wood Ants (`southern-wood-ant`, `hairy-wood-ant` → `wood-ant`) |
+| Crane Fly | renamed from "Daddy Longlegs" (`daddy-longlegs` → `crane-fly`), so it isn't mistaken for a spider |
+
+Old saves are migrated automatically through the `MERGED` alias map.
+
+### Counts
+
+| Category | United Kingdom | Ireland |
+|---|---|---|
+| Butterflies | 53 | 34 |
+| Moths | 54 | 46 |
+| Bees, wasps & sawflies | 31 | 27 |
+| Beetles | 48 | 36 |
+| Ants | 5 | 4 |
+| Flies | 23 | 19 |
+| Other insects (lacewings, caddisflies, scorpionflies, alderflies, fleas and so on) | 9 | 6 |
+| **Total** | **223** | **172** |
+
+### Where the species came from
+- **Starting lists:** the Wildlife Trusts' *Wildlife Explorer* lists for each category.
+- **Added for Northern Ireland and Ireland:** extra species, for example the Narrow-bordered Bee Hawk-moth, plus Ireland-only species such as the **Burren Green**.
+- **Added after a gap check:** sawflies, lacewings, more hawk-moths and tigers, ladybirds, hoverflies and bees.
+- **Irish checks:** every British species was checked against Irish records, mainly National Biodiversity Data Centre maps, the Irish Red Lists, MothsIreland and the All-Ireland Pollinator Plan. Species with no Irish records, or only one-off strays, are left out of the Irish collection.
+- **The Monarch** is the app's original species. It stays in both collections as a rare vagrant.
+
+## Countries: United Kingdom and Ireland
+
+- **Switching country.** Tap the flag in the top-right corner to change country. The page reloads with that country's data.
+- **What's separate.** Each country has its own species list, rarity tiers, status lines, field notes, save and achievements. The two saves are `bookworm-proto-v1` and `bookworm-proto-v1-ie`, and the chosen country is stored in `bookworm-country`.
+- **Coverage.** The **United Kingdom collection includes Northern Ireland**. Both countries get the complete experience.
+- **Wording, chosen to respect cultural identity:**
+  - The country picker reads **"United Kingdom"** and **"Ireland"**.
+  - Species are described as **"British"** or **"Irish"**, as in "223 British species".
+  - "UK" is fine inside field notes for brevity.
+- **Irish mode details:**
+  - Rarity comes from `IE_RARITY`.
+  - Irish status lines and an optional Irish fact come from `IE_NOTES`. The default status lines are in `IE_STATUS`.
+  - Facts that mention British places are hidden automatically by `PLACE_RE`.
+
+## Species cards
+
+Each card shows:
+- name, category and scientific name;
+- rarity chip and "In season now!" chip;
+- the I've Seen It! box;
+- family, size, larva food, when to see it, and UK or Irish status.
+
+Then, in order:
+
+1. **Field notes.** These unlock once you've raised the species from a book.
+2. **Gardening Tip.** It only appears for species a garden can realistically attract, for example: *"Want to attract a Red Admiral to your garden? Consider adding stinging nettles and ivy."* There's a tip for 73 British and 64 Irish species. There's **no** tip for:
+   - garden pests, such as cabbage whites, rosemary beetle and box-tree moth;
+   - anything that bites, stings or has irritating hairs;
+   - rare habitat specialists;
+   - predators and ants.
+
+   No invasive plants are suggested, and buddleia was deliberately left out.
+3. **Want To Learn More?** Free guides from non-commercial organisations: the Wildlife Trusts, Butterfly Conservation, the Bumblebee Conservation Trust and, in Irish mode, the National Biodiversity Data Centre, Butterfly Conservation Ireland and the All-Ireland Pollinator Plan. Every link was checked before it was added. Butterfly Conservation has no page for a handful of moths, so those cards don't link there.
+4. **Additional Sources.** Every page the card's facts were checked against, including Wikipedia, plus a note saying when the check was done. If a detail couldn't be confirmed by any source, the card says so.
+5. **Raised from your books.** Which books raised this species.
+
+The gardening tip and links show even before a species is raised.
+
+## Fact-checking and sources
+
+In October 2026 every card was checked claim by claim against trustworthy sources. These were mainly:
+- conservation charities (Wildlife Trusts, Butterfly Conservation, Bumblebee Conservation Trust, Buglife, Woodland Trust, RHS, Natural History Museum);
+- recording schemes (BWARS, UKMoths, UK Beetle Recording, sawflies.org.uk, NatureSpot);
+- Irish public bodies (NBDC, NPWS, All-Ireland Pollinator Plan, Habitas);
+- Wikipedia.
+
+Retailers, pest-control firms, blogs and forums were not allowed.
+
+| Result | Field-note sentences | Other details (food, season, size, status, scientific name) |
+|---|---|---|
+| Confirmed as written | 455 | 833 |
+| Corrected | 220 | 344 |
+| Replaced with a verified fact | 38 | — |
+| Kept but unconfirmed (flagged on the card) | — | 15 |
+
+**Notable corrections:**
+- **Scientific names:** Adonis and Chalk Hill Blues are now *Polyommatus*, the Gooseberry Sawfly is *Euura ribesii*, and the Brown Lacewing now uses its family name, Hemerobiidae.
+- **Irish wood ants:** Ireland has **two** wood ants. As well as the Hairy Wood Ant, the Scottish Wood Ant lives at two sites in County Armagh.
+- **Mullein:** rediscovered in Ireland in **2021** after 69 years.
+- **Privet Hawk-moth:** Britain's largest resident *hawk-moth*, not its largest moth.
+
+**Where sources disagree** (for example Scotch Argus wingspan and Narrow-headed Ant size), the national recording scheme or Butterfly Conservation figure was used.
+
+The raw fact-check results are in `fc/result*.json`. For every claim they record the status (ok, corrected, replaced or unverified), the old wording and the URLs used. The checkers' notes on disputed points are in those files too.
+
+## Book search
+
+- **Search:** it uses the free **Open Library** API, through `/search.json`, `/isbn/<isbn>.json` and `/authors/<id>.json`.
+- **Offline fallback:** when Open Library can't be reached, it falls back to a small built-in sample catalogue. The claude.ai artifact sandbox blocks outside requests, so live search only works in the GitHub Pages version.
+
+## Project files
+
+| File | What it is |
+|---|---|
+| `bookworm.html` | The app. It's one HTML file with inline CSS, JavaScript and SVG, and it's the source of truth. |
+| `build_standalone.py` | Wraps `bookworm.html` in a full HTML document, with doctype, meta tags and favicon, and writes `index.html`. **Run `python3 build_standalone.py` after every change.** |
+| `index.html` | The built page that goes to GitHub Pages. |
+| `bookworm.v*.html` | Backups from earlier versions. |
+| `fc/` | Fact-check batches (`batch*.json`), results (`result*.json`) and the checker instructions (`INSTRUCTIONS.md`). |
+| `*_test.js` | Playwright test scripts. |
+
+## How the code is organised
+
+Everything runs inside one IIFE in `bookworm.html`.
+
+### Species data
+- **`SPECIES`:** the original 15 butterflies as object literals.
+- **Category rows:** `BFLY_ROWS`, `MOTH_ROWS`, `BEEWASP_ROWS`, `BEETLE_ROWS`, `ANT_ROWS`, `FLY_ROWS` and `OTHER_ROWS`. Each row is laid out as `[id, name, sci, family, rarity, size, larvaLength, food, season, status, facts, noun]`. `MOTH_ROWS` rows have no `noun`.
+- **Extras:** `EXTRA` holds species added for both countries, and `IE_ONLY` holds Ireland-only species.
+- **`DIMORPH`:** the species with male and female forms, as `[male description, female description, sources]`.
+- **`CASTE`:** the queen, worker and (Red-tailed Bumblebee) male descriptions with sources, plus `why` (how caste is decided, for ants, honey bees, bumblebees and wasps) and `spring` (spring-queen field notes).
+- **Forms in code:** `formsOf(id)` lists a species' forms: `m` male, `f` female, `q` queen, `w` worker. Larvae store `sex` (`m` or `f`), and `finalForm()` turns a female of a social species into `q` or `w` when she emerges. Whether she ever went hungry is tracked by `markHungry()`.
+- **`CHECKED`:** the fact-checked values, which **override** the draft text above. It holds `sci`, `food`, `season`, `size`, `status`, `facts`, Irish `[status, fact]`, `garden`, `src`, `srcIE` and `unv`. See the tidy-up note in [Before the Android build](#before-the-android-build).
+
+### Category metadata
+`KINDS` holds per-category wording: larva and pupa words, size and food labels, and stage facts.
+
+### Seasons
+`parseMonths()` turns "When to see it" text into a set of months. It understands:
+- month ranges, including ranges that wrap the year;
+- "All year";
+- season words such as "spring" or "summer".
+
+`inSeason()` and `weightedPick()` handle the 3:1 seasonal weighting.
+
+### Countries
+`COUNTRIES`, `IE_RARITY`, `IE_NOTES`, `IE_STATUS`, `PLACE_RE` and `COUNTRY_IDS`. The species list is filtered to the chosen country at load.
+
+### Card links and sources
+`learnLinks()`, `sourceLinks()`, `srcLabel()` (turns URLs into readable labels) and `renderLearn()`.
+
+### Main screens
+`renderShelf`, `renderRead`, `feed`, `celebrate`, `renderColl`, `openSpecies`, `openSeen`, `openWaiting`, `openNotes`, `openWtrList`, `openDoneList`, `pickSpecies` (with `missingForms`), `checkAchievements`, `checkUnlocks` and `renderAch`.
+
+### Save data
+Each country's save holds:
+- `books`: being read or frozen, each with an optional `sex`.
+- `waiting`: larvae waiting for a book.
+- `collection`: every finished book with the species and form it raised. This doubles as the Completed Books list.
+- `wtr`: the Want To Read list.
+- `seen`: the I've Seen It! ticks.
+- `achievements`.
+- `unlocks`: when each category unlocked.
+
+### Art
+The art is **placeholder** inline SVG (`caterpillarSVG`, `chrysalisSVG`, `butterflySVG`), to be replaced with your own artwork.
+
+### Theme
+Colour tokens are defined in `:root`, with light and dark mode. Fonts are Grandstander (display), Atkinson Hyperlegible (body) and DM Mono.
+
+## Testing
+
+The Playwright scripts run with `NODE_PATH=$(npm root -g) node <script>.js`. Outside network requests are blocked in tests.
+
+- **Current:** `notes_test.js` covers:
+  - butterfly-only start, and the Moths unlock after 2 butterflies;
+  - See Field Notes;
+  - Log Reading position;
+  - the duplicate-book prompt;
+  - Want To Read and Completed Books;
+  - the two-line collection count;
+  - locked-category notes.
+
+  `caste_test.js` covers queens and workers: the feeding rule, the notes and the save migration.
+
+  `multi_test.js` covers the shelf limits, freezing and transfers.
+- **Also current:** `fc_test.js` checks every card in both countries:
+  - no errors;
+  - every season parses to months;
+  - gardening tips show only where intended;
+  - every card has sources.
+- **Outdated:** several older scripts (`ie_test.js`, `merge_test.js`, `saw_test.js`, `meta_test.js`) still expect earlier species counts and wording, so they report stale failures. Update them during the tidy-up.
+
+## Before the Android build
+
+**A tidy-up pass is needed before porting.**
+
+1. **Fold `CHECKED` into the species data.** The verified text currently sits in the `CHECKED` block, which overrides the original draft text at load. So the file holds both versions, roughly doubling the data size.
+   - Write the checked values back into one clean dataset and delete the draft text. Ideally that's a single JSON file, `species.json`, with one record per species and a per-country section.
+   - Drop the override step.
+2. **Unify the data format.** Replace the mix of object literals and row arrays with one consistent record shape. Include rarity, Irish data, garden tip, sources and the unverified flags.
+3. **Move `IE_RARITY`, `IE_NOTES` and the source maps** (`WT_SLUG`, `BC_SLUG`, `NBDC_ID` and so on) into the same dataset.
+4. **Update or retire the outdated tests**, and add a check that every link still works.
+5. **Re-check the 15 unconfirmed details**, flagged in `unv` and on the cards.
+6. **Replace placeholder art**: a larva, a pupa and an adult for each category, or for each species.
+7. **Swap `localStorage` for proper app storage** on Android, and keep the save-migration map (`MERGED`).
+
+## Ideas for later
+
+1. **Species-specific growth-stage trivia.** At each growth stage, show larva and pupa trivia for that particular species where it's known, instead of the general larva facts.
+2. **Habitats.** Unlockable habitats such as "Meadow" or "Wetland", each "housing" the adult species you've collected that live there. Tapping a habitat shows it as background art, with the adult art of each collected species visible throughout the scene.
+
+## Design decisions log
+
+- **Collection order:** collection pages are ordered from Common to Rare.
+- **Achievements:** achievements are per category and per country, with meta achievements across both countries.
+- **Seasonal weighting:** seasonal species are favoured, not exclusive. Out-of-season species can still hatch.
+- **Want To Learn More? links:** the National Trust is a charity, not a public body, and has no species pages. So "Want To Learn More?" uses non-commercial conservation charities and public bodies instead, and says so on the card.
+- **NBN Atlas:** left out, because its pages couldn't be verified.
+- **Gardening tips:** shown before raising, alongside the links, because they're useful straight away.
+- **Unlock order:** after Bees & Wasps, the order is Beetles, Flies, Ants, then Other insects, two butterflies apart each time. Change `UNLOCKS` to adjust.
+- **Male and female forms:** only one larva of a species can be raised at a time, even when the other form is still missing.
+- **Queens and workers:** caste follows feeding rather than chance, which rewards steady reading and mirrors the real biology. The Common Wasp and Hornet have forms too, even though few people will ever tell their queens from workers in the wild, because collecting is the fun.
