@@ -36,7 +36,15 @@ It's meant to be educational and friendly for beginners in entomology. Every spe
 ### Books and larvae
 - **One larva per book.** Starting a book hatches an egg. The larva's species is chosen at random, as described in [Choosing a species](#choosing-a-species).
 - **Logging progress.** You log reading as a **page number** or a **percentage**, and you can switch between the two at any time. The app converts between them, rounding up, and the larva never loses a stage when you switch.
-- **Growth.** The larva grows at every 10% of the book, and each growth stage has its own congratulations screen with a fact. At **90%** it becomes a pupa: a chrysalis for butterflies, a pupa or cocoon for everything else. At **100%** the adult emerges and joins your collection.
+- **Growth.** The larva grows through 8 stages, each with its own congratulations screen and a fact. It then pupates (a chrysalis for butterflies, a pupa for everything else) at a **species-specific point** in the book, and the adult emerges at **100%**.
+  - **Pupation point:** worked out from the species' real active development time, as larva days ÷ (larva + pupa days), with winter dormancy left out. The Peacock pupates at 63%, most species fall between 50% and 90%, and multi-year beetle larvae like the Stag Beetle pupate at about 95%. A few parasitic insects with short larval lives pupate at around a third of the way through.
+  - **Life cycle row:** each species card shows the active days as a larva and as a pupa, and flags figures estimated from close relatives.
+  - **Winter field note:** each species has a field note saying which stage spends the winter.
+  - **Durations:** 100 species have species-level figures, 37 genus-level and 87 family-level estimates. They're in `DUR`.
+- **Pupae don't feed.** Once it pupates:
+  - the Feed button reads **Grow**, and logging reading shows "Growing!" instead of "Munch!";
+  - the hunger status shows **Pupating**, and a pupa never gets hungry;
+  - queen or worker is decided by feeding during the larval stage only.
 - **Correcting progress.** If you enter the wrong page, the page-number editor lets you fix it.
 - **Logging reading.** The Log Reading box sits right under the larva, so you can watch it munch when you press **Feed**. Type the page you're on, or your percentage, and press Feed.
 - **Field notes while raising.** Each larva's page has a **See Field Notes** button under its hunger status. It opens a pop-up with the species' field notes, gardening tip and links as soon as the egg hatches. In the Species Collection, the field notes stay locked until you've raised the adult.
@@ -105,6 +113,44 @@ It's meant to be educational and friendly for beginners in entomology. Every spe
 ### I've Seen It!
 On any species card you can mark which life stages you've seen in the wild: egg, larva, pupa or adult. Seen species get a marker in the collection. This works even for species you haven't raised yet.
 
+### Habitats
+- **The habitats:** 8 broad habitats, based on the Wildlife Trusts' habitat groups:
+  - Woodland;
+  - Grassland & Meadows;
+  - Heathland & Moorland;
+  - Wetlands & Bogs;
+  - Rivers, Ponds & Lakes;
+  - Coast;
+  - Farmland & Hedgerows;
+  - Towns, Gardens & Homes.
+- **Which species live where:** each species lives in 1–3 of them, main habitat first. They're in `HAB`, sourced mostly from Butterfly Conservation, BWARS, the Bumblebee Conservation Trust, NatureSpot and Wikipedia.
+- **Unlocking:** a habitat unlocks once you've raised **2** species that live there (`HAB_NEED`), with a banner on the "emerged" screen. Merged collections count, and unmerging re-locks any habitats that only unlocked through merging. Reset App clears habitat unlocks.
+- **Where they are:** the Collection screen has a **Species / Habitats** switch. Each unlocked habitat opens a simple placeholder screen: its name and a list of the species that live there, with raised ones first and ticked. Species in season this month get the leaf mark, so you can see what should be active there now. Species cards also list their habitats.
+
+### Score and titles
+- **Points:** every finished book earns points for its species' rarity in the country it was raised in: **100** Common, **200** Uncommon, **300** Rare. Repeats count. Completed Books and species cards show each book's points in that rarity's colour.
+- **Score:** the score covers every country (merging doesn't change it), and it's shown under the app title, with the current title beneath it. Tapping it opens the Titles list on the Achievements screen.
+- **Titles:** these are earned at score thresholds, and each new one gets a banner on the "emerged" screen.
+
+  | Points | Title |
+  |---|---|
+  | 0 | Egg Explorer |
+  | 500 | Hungry Hatchling |
+  | 1,500 | Caterpillar Chapter-Chaser |
+  | 3,000 | Larva Librarian |
+  | 5,000 | Paperback Pupa |
+  | 8,000 | Bookish Butterfly |
+  | 12,000 | Moth of the Margins |
+  | 17,000 | Bumblebee Bibliophile |
+  | 23,000 | Hawk-moth Historian |
+  | 30,000 | Lepidoptera Laureate |
+  | 40,000 | Entomology Encyclopaedist |
+  | 55,000 | Metamorphosis Maestro |
+  | 75,000 | Monarch of the Manuscripts |
+
+  For scale, raising every form of every species is worth about 43,800 points in the United Kingdom and 34,800 in Ireland, so the top title needs both countries, or a lot of re-reading.
+- **Storage:** titles are stored in `bookworm-titles`, and older saves were scored retroactively.
+
 ### Achievements
 - **Category achievements:** "Collect all British Butterflies", "Collect all Irish Moths" and so on, one per category per country.
 - **Meta achievements:** "Collect All British Species" and "Collect All Irish Species". These read both countries' saves, and they're stored separately in `bookworm-meta`.
@@ -157,6 +203,23 @@ Old saves are migrated automatically through the `MERGED` alias map.
   - Rarity comes from `IE_RARITY`.
   - Irish status lines and an optional Irish fact come from `IE_NOTES`. The default status lines are in `IE_STATUS`.
   - Facts that mention British places are hidden automatically by `PLACE_RE`.
+
+## Settings
+
+Tap the gear under the flag to open Settings.
+
+- **About:** what the app does, its learning objectives, the version number (`APP_VERSION`, currently 0.9.0) and the GitHub Pages link. The wording is a first draft to edit.
+- **Merge Collections (Easy Mode):** shares everything you've collected, past and future, across every country.
+  - **How it works:** each raised adult records the country it was collected in (`country`). Nothing is copied. While merged, the app reads every country's saves together (`coll()`). So species raised in the United Kingdom that also live in Ireland count as collected in Ireland, which leaves only the rest, including Ireland-only species. This works for any country added later.
+  - **What changes on screen:** the collection shows an "Easy Mode" chip. Species cards and Completed Books show where each one was collected. Category unlocks also count butterflies from every country.
+  - **Unmerge Collections:** the menu item changes to this once merged. Unmerging goes back to each country's own collection. It removes any category achievements, meta achievements and category unlocks that were only complete because of merging. Nothing else depends on them, so nothing breaks.
+- **Reset App:** asks twice ("Are you sure? This cannot be undone."). In every country it then deletes:
+  - collections and completed books;
+  - achievements, meta achievements, titles, the score and category unlocks;
+  - waiting larvae;
+  - I've Seen It! ticks.
+
+  It also switches Merge Collections off. A notice explains that the Want To Read list, frozen larvae and current books are kept and must be removed by hand.
 
 ## Species cards
 
@@ -233,6 +296,8 @@ Everything runs inside one IIFE in `bookworm.html`.
 - **`SPECIES`:** the original 15 butterflies as object literals.
 - **Category rows:** `BFLY_ROWS`, `MOTH_ROWS`, `BEEWASP_ROWS`, `BEETLE_ROWS`, `ANT_ROWS`, `FLY_ROWS` and `OTHER_ROWS`. Each row is laid out as `[id, name, sci, family, rarity, size, larvaLength, food, season, status, facts, noun]`. `MOTH_ROWS` rows have no `noun`.
 - **Extras:** `EXTRA` holds species added for both countries, and `IE_ONLY` holds Ireland-only species.
+- **`HAB`:** each species' habitats and sources. `HABITATS` lists the 8 habitats with descriptions.
+- **`DUR`:** active larva and pupa days, basis (species, genus or family), winter note and sources. `pupAt(id)` gives the pupation %, `stageAt(k,id)` the % for each stage, and `stageFor(p,id)` the stage for a given %.
 - **`DIMORPH`:** the species with male and female forms, as `[male description, female description, sources]`.
 - **`CASTE`:** the queen, worker and (Red-tailed Bumblebee) male descriptions with sources, plus `why` (how caste is decided, for ants, honey bees, bumblebees and wasps) and `spring` (spring-queen field notes).
 - **Forms in code:** `formsOf(id)` lists a species' forms: `m` male, `f` female, `q` queen, `w` worker. Larvae store `sex` (`m` or `f`), and `finalForm()` turns a female of a social species into `q` or `w` when she emerges. Whether she ever went hungry is tracked by `markHungry()`.
@@ -262,7 +327,8 @@ Everything runs inside one IIFE in `bookworm.html`.
 Each country's save holds:
 - `books`: being read or frozen, each with an optional `sex`.
 - `waiting`: larvae waiting for a book.
-- `collection`: every finished book with the species and form it raised. This doubles as the Completed Books list.
+- `collection`: every finished book with the species, form and `country` it was raised in. This doubles as the Completed Books list.
+- Merge Collections is stored separately in `bookworm-merged`, because it applies to every country.
 - `wtr`: the Want To Read list.
 - `seen`: the I've Seen It! ticks.
 - `achievements`.
@@ -313,8 +379,14 @@ The Playwright scripts run with `NODE_PATH=$(npm root -g) node <script>.js`. Out
 
 ## Ideas for later
 
-1. **Species-specific growth-stage trivia.** At each growth stage, show larva and pupa trivia for that particular species where it's known, instead of the general larva facts.
-2. **Habitats.** Unlockable habitats such as "Meadow" or "Wetland", each "housing" the adult species you've collected that live there. Tapping a habitat shows it as background art, with the adult art of each collected species visible throughout the scene.
+1. **Species-specific growth-stage trivia.** At each growth stage, show larva and pupa trivia for that particular species where it's known, instead of the general larva facts. Use the species' own life-cycle data (`DUR`) in the blurbs that appear as the larva reaches each new growth stage. Examples:
+   - "A Peacock caterpillar feeds for about 27 days before it forms its chrysalis."
+   - "Stag Beetle larvae can spend years growing in rotting wood."
+   - The species' winter note, shown at the right stage, e.g. on reaching the pupa stage for species that overwinter as pupae.
+2. **Habitat artwork.** The basic Habitats screens, a title and a species list, are in. Later, each habitat becomes a piece of background art, with the adult art of every collected species that lives there overlaid on it.
+   - **Time of day:** the art comes in **dawn, day, dusk and night** versions, and the habitat follows the real time. Only species active at that time of day appear: for example, butterflies by day and most moths at night, which needs activity-time data per species.
+   - **Seasons:** each habitat also has **spring, summer, autumn and winter** versions, following the real date. Only species out at that time of year appear, using the existing `months` data.
+   - **Viewing other times:** you can switch to view another time of day or season, but the habitat always opens on the current real time and season.
 
 ## Design decisions log
 

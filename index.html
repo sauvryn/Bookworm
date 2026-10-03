@@ -44,6 +44,10 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
 .wordmark{font-family:var(--f-display);font-weight:800;font-size:28px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
 .wordmark svg{width:34px;height:20px}
 .top .sub{font-size:13px;color:var(--muted)}
+.score-box{display:flex;flex-direction:column;align-items:flex-start;gap:0;margin:2px 0 4px;padding:0;background:none;border:0;text-align:left;font-weight:400}
+.score-box .pts{font-family:var(--f-mono,'DM Mono',monospace);font-size:18px;font-weight:500;color:var(--ink)}
+.score-box .ttl{font-family:var(--f-display);font-weight:700;font-size:15px;color:var(--accent)}
+.pts-chip{font-family:'DM Mono',monospace}
 h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.15}
 h2{font-size:22px;font-weight:700}
 h3{font-size:17px;font-weight:700}
@@ -104,7 +108,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
 @keyframes flap{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.72)}}
 .munch{animation:munch .6s ease}
 @keyframes munch{0%{transform:scale(1)}30%{transform:scale(1.06,.94)}60%{transform:scale(.97,1.04)}100%{transform:scale(1)}}
-.floater{position:absolute;left:50%;top:40%;transform:translateX(-50%);font-family:var(--f-display);font-weight:800;color:var(--accent);font-size:22px;pointer-events:none;animation:float 1.1s ease forwards}
+.floater{white-space:nowrap;position:absolute;left:50%;top:40%;transform:translateX(-50%);font-family:var(--f-display);font-weight:800;color:var(--accent);font-size:22px;pointer-events:none;animation:float 1.1s ease forwards}
 @keyframes float{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,-40px)}}
 
 /* progress */
@@ -116,9 +120,9 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .stem{position:relative;height:30px}
 .stem .track{position:absolute;left:0;right:0;top:13px;height:5px;border-radius:3px;background:var(--line)}
 .stem .fill{position:absolute;left:0;top:13px;height:5px;border-radius:3px;background:var(--leaf-dark);transition:width .5s ease}
-.stem .nodes{position:absolute;inset:0;display:grid;grid-template-columns:repeat(10,1fr)}
-.stem .node{display:flex;justify-content:flex-end;align-items:center}
-.stem .node span{width:16px;height:16px;border-radius:50%;background:var(--surface);border:2px solid var(--line);transform:translateX(50%)}
+.stem .nodes{position:absolute;inset:0}
+.stem .node{position:absolute;top:0;bottom:0;display:flex;align-items:center;transform:translateX(-50%)}
+.stem .node span{width:16px;height:16px;border-radius:50%;background:var(--surface);border:2px solid var(--line)}
 .stem .node.done span{background:var(--leaf);border-color:var(--leaf-dark)}
 .stem .node.chrys span{border-radius:50% 50% 50% 50%/60% 60% 40% 40%}
 .stem .node.fly span{background:var(--surface);border-color:var(--accent)}
@@ -132,11 +136,26 @@ button:disabled{opacity:.45;cursor:not-allowed}
 /* collection */
 .seg{display:flex;flex-wrap:wrap;gap:4px;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:4px}
 .flag-btn{padding:6px;border-radius:10px;line-height:0;align-self:center}
+.hdr-btns{display:flex;flex-direction:column;align-items:center;gap:6px;align-self:flex-start;margin-top:4px}
+.gear-btn{padding:6px;border-radius:10px;line-height:0;color:var(--muted)}
+.gear-btn svg{width:22px;height:22px}
+.set-text{display:flex;flex-direction:column;gap:10px;font-size:15px}
+.set-text p,.set-text ul{margin:0}
+.set-text ul{padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.chip.easy{background:var(--ok-soft);color:var(--ok);border-color:transparent}
 .flag{width:36px;height:18px;display:block;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.15)}
 .opt.country{flex-direction:row;align-items:center;gap:12px}
 .opt.country span{display:flex;flex-direction:column}
 .opt.country .flag{width:48px;height:24px;flex:none}
 .seg.two{display:grid;grid-template-columns:1fr 1fr}
+.coll-switch{margin-bottom:12px}
+.hab-list{display:flex;flex-direction:column;gap:8px}
+.hab-card{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;font-weight:400;padding:12px 14px;width:100%;border-radius:14px;border:1px solid var(--line);background:var(--surface-2)}
+.hab-card b{font-family:var(--f-display);font-size:17px}
+.hab-card.open{border-color:var(--leaf-dark);background:var(--ok-soft)}
+.hab-card.shut{border-style:dashed;background:transparent;color:var(--muted)}
+.hab-species{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:15px}
+.hab-species .got{font-weight:700}
 .field-label{font-size:14px;font-weight:700}
 .seg button{flex:1 1 auto;border:0;background:transparent;color:var(--muted);padding:8px 10px;white-space:nowrap;font-size:14px}
 .seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
@@ -190,7 +209,7 @@ nav.tabs svg{width:22px;height:22px}
 .choice button{display:flex;flex-direction:column;gap:4px;align-items:flex-start;text-align:left;padding:14px;font-weight:400}
 .choice button b{font-family:var(--f-display);font-size:18px}
 .choice button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
-.celebrate{text-align:center;align-items:center;position:relative;overflow:hidden}
+.celebrate{text-align:center;align-items:center;position:relative;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain}
 .celebrate .burst{position:absolute;inset:-40% -20% auto;height:420px;background:repeating-conic-gradient(from 0deg at 50% 60%,color-mix(in srgb,var(--accent) 16%,transparent) 0 10deg,transparent 10deg 20deg);animation:spin 30s linear infinite;pointer-events:none;-webkit-mask:radial-gradient(circle at 50% 60%,#000 20%,transparent 65%);mask:radial-gradient(circle at 50% 60%,#000 20%,transparent 65%)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .celebrate>*{position:relative}
@@ -238,8 +257,9 @@ details.tools .in{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .ach-meta{display:flex;flex-direction:column;gap:4px;min-width:0}
 .ach-meta b{font-family:var(--f-display);font-size:17px}
 .ach-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-.ach-banner{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center;text-align:left;width:100%;background:var(--accent-soft);border-radius:14px;padding:10px 12px}
+.ach-banner{position:relative;padding-right:40px!important;display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center;text-align:left;width:100%;background:var(--accent-soft);border-radius:14px;padding:10px 12px}
 .ach-banner[hidden]{display:none}
+.ach-x{position:absolute;top:6px;right:6px;width:30px;height:30px;padding:0;border-radius:50%;font-size:18px;line-height:1;background:var(--surface);display:flex;align-items:center;justify-content:center}
 .ach-banner .ach-medal{color:var(--accent)}
 .ach-banner .ach-medal svg{width:44px;height:44px}
 .ach-banner b{display:block;font-family:var(--f-display)}
@@ -280,9 +300,13 @@ details.tools .in{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
         <svg viewBox="0 0 34 20" aria-hidden="true"><rect x="1" y="6" width="26" height="12" rx="6" fill="#fbfbf4" stroke="#1b1b1b" stroke-width="1.5"/><rect x="6" y="6" width="3" height="12" fill="#1b1b1b"/><rect x="12" y="6" width="3" height="12" fill="#f2c230"/><rect x="18" y="6" width="3" height="12" fill="#1b1b1b"/><circle cx="27" cy="11" r="6" fill="#1b1b1b"/><circle cx="29" cy="10" r="1.4" fill="#fff"/><path d="M24 6 Q22 1 19 1" stroke="#1b1b1b" stroke-width="1.5" fill="none"/></svg>
         Bookworm
       </div>
+      <button type="button" class="score-box" id="score-box" aria-label="Your score and title. Open titles"><span class="pts" id="score-pts">0 points</span><span class="ttl" id="score-title"></span></button>
       <div class="sub" id="sub">Prototype · up to 5 books at once</div>
     </div>
-    <button type="button" class="flag-btn" id="flag-btn" aria-haspopup="dialog"></button>
+    <div class="hdr-btns">
+      <button type="button" class="flag-btn" id="flag-btn" aria-haspopup="dialog"></button>
+      <button type="button" class="gear-btn" id="gear-btn" aria-haspopup="dialog" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+    </div>
   </header>
 
   <!-- SHELF -->
@@ -380,7 +404,7 @@ details.tools .in{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
         <span class="eyebrow">Log reading</span>
         <div class="row">
           <label style="flex:2" id="log-label">I'm now on page <input id="log-val" type="number" min="0" step="1"></label>
-          <button class="primary" type="submit">Feed</button>
+          <button class="primary" type="submit" id="feed-btn">Feed</button>
         </div>
       </form>
       <div class="card">
@@ -418,6 +442,11 @@ details.tools .in{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 
   <!-- COLLECTION -->
   <section id="screen-ach" hidden>
+    <div class="card" style="margin-bottom:16px" id="titles-card">
+      <div class="stat-line"><h2>Titles</h2><span class="chip mono" id="title-count"></span></div>
+      <p class="muted small">Every book you finish earns points: 100 for a Common species, 200 for Uncommon and 300 for Rare. Higher scores earn new titles. Your score counts every country, and repeats count too.</p>
+      <div class="ach-list" id="title-list"></div>
+    </div>
     <div class="card" style="margin-bottom:16px">
       <div class="stat-line"><h2>Categories</h2><span class="chip mono" id="unl-count"></span></div>
       <p class="muted small">Every egg starts out as a butterfly. Raise more butterflies to unlock the other categories, one at a time.</p>
@@ -437,9 +466,15 @@ details.tools .in{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
   </section>
 
   <section id="screen-coll" hidden>
-    <div class="card">
+    <div class="seg two coll-switch" role="group" aria-label="Collection view"><button type="button" id="cv-species" aria-pressed="true">Species</button><button type="button" id="cv-habitats" aria-pressed="false">Habitats</button></div>
+    <div class="card" id="hab-view" hidden>
+      <div class="stat-line"><h2>Habitats</h2><span class="chip mono" id="hab-count"></span></div>
+      <p class="muted small">Raise 2 species that live in a habitat to unlock it. Tap an unlocked habitat to see which insects live there.</p>
+      <div class="hab-list" id="hab-list"></div>
+    </div>
+    <div class="card" id="species-view">
       <div class="stat-line">
-        <h2>Species Collection</h2>
+        <h2>Species Collection</h2><span class="chip easy" id="easy-chip" hidden>Easy Mode: collections merged</span>
         <span class="chip mono coll-count" id="coll-count"></span>
       </div>
       <p class="muted small">Each finished book adds the adult insect it raised. Tap any species to read its summary and to mark if you have seen it in the wild. <span class="season-key"><svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><path d="M2 14C2 7 7 2 14 2c0 7-5 12-12 12Z" fill="currentColor"/></svg></span> marks species in season now.</p>
@@ -622,6 +657,24 @@ details.tools .in{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
       <ul class="links" id="mn-learn"></ul></div>
     <div class="stack learn"><h3>Additional Sources</h3><ul class="links" id="mn-src"></ul><p class="small muted" id="mn-src-note"></p></div>
     <button type="button" class="primary" id="mn-close">Close</button>
+  </div>
+</div>
+
+<!-- Habitat -->
+<div class="overlay" id="m-hab" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="hb-h">
+    <h2 id="hb-h"></h2>
+    <p class="muted small" id="hb-sub"></p>
+    <ul class="hab-species" id="hb-list"></ul>
+    <button type="button" class="primary" id="hb-close">Close</button>
+  </div>
+</div>
+
+<!-- Settings -->
+<div class="overlay" id="m-set" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="set-h">
+    <h2 id="set-h">Settings</h2>
+    <div class="stack" id="set-body"></div>
   </div>
 </div>
 
@@ -1299,6 +1352,30 @@ const formDesc=(id,k)=>DIMORPH[id]?DIMORPH[id][k==="m"?0:1]:CASTE.species[id][k]
 const formSrc=id=>DIMORPH[id]?DIMORPH[id][2]:isCaste(id)?[...CASTE.species[id].src,...CASTE.why[casteGroup(id)].src]:[];
 const sexForForm=k=>k==="m"?"m":k?"f":null;
 const SEX_WORD={m:"Male",f:"Female",q:"Queen",w:"Worker"}, SEX_SYM={m:"♂",f:"♀",q:"Q",w:"W"};
+/* Active development time (days) as a larva and as a pupa, leaving out winter dormancy: [larva, pupa, basis (s species,
+   g genus, f family-level estimate), winter field note, sources]. The larva pupates at larva/(larva+pupa) of the book. */
+const DUR={"peacock":[27,16,"s",null,["https://ukbutterflies.co.uk/species.php?species=io"]],"red-admiral":[25,17,"s","Most fly in from Europe each spring; a few adults now survive UK winters.",["https://www.ukbutterflies.co.uk/species.php?species=atalanta"]],"small-tortoiseshell":[26,21,"s",null,["https://ukbutterflies.co.uk/species.php?species=urticae"]],"large-white":[30,14,"s","It spends the winter as a pupa, fixed to a wall, fence or tree trunk.",["https://ukbutterflies.co.uk:443/species.php?species=brassicae","https://en.wikipedia.org/wiki/Pieris_brassicae"]],"small-white":[21,12,"s","It spends the winter as a pupa, fixed to a wall, fence or plant stem.",["https://ukbutterflies.co.uk/species.php?species=rapae","https://en.wikipedia.org/wiki/Pieris_rapae","https://ukbutterflies.co.uk/species.php?species=napi"]],"green-veined-white":[20,10,"s","It spends the winter as a pupa, attached to a plant stem.",["https://ukbutterflies.co.uk/species.php?species=napi"]],"meadow-brown":[120,26,"f","The caterpillar spends winter in the grass, feeding on mild nights.",["https://en.wikipedia.org/wiki/Meadow_brown","https://ukbutterflies.co.uk/species.php?species=sylvanus"]],"speckled-wood":[30,12,"f","It can spend the winter either as a caterpillar or as a pupa.",["https://en.wikipedia.org/wiki/Speckled_wood_(butterfly)","https://en.wikipedia.org/wiki/Meadow_brown"]],"painted-lady":[25,12,"g","It can't survive UK winters; new adults fly in from the south each spring.",["https://en.wikipedia.org/wiki/Vanessa_cardui","https://www.ukbutterflies.co.uk/species.php?species=atalanta"]],"brimstone":[28,14,"s",null,["https://en.wikipedia.org/wiki/Gonepteryx_rhamni"]],"orange-tip":[25,12,"f","It spends the winter as a pupa, stuck to a plant stem.",["https://en.wikipedia.org/wiki/Anthocharis_cardamines","https://ukbutterflies.co.uk/species.php?species=napi","https://ukbutterflies.co.uk:443/species.php?species=brassicae"]],"small-copper":[24,18,"f","It spends the winter as a small caterpillar on sorrel leaves.",["https://en.wikipedia.org/wiki/Small_copper","https://en.wikipedia.org/wiki/Common_blue"]],"holly-blue":[21,14,"f","It spends the winter as a pupa, hidden among leaves or bark.",["https://en.wikipedia.org/wiki/Holly_blue","https://en.wikipedia.org/wiki/Common_blue"]],"common-blue":[35,14,"s","It spends the winter as a half-grown caterpillar, low in the plants.",["https://en.wikipedia.org/wiki/Common_blue"]],"monarch":[20,12,"s","A rare visitor blown across the Atlantic; it can't survive UK winters.",["https://en.wikipedia.org/wiki/Monarch_butterfly"]],"large-skipper":[150,20,"s","The caterpillar hibernates for six months inside a rolled grass leaf.",["https://ukbutterflies.co.uk/species.php?species=sylvanus"]],"small-skipper":[60,18,"f","The tiny caterpillar hibernates in a silk case inside a grass stem.",["https://ukbutterflies.co.uk/species.php?species=sylvanus"]],"dingy-skipper":[60,25,"f","The fully grown caterpillar hibernates in a cocoon of leaves.",["https://ukbutterflies.co.uk/species.php?species=sylvanus"]],"grizzled-skipper":[55,18,"f","It spends the winter as a pupa in a loose cocoon low in the grass.",["https://ukbutterflies.co.uk/species.php?species=sylvanus"]],"duke-of-burgundy":[28,21,"f","It spends about nine months as a pupa, right through the winter.",["https://en.wikipedia.org/wiki/Duke_of_Burgundy_(butterfly)"]],"scotch-argus":[80,16,"f","The tiny caterpillar hibernates deep in grass tussocks.",["https://en.wikipedia.org/wiki/Meadow_brown","https://ukbutterflies.co.uk/species.php?species=sylvanus"]],"wood-white":[28,12,"f","It spends the winter as a pupa, attached to a grass or plant stem.",["https://ukbutterflies.co.uk/species.php?species=napi","https://ukbutterflies.co.uk:443/species.php?species=brassicae"]],"large-heath":[100,18,"f","The caterpillar hibernates low down in cotton-grass on the bog.",["https://en.wikipedia.org/wiki/Meadow_brown","https://ukbutterflies.co.uk/species.php?species=sylvanus"]],"high-brown-fritillary":[60,25,"g","It spends the winter as a tiny caterpillar inside its eggshell.",["https://butterfly-conservation.org/sites/default/files/2020-06/Fritillary%20life%20cycles.pdf"]],"marsh-fritillary":[65,21,"s","Caterpillars hibernate together in a silk web low in a grass tussock.",["https://en.wikipedia.org/wiki/Euphydryas_aurinia","https://butterfly-conservation.org/sites/default/files/2020-06/Fritillary%20life%20cycles.pdf"]],"glanville-fritillary":[90,25,"s","Caterpillars hibernate together in a silk 'winter nest'.",["https://en.wikipedia.org/wiki/Glanville_fritillary"]],"silver-studded-blue":[70,20,"f","It spends the winter as an egg, laid on heather near ant nests.",["https://en.wikipedia.org/wiki/Silver-studded_blue","https://en.wikipedia.org/wiki/Common_blue"]],"white-letter-hairstreak":[45,26,"s","It spends the winter as an egg, tucked beside a bud on an elm twig.",["https://www.ukbutterflies.co.uk/species.php?species=w-album"]],"pearl-bordered-fritillary":[95,14,"s","The caterpillar hibernates inside curled dead leaves.",["https://butterfly-conservation.org/sites/default/files/2020-06/Fritillary%20life%20cycles.pdf","https://en.wikipedia.org/wiki/Pearl-bordered_fritillary"]],"brown-hairstreak":[55,25,"f","It spends the winter as an egg, laid on a blackthorn twig.",["https://en.wikipedia.org/wiki/Brown_hairstreak","https://www.ukbutterflies.co.uk/species.php?species=w-album"]],"small-pearl-bordered-fritillary":[70,17,"s","The caterpillar hibernates in leaf litter until spring.",["https://butterfly-conservation.org/sites/default/files/2020-06/Fritillary%20life%20cycles.pdf","https://en.wikipedia.org/wiki/Small_pearl-bordered_fritillary"]],"small-blue":[25,14,"s","The fully grown caterpillar hibernates in a cocoon until spring.",["https://en.wikipedia.org/wiki/Cupido_minimus"]],"adonis-blue":[32,18,"g","It spends the winter as a small caterpillar, low in the turf.",["https://en.wikipedia.org/wiki/Adonis_blue","https://en.wikipedia.org/wiki/Common_blue"]],"chalkhill-blue":[67,30,"s","It spends the winter as an egg, laid near horseshoe vetch.",["https://ukbutterflies.co.uk/species.php?species=coridon","https://de.wikipedia.org/wiki/Silbergr%C3%BCner_Bl%C3%A4uling"]],"heath-fritillary":[80,20,"s","Caterpillars hibernate together, hidden in dead leaves.",["https://en.wikipedia.org/wiki/Heath_fritillary"]],"black-hairstreak":[40,20,"g","It spends the winter as an egg, laid on a blackthorn twig.",["https://en.wikipedia.org/wiki/Black_hairstreak","https://www.ukbutterflies.co.uk/species.php?species=w-album"]],"small-heath":[40,21,"g","It spends the winter as a small caterpillar, low in the grass.",["https://en.wikipedia.org/wiki/Small_heath_(butterfly)"]],"ringlet":[110,14,"f","The caterpillar hibernates in grass but wakes to feed on mild days.",["https://en.wikipedia.org/wiki/Ringlet","https://en.wikipedia.org/wiki/Meadow_brown"]],"gatekeeper":[100,21,"s","It spends the winter as a small caterpillar, resting low in the grass.",["https://en.wikipedia.org/wiki/Pyronia_tithonus"]],"grayling":[140,28,"s","It spends the winter as a small caterpillar, deep in a grass tussock.",["https://en.wikipedia.org/wiki/Hipparchia_semele"]],"marbled-white":[75,21,"s","Caterpillars hibernate as soon as they hatch and feed the next spring.",["https://en.wikipedia.org/wiki/Melanargia_galathea"]],"wall":[35,14,"s","It spends the winter as a caterpillar, feeding on mild days.",["https://en.wikipedia.org/wiki/Lasiommata_megera","https://butterfly-conservation.org/butterflies/wall"]],"silver-washed-fritillary":[70,16,"s","Caterpillars hibernate as soon as they hatch, hidden in bark crevices.",["https://en.wikipedia.org/wiki/Argynnis_paphia"]],"dark-green-fritillary":[70,25,"s","Caterpillars hibernate as soon as they hatch and feed on violets in spring.",["https://en.wikipedia.org/wiki/Speyeria_aglaja"]],"comma":[30,10,"s",null,["https://en.wikipedia.org/wiki/Polygonia_c-album"]],"purple-emperor":[110,18,"s","Caterpillars hibernate in the forks of sallow twigs, turning brown.",["https://en.wikipedia.org/wiki/Apatura_iris"]],"swallowtail":[30,14,"s","Most spend the winter as a pupa, fixed to a reed stem.",["https://en.wikipedia.org/wiki/Papilio_machaon"]],"clouded-yellow":[30,18,"s","It can't survive British winters and arrives each year from the south.",["https://en.wikipedia.org/wiki/Colias_croceus"]],"green-hairstreak":[35,21,"f","It spends the winter as a pupa in the leaf litter, often tended by ants.",["https://en.wikipedia.org/wiki/Callophrys_rubi","https://en.wikipedia.org/wiki/Favonius_quercus"]],"purple-hairstreak":[45,25,"f","It spends the winter as a tiny egg at the base of an oak bud.",["https://en.wikipedia.org/wiki/Favonius_quercus"]],"brown-argus":[30,14,"s","It spends the winter as a caterpillar, then pupates in spring.",["https://en.wikipedia.org/wiki/Aricia_agestis"]],"white-admiral":[90,14,"s","Caterpillars hibernate in a rolled leaf tent tied to a honeysuckle stem.",["https://en.wikipedia.org/wiki/Limenitis_camilla"]],"large-blue":[140,21,"s","Caterpillars spend the winter inside a red ant nest, eating ant grubs.",["https://en.wikipedia.org/wiki/Phengaris_arion"]],"small-magpie":[45,18,"s","It spends the winter as a caterpillar in a silk cocoon in a hollow stem.",["https://ukmoths.org.uk/species/anania-hortulata/"]],"early-grey":[50,25,"f","It spends the winter as a pupa in a cocoon among plant debris.",["https://en.wikipedia.org/wiki/Xylocampa_areola"]],"double-striped-pug":[28,14,"f","It spends the winter as a pupa.",["https://en.wikipedia.org/wiki/Gymnoscelis_rufifasciata"]],"box-tree-moth":[28,14,"s","Small caterpillars spend the winter in a silk shelter between box leaves.",["https://en.wikipedia.org/wiki/Cydalima_perspectalis","https://www.rhs.org.uk/biodiversity/box-tree-caterpillar"]],"dingy-mocha":[30,14,"s","Caterpillars from the late brood spend the winter as a pupa.",["https://butterfly-conservation.org/moths/dingy-mocha","https://ukmoths.org.uk/species/cyclophora-pendularia/"]],"deaths-head-hawk-moth":[40,28,"s","It rarely survives British winters; most arrive as migrants from the south.",["https://tpittaway.tripod.com/sphinx/a_atr.htm","https://en.wikipedia.org/wiki/Acherontia_atropos"]],"winter-moth":[42,30,"f","It spends the winter as an egg on a twig, hatching as the buds open.",["https://en.wikipedia.org/wiki/Winter_moth"]],"december-moth":[70,30,"f","It spends the winter as an egg stuck to a twig.",["https://butterfly-conservation.org/moths/december-moth","https://ukmoths.org.uk/species/poecilocampa-populi/"]],"oak-eggar":[120,35,"s","In the south caterpillars hibernate; in the north it takes two years.",["https://en.wikipedia.org/wiki/Lasiocampa_quercus","https://ukmoths.org.uk/species/lasiocampa-quercus/"]],"herald":[50,21,"s",null,["https://butterfly-conservation.org/moths/the-herald","https://en.wikipedia.org/wiki/Herald_(moth)"]],"large-emerald":[90,25,"s","Small caterpillars hibernate on a twig, looking like a bud.",["https://butterfly-conservation.org/moths/large-emerald","https://ukmoths.org.uk/species/geometra-papilionaria/"]],"argent-and-sable":[50,21,"f","It spends the winter as a pupa among dead leaves.",["https://butterfly-conservation.org/moths/argent-sable","https://ukmoths.org.uk/species/rheumaptera-hastata/"]],"scarlet-tiger":[110,25,"s","Part-grown caterpillars spend the winter low among plants.",["https://www.naturespot.org/species/scarlet-tiger","https://butterfly-conservation.org/moths/scarlet-tiger"]],"mullein":[40,28,"g","It spends the winter as a pupa in a tough cocoon underground.",["https://en.wikipedia.org/wiki/Mullein_moth","https://www.naturespot.org/species/mullein"]],"puss-moth":[55,28,"f","It spends the winter as a pupa inside a rock-hard cocoon on bark.",["https://en.wikipedia.org/wiki/Cerura_vinula","https://butterfly-conservation.org/moths/puss-moth"]],"yellow-tail":[80,18,"s","Small caterpillars hibernate alone in a silk cocoon on a twig.",["https://en.wikipedia.org/wiki/Yellow-tail"]],"knot-grass":[35,21,"f","It spends the winter as a pupa.",["https://ukmoths.org.uk/species/acronicta-rumicis/"]],"brown-tail":[100,22,"s","Caterpillars spend the winter together in silk tents in hedges.",["https://butterfly-conservation.org/moths/brown-tail"]],"pale-tussock":[80,25,"s","It spends the winter as a pupa in a cocoon among leaf litter.",["https://butterfly-conservation.org/moths/pale-tussock"]],"fox-moth":[75,30,"s","Fully grown caterpillars hibernate in leaf litter, then pupate in spring.",["https://butterfly-conservation.org/moths/fox-moth"]],"orange-underwing":[40,25,"f","It spends the winter as a pupa, hidden in soft bark or rotten wood.",["https://en.wikipedia.org/wiki/Archiearis_parthenias","https://butterfly-conservation.org/moths/orange-underwing"]],"mint-moth":[25,12,"f","It spends the winter as a caterpillar in a silk cocoon.",["https://en.wikipedia.org/wiki/Pyrausta_aurata","https://ukmoths.org.uk/species/pyrausta-aurata/"]],"chimney-sweeper":[35,18,"f","It spends the winter as an egg.",["https://ukmoths.org.uk/species/odezia-atrata/","https://en.wikipedia.org/wiki/Odezia_atrata"]],"burnet-companion":[40,18,"f","It spends the winter as a pupa in a cocoon among dead plants.",["https://butterfly-conservation.org/moths/burnet-companion","https://ukmoths.org.uk/species/euclidia-glyphica"]],"mother-shipton":[45,18,"f","It spends the winter as a pupa in a cocoon among grass or just underground.",["https://en.wikipedia.org/wiki/Euclidia_mi","https://ukmoths.org.uk/species/euclidia-mi"]],"jersey-tiger":[120,25,"f","It spends the winter as a small caterpillar, then feeds again in spring.",["https://en.wikipedia.org/wiki/Euplagia_quadripunctaria","https://ukmoths.org.uk/species/euplagia-quadripunctaria"]],"vapourer":[50,14,"g","It spends the winter as eggs laid on the old cocoon.",["https://en.wikipedia.org/wiki/Orgyia_antiqua","https://ukmoths.org.uk/species/orgyia-antiqua"]],"drinker":[150,21,"f","Its half-grown caterpillar sleeps through winter on a grass stem.",["https://butterfly-conservation.org/moths/drinker","https://ukmoths.org.uk/species/euthrix-potatoria"]],"reddish-buff":[40,21,"f","It probably spends the winter as a pupa in the ground.",["https://ukmoths.org.uk/species/acosmetia-caliginosa"]],"magpie-moth":[90,21,"f","Its small caterpillar spends the winter on the food plant.",["https://butterfly-conservation.org/moths/magpie","https://en.wikipedia.org/wiki/Abraxas_grossulariata"]],"broad-bordered-bee-hawk-moth":[35,21,"f","It spends the winter as a pupa in a loose cocoon on the ground.",["https://tpittaway.tripod.com/sphinx/h_fuc.htm"]],"angle-shades":[60,25,"f","Its caterpillar spends the winter feeding slowly on mild nights.",["https://en.wikipedia.org/wiki/Angle_shades","https://gdoremi.altervista.org/noctuidae/Phlogophora_meticulosa_en.html"]],"silver-y":[21,10,"s","Most fly in from southern Europe each spring; few survive our winter.",["https://agroatlas.ru/en/content/pests/Autographa_gamma/","https://en.wikipedia.org/wiki/Silver_Y"]],"large-yellow-underwing":[120,40,"f","Its caterpillar spends the winter in the soil, feeding on mild nights.",["https://en.wikipedia.org/wiki/Large_yellow_underwing","https://ukmoths.org.uk/species/noctua-pronuba/"]],"cinnabar":[35,21,"f","It spends the winter as a pupa in a cocoon on the ground.",["https://en.wikipedia.org/wiki/Cinnabar_moth","https://www.naturespot.org/species/cinnabar"]],"garden-tiger":[130,25,"f","Its young caterpillar spends the winter in low plants, then feeds in spring.",["https://en.wikipedia.org/wiki/Garden_tiger_moth","https://butterfly-conservation.org/moths/garden-tiger"]],"buff-tip":[50,21,"f","It spends the winter as a pupa buried in the soil.",["https://en.wikipedia.org/wiki/Phalera_bucephala","https://www.naturespot.org/species/buff-tip"]],"elephant-hawk-moth":[27,21,"f","It spends the winter as a pupa in a loose cocoon on the ground.",["https://en.wikipedia.org/wiki/Elephant_hawk-moth","https://tpittaway.tripod.com/sphinx/d_elp.htm"]],"hummingbird-hawk-moth":[30,21,"s","Most fly in from the south; a few adults may survive winter here.",["https://tpittaway.tripod.com/sphinx/m_ste.htm","https://en.wikipedia.org/wiki/Hummingbird_hawk-moth","https://butterfly-conservation.org/news-and-blog/species-of-the-month-humming-bird-hawk-moth"]],"lime-hawk-moth":[40,21,"f","It spends the winter as a pupa just under the soil near the tree.",["https://tpittaway.tripod.com/sphinx/m_til.htm","https://en.wikipedia.org/wiki/Lime_hawk-moth"]],"privet-hawk-moth":[40,25,"f","It spends the winter as a pupa buried deep in the soil.",["https://tpittaway.tripod.com/sphinx/s_lig.htm","https://en.wikipedia.org/wiki/Privet_hawk_moth"]],"peppered-moth":[50,21,"f","It spends the winter as a pupa in the soil.",["https://en.wikipedia.org/wiki/Peppered_moth"]],"brimstone-moth":[35,18,"f","It spends the winter as either a caterpillar or a pupa.",["https://en.wikipedia.org/wiki/Brimstone_moth"]],"emperor-moth":[55,25,"f","It spends the winter as a pupa inside a tough silk cocoon.",["https://en.wikipedia.org/wiki/Saturnia_pavonia"]],"six-spot-burnet":[120,21,"f","Its caterpillar sleeps through winter, sometimes two, then feeds again.",["https://en.wikipedia.org/wiki/Zygaena_filipendulae"]],"poplar-hawk-moth":[40,21,"f","It spends the winter as a pupa buried in the soil.",["https://tpittaway.tripod.com/sphinx/l_pop.htm"]],"eyed-hawk-moth":[40,21,"f","It spends the winter as a pupa buried in the soil.",["https://tpittaway.tripod.com/sphinx/s_oce.htm"]],"ruby-tiger":[45,18,"f","Its fully grown caterpillar spends winter hidden, waking on warm days.",["https://en.wikipedia.org/wiki/Phragmatobia_fuliginosa"]],"white-ermine":[40,21,"f","It spends the winter as a pupa in a cocoon among leaf litter.",["https://en.wikipedia.org/wiki/Spilosoma_lubricipeda"]],"muslin-moth":[45,21,"f","It spends the winter as a pupa in a cocoon.",["https://en.wikipedia.org/wiki/Diaphora_mendica"]],"swallow-tailed-moth":[90,21,"f","Its twig-like caterpillar spends the winter on the food plant.",["https://en.wikipedia.org/wiki/Swallow-tailed_moth"]],"white-plume-moth":[70,12,"f","It spends the winter as a small caterpillar.",["https://en.wikipedia.org/wiki/Pterophorus_pentadactyla"]],"burnished-brass":[45,18,"f","It spends the winter as a small caterpillar.",["https://en.wikipedia.org/wiki/Diachrysia_chrysitis"]],"red-tailed-mason-bee":[30,21,"g","It spends the winter as an adult bee, still sealed in its cocoon.",["https://en.wikipedia.org/wiki/Osmia_bicornis","https://bwars.com/bee/megachilidae/osmia-bicolor"]],"bilberry-bumblebee":[17,14,"g",null,["https://www.bumblebeeconservation.org/about-bees/lifecycle/"]],"ashy-mining-bee":[21,18,"g","It spends the winter as an adult bee, sealed in its underground cell.",["https://bwars.com/bee/andrenidae/andrena-cineraria"]],"bee-wolf":[10,20,"g","It spends the winter as a grub inside a cocoon underground.",["https://en.wikipedia.org/wiki/Philanthus_triangulum","https://bwars.com/wasp/crabronidae/philanthinae/philanthus-triangulum"]],"ivy-bee":[21,18,"g","It spends the winter as a grub in its underground cell.",["https://en.wikipedia.org/wiki/Colletes_hederae","https://bwars.com/bee/colletidae/colletes-hederae"]],"buff-tailed-bumblebee":[17,14,"g",null,["https://www.bumblebeeconservation.org/about-bees/lifecycle/","https://en.wikipedia.org/wiki/Bombus_terrestris"]],"hairy-footed-flower-bee":[21,21,"g","It spends the winter as an adult bee, sealed in its nest cell.",["https://lopezuribelab.com/anthophora-abrupta/","https://bwars.com/bee/apidae/anthophora-plumipes"]],"heath-bumblebee":[17,14,"g",null,["https://www.bumblebeeconservation.org/about-bees/lifecycle/"]],"tree-bumblebee":[17,14,"g","Only new queens survive winter, hibernating in the ground.",["https://www.researchgate.net/publication/240336833_Colony_development_larval_development_and_worker_reproduction_in_Bombus_impatiens_Cresson","https://en.wikipedia.org/wiki/Bumblebee","https://www.bumblebeeconservation.org/bumblebee-nests/"]],"early-bumblebee":[17,14,"g","Only new queens survive winter, hibernating in the ground.",["https://www.researchgate.net/publication/240336833_Colony_development_larval_development_and_worker_reproduction_in_Bombus_impatiens_Cresson","https://en.wikipedia.org/wiki/Bombus_pratorum","https://www.bumblebeeconservation.org/bumblebee-nests/"]],"garden-bumblebee":[17,14,"g","Only new queens survive winter, hibernating in the ground.",["https://www.researchgate.net/publication/240336833_Colony_development_larval_development_and_worker_reproduction_in_Bombus_impatiens_Cresson","https://en.wikipedia.org/wiki/Bombus_hortorum","https://www.bumblebeeconservation.org/bumblebee-nests/"]],"shrill-carder-bee":[17,14,"g","Only new queens survive winter, hibernating in the ground.",["https://www.researchgate.net/publication/240336833_Colony_development_larval_development_and_worker_reproduction_in_Bombus_impatiens_Cresson","https://en.wikipedia.org/wiki/Bumblebee","https://www.bumblebeeconservation.org/bumblebee-nests/"]],"giant-horntail":[420,28,"f","It spends winters as a grub, tunnelling inside dead conifer wood.",["https://massnrc.org/pests/pestFAQsheets/giant%20woodwasp.htm","https://en.wikipedia.org/wiki/Siricidae"]],"white-tailed-bumblebee":[17,14,"g","Only new queens survive winter, hibernating in the ground.",["https://www.researchgate.net/publication/240336833_Colony_development_larval_development_and_worker_reproduction_in_Bombus_impatiens_Cresson","https://en.wikipedia.org/wiki/Bumblebee","https://www.bumblebeeconservation.org/bumblebee-nests/"]],"red-tailed-bumblebee":[17,14,"g","Only new queens survive winter, hibernating in the ground.",["https://www.researchgate.net/publication/240336833_Colony_development_larval_development_and_worker_reproduction_in_Bombus_impatiens_Cresson","https://en.wikipedia.org/wiki/Bumblebee","https://www.bumblebeeconservation.org/bumblebee-nests/"]],"common-carder-bee":[17,14,"g","Only new queens survive winter, hibernating in the ground.",["https://www.researchgate.net/publication/240336833_Colony_development_larval_development_and_worker_reproduction_in_Bombus_impatiens_Cresson","https://en.wikipedia.org/wiki/Bombus_pascuorum","https://www.bumblebeeconservation.org/bumblebee-nests/"]],"honey-bee":[7,7,"s","The whole colony huddles together in the hive to keep warm all winter.",["https://en.wikipedia.org/wiki/Western_honey_bee"]],"patchwork-leaf-cutter-bee":[25,22,"g","It spends winter as a grown grub inside a cocoon in its leaf-lined cell.",["https://en.wikipedia.org/wiki/Megachile_pugnata","https://en.wikipedia.org/wiki/Alfalfa_leafcutter_bee","https://www.bwars.com/bee/megachilidae/megachile-centuncularis"]],"red-mason-bee":[63,25,"s","The new adult waits all winter inside its cocoon, then chews out in spring.",["https://www.researchgate.net/publication/371358775_The_Formal_Model_for_the_solitary_bee_Osmia_bicornis_L_agent-based_model","https://en.wikipedia.org/wiki/Osmia_bicornis","https://www.bwars.com/bee/megachilidae/osmia-bicornis"]],"tawny-mining-bee":[25,20,"f","The new adult waits all winter in its underground cell, then digs out in spring.",["https://en.wikipedia.org/wiki/Andrena","https://www.bwars.com/bee/andrenidae/andrena-fulva","https://en.wikipedia.org/wiki/Megachile_pugnata"]],"hornet":[26,14,"s","Only new queens survive winter, sleeping in rotten wood or crevices.",["https://www.monaconatureencyclopedia.com/vespa-crabro/?lang=en"]],"common-wasp":[15,15,"g","Only new queens survive winter, sleeping in sheds, lofts or log piles.",["https://en.wikipedia.org/wiki/Vespula_vulgaris","https://animaldiversity.org/accounts/Vespula_maculifrons/"]],"ruby-tailed-wasp":[8,14,"s","It spends winter as a grub in a cocoon, inside its host's nest cell.",["https://faculty.ucr.edu/~legneref/identify/chrysidi.htm","https://en.wikipedia.org/wiki/Chrysis_ignita"]],"birch-clubhorn":[45,21,"s","It spends winter as a grown grub in a tough cocoon.",["https://en.wikipedia.org/wiki/Cimbex_femoratus","https://en.wikipedia.org/wiki/Sawfly"]],"gooseberry-sawfly":[21,14,"s","It spends winter as a grown grub in a silk cocoon in the soil.",["https://en.wikipedia.org/wiki/Nematus_ribesii","https://www.rhs.org.uk/biodiversity/gooseberry-sawfly"]],"solomons-seal-sawfly":[35,14,"s","It spends winter as a grub in the soil, and pupates in spring.",["https://www.rhs.org.uk/biodiversity/solomons-seal-sawfly","https://en.wikipedia.org/wiki/Sawfly"]],"great-yellow-bumblebee":[17,14,"g","Only new queens survive winter, hibernating in the ground.",["https://www.researchgate.net/publication/240336833_Colony_development_larval_development_and_worker_reproduction_in_Bombus_impatiens_Cresson","https://en.wikipedia.org/wiki/Bumblebee","https://www.bumblebeeconservation.org/bumblebee-nests/"]],"orange-tailed-mining-bee":[25,20,"f","The new adult waits all winter in its underground cell, then digs out in spring.",["https://en.wikipedia.org/wiki/Andrena","https://en.wikipedia.org/wiki/Megachile_pugnata"]],"wool-carder-bee":[25,22,"f","It spends winter as a grown grub inside a cocoon in its nest hole.",["https://en.wikipedia.org/wiki/Megachile_pugnata","https://en.wikipedia.org/wiki/Anthidium_manicatum"]],"nomad-bee":[25,20,"f","The new adult waits all winter in its host's underground cell.",["https://en.wikipedia.org/wiki/Nomada","https://en.wikipedia.org/wiki/Andrena","https://en.wikipedia.org/wiki/Megachile_pugnata"]],"violet-carpenter-bee":[20,18,"g","Adults hibernate in old tunnels in dead wood.",["https://en.wikipedia.org/wiki/Xylocopa_pubescens","https://en.wikipedia.org/wiki/Xylocopa_violacea"]],"pea-leaf-weevil":[42,12,"s","Adults spend winter sheltering in field edges and hedgerows.",["https://www.ndsu.edu/agriculture/extension/publications/integrated-pest-management-pea-leaf-weevil-north-dakota","https://en.wikipedia.org/wiki/Sitona_lineatus"]],"black-oil-beetle":[45,14,"f","It spends winter as a resting grub inside a bee's nest.",["https://www.ukbeetles.co.uk/meloe-proscarabaeus"]],"acorn-weevil":[28,18,"s","The grub spends one or two winters in a little cell in the soil.",["https://www.ukbeetles.co.uk/curculio-glandium"]],"king-diving-beetle":[90,25,"g","Adults spend winter in the pond, often under ice.",["https://www.researchgate.net/figure/The-weight-and-length-of-the-larvae-and-adult-beetles-of-Dytiscus-dimidiatus-grown-in-the_tbl1_359789865","https://www.ukbeetles.co.uk/dytiscus-marginalis","https://en.wikipedia.org/wiki/Dytiscidae"]],"great-silver-water-beetle":[35,14,"f","Adults spend winter in the pond, among plants or mud.",["https://www.ukbeetles.co.uk/hydrophilus-piceus","https://en.wikipedia.org/wiki/Hydrophilidae"]],"golden-bloomed-grey-longhorn":[100,25,"s","It spends winter as a grub inside the base of a thistle stem.",["https://www.ukbeetles.co.uk/agapanthia-villosoviridescens","https://en.wikipedia.org/wiki/Agapanthia_villosoviridescens"]],"soldier-beetle":[180,10,"s","Its velvety grubs spend winter in the soil, hunting on mild days.",["https://www.ukbeetles.co.uk/cantharis-rustica","https://en.wikipedia.org/wiki/Cantharis_rustica"]],"red-breasted-carrion-beetle":[22,11,"s",null,["https://academic.oup.com/jme/article/59/6/1905/6693947","https://www.ukbeetles.co.uk/oiceoptoma-thoracicum"]],"black-snail-beetle":[22,11,"f",null,["https://en.wikipedia.org/wiki/Phosphuga_atrata","https://academic.oup.com/jme/article/59/6/1905/6693947"]],"rosemary-beetle":[75,21,"s","Grubs and adults both get through winter, feeding on mild days.",["https://www.rhs.org.uk/biodiversity/rosemary-beetle","https://en.wikipedia.org/wiki/Chrysolina_americana"]],"black-spotted-longhorn":[400,21,"s","Its grubs spend two or more winters inside dead tree stumps.",["https://www.ukbeetles.co.uk/rhagium-mordax"]],"black-and-yellow-longhorn":[500,30,"s","Its grubs spend two or three winters inside rotting wood.",["https://www.ukbeetles.co.uk/rutpela-maculata"]],"swollen-thighed-beetle":[120,14,"f","It spends winter as a grub inside a dry plant stem.",["https://www.buglife.org.uk/bugs/bug-directory/thick-legged-flower-beetle/","https://en.wikipedia.org/wiki/Oedemera_nobilis"]],"tansy-beetle":[40,30,"s","Adults spend winter buried in the soil near tansy plants.",["https://cdn.buglife.org.uk/downloads/Species-managment-sheet-Tansy-beetle-Chrysolina-graminis-final_0.pdf","https://en.wikipedia.org/wiki/Chrysolina_graminis"]],"noble-chafer":[420,21,"s","Its grubs spend two or more winters inside rotten fruit-tree wood.",["https://en.wikipedia.org/wiki/Gnorimus_nobilis","https://www.ukbeetles.co.uk/gnorimus-nobilis"]],"violet-click-beetle":[400,21,"s","It spends the winter as a larva in rotten wood inside old hollow trees.",["https://cdn.buglife.org.uk/2022/01/VCB-species-account.-FINAL_with-map.pdf"]],"whirligig-beetle":[25,7,"g",null,["https://en.wikipedia.org/wiki/Gyrinus_minutus","https://www.sciencedirect.com/topics/agricultural-and-biological-sciences/whirligig-beetle"]],"great-diving-beetle":[90,21,"s","Adults spend the winter in the pond, often resting in the mud.",["https://www.ukbeetles.co.uk/dytiscus-marginalis","https://en.wikipedia.org/wiki/Dytiscus"]],"green-tortoise-beetle":[35,7,"s","Adults spend the winter hidden in leaf litter or grass tussocks.",["https://www.ukbeetles.co.uk/cassida-viridis"]],"bloody-nosed-beetle":[45,25,"s","It can spend the winter as an egg, a larva or an adult, low among plants.",["https://www.ukbeetles.co.uk/timarcha-tenebricosa"]],"wasp-beetle":[400,21,"s","It spends the winter as a larva tunnelling inside dead wood.",["https://www.ukbeetles.co.uk/clytus-arietis","https://en.wikipedia.org/wiki/Clytus_arietis"]],"musk-beetle":[550,49,"s","It spends winters as a larva deep inside living willow wood.",["https://www.ukbeetles.co.uk/aromia-moschata"]],"deathwatch-beetle":[1000,25,"s","It spends winters as a larva in old oak wood; some new adults wait in their cell.",["https://www.ukbeetles.co.uk/xestobium-rufovillosum","https://en.wikipedia.org/wiki/Deathwatch_beetle"]],"22-spot-ladybird":[21,7,"f","Adults spend the winter low down in grass tussocks and leaf litter.",["https://www.ukbeetles.co.uk/psyllobora-vigintiduopunctata","https://en.wikipedia.org/wiki/Coccinellidae"]],"14-spot-ladybird":[21,7,"f","Adults spend the winter in leaf litter and grass tussocks.",["https://en.wikipedia.org/wiki/Propylea_quatuordecimpunctata","https://en.wikipedia.org/wiki/Coccinellidae"]],"harlequin-ladybird":[21,7,"s","Adults spend the winter in big groups, often inside houses.",["https://www.ukbeetles.co.uk/harmonia-axyridis"]],"orange-ladybird":[21,7,"f","Adults spend the winter in leaf litter or under tree bark.",["https://en.wikipedia.org/wiki/Halyzia_sedecimguttata","https://en.wikipedia.org/wiki/Coccinellidae"]],"7-spot-ladybird":[28,8,"s","Adults spend the winter sheltering in hollow stems and leaf litter.",["https://en.wikipedia.org/wiki/Coccinella_septempunctata"]],"eyed-ladybird":[25,8,"f","Adults spend the winter in leaf litter, often under pine trees.",["https://en.wikipedia.org/wiki/Anatis_ocellata","https://en.wikipedia.org/wiki/Coccinellidae"]],"2-spot-ladybird":[21,8,"s","Adults spend the winter in groups in cracks, bark and buildings.",["https://en.wikipedia.org/wiki/Coccinellidae","https://en.wikipedia.org/wiki/Adalia_bipunctata"]],"red-headed-cardinal-beetle":[450,14,"g","It spends winters as a larva under the bark of dead trees.",["https://en.wikipedia.org/wiki/Pyrochroa_coccinea"]],"glow-worm":[450,12,"s","It spends winters as a larva, hiding under stones or in leaf litter.",["https://www.buglife.org.uk/bugs/bug-directory/common-glow-worm/","https://www.ukbeetles.co.uk/lampyris-noctiluca","https://en.wikipedia.org/wiki/Lampyris_noctiluca"]],"common-red-soldier-beetle":[150,14,"s","It spends the winter as a larva in the soil or leaf litter.",["https://www.ukbeetles.co.uk/rhagonycha-fulva","https://www.ukbeetles.co.uk/cantharidae"]],"coppery-click-beetle":[700,21,"g","It spends winters as a larva in the soil under grassland.",["https://www.ukbeetles.co.uk/ctenicera-cuprea","https://en.wikipedia.org/wiki/Wireworm","https://www.rhs.org.uk/biodiversity/wireworms"]],"rose-chafer":[400,35,"s","It spends winters as a larva in rotting wood or compost.",["https://www.ukbeetles.co.uk/cetonia-aurata","https://en.wikipedia.org/wiki/Cetonia_aurata"]],"common-cockchafer":[550,42,"s","It spends winters as a larva deep in the soil, eating roots.",["https://www.ukbeetles.co.uk/melolontha-melolontha","https://en.wikipedia.org/wiki/Common_cockchafer"]],"minotaur-beetle":[100,28,"s","Adults stay busy in winter, digging burrows in sandy ground.",["https://www.ukbeetles.co.uk/typhaeus-typhoeus","https://www.naturespot.org/species/minotaur-beetle"]],"rhinoceros-beetle":[550,35,"s","It spends winters as a larva inside rotting wood.",["https://www.ukbeetles.co.uk/sinodendron-cylindricum","https://en.wikipedia.org/wiki/Sinodendron_cylindricum"]],"lesser-stag-beetle":[300,35,"s","It spends winters as a larva inside rotting wood.",["https://en.wikipedia.org/wiki/Dorcus_parallelipipedus"]],"stag-beetle":[750,40,"s","It spends winters as a larva in rotting wood underground.",["https://www.ukbeetles.co.uk/lucanus-cervus","https://www.nhm.ac.uk/discover/stag-beetles.html"]],"common-sexton-beetle":[18,20,"s","Adults spend the winter buried in the soil.",["https://www.ukbeetles.co.uk/nicrophorus-vespilloides"]],"violet-ground-beetle":[200,21,"s","Adults and larvae spend winter in soil, feeding in mild spells.",["https://www.ukbeetles.co.uk/carabus-violaceus"]],"devils-coach-horse":[150,30,"s","Adults and larvae spend winter under logs, active in mild spells.",["https://www.ukbeetles.co.uk/ocypus-olens"]],"green-tiger-beetle":[300,21,"s","It spends winter as a larva or new adult down its burrow.",["https://www.ukbeetles.co.uk/cicindela-campestris","https://en.wikipedia.org/wiki/Cicindela_campestris"]],"cream-spot-ladybird":[21,7,"f","Adults spend the winter in leaf litter or bark crevices.",["https://en.wikipedia.org/wiki/Coccinellidae"]],"kidney-spot-ladybird":[21,7,"f","Adults spend the winter in bark crevices or leaf litter.",["https://en.wikipedia.org/wiki/Coccinellidae"]],"pine-ladybird":[21,7,"f","Adults spend the winter in bark crevices or leaf litter.",["https://en.wikipedia.org/wiki/Coccinellidae"]],"striped-ladybird":[25,8,"f","Adults spend the winter in leaf litter under pine trees.",["https://en.wikipedia.org/wiki/Coccinellidae"]],"narrow-headed-ant":[20,20,"f","The queen and workers spend the winter deep under the nest mound.",["https://en.wikipedia.org/wiki/Lasius_niger","https://www.antwiki.org/wiki/Formica_exsecta"]],"wood-ant":[20,20,"f","The queen and workers spend the winter deep under the nest mound.",["https://en.wikipedia.org/wiki/Lasius_niger","https://en.wikipedia.org/wiki/Formica_rufa"]],"red-ant":[35,18,"f","Larvae, workers and queens spend the winter in the nest underground.",["https://en.wikipedia.org/wiki/Lasius_niger","https://www.antwiki.org/wiki/Myrmica_rubra"]],"yellow-meadow-ant":[35,21,"f","Larvae, workers and queens spend the winter in the anthill.",["https://en.wikipedia.org/wiki/Lasius_niger","https://en.wikipedia.org/wiki/Lasius_flavus"]],"black-garden-ant":[21,21,"s","The queen and workers spend the winter underground in the nest.",["https://en.wikipedia.org/wiki/Lasius_niger"]],"bat-winged-phasia":[14,24,"s","It spends the winter as a larva, living inside a shield bug.",["https://en.wikipedia.org/wiki/Phasia_hemiptera"]],"ferruginous-bee-grabber":[12,21,"f","It spends the winter as a pupa inside the body of a dead bumblebee.",["https://en.wikipedia.org/wiki/Sicus_ferrugineus","https://en.wikipedia.org/wiki/Conopidae"]],"the-footballer":[21,10,"g","It spends the winter as a larva in mud or wet rotting plants.",["https://en.wikipedia.org/wiki/Helophilus_pendulus"]],"bumblebee-mimic-hoverfly":[60,21,"g","It spends the winter as a pupa in the soil near a bee or wasp nest.",["https://en.wikipedia.org/wiki/Volucella_bombylans","https://en.wikipedia.org/wiki/Volucella_pellucens"]],"batman-hoverfly":[30,12,"f","It spends the winter as a larva in a wet, rotting tree hole.",["https://en.wikipedia.org/wiki/Myathropa_florea"]],"narcissus-bulb-fly":[150,35,"s","It spends the winter as a maggot, feeding inside a daffodil bulb.",["https://en.wikipedia.org/wiki/Merodon_equestris","https://www.rhs.org.uk/biodiversity/narcissus-bulb-fly"]],"drone-fly":[21,12,"s",null,["https://www.mdpi.com/2673-8929/4/2/22","https://en.wikipedia.org/wiki/Eristalis_tenax"]],"hornet-mimic-hoverfly":[60,21,"s","It spends the winter as a pupa in the soil.",["https://en.wikipedia.org/wiki/Volucella_zonaria","https://en.wikipedia.org/wiki/Volucella_pellucens"]],"common-banded-hoverfly":[12,9,"g","It spends the winter as a larva in the leaf litter.",["https://en.wikipedia.org/wiki/Syrphus_ribesii"]],"heineken-fly":[17,10,"s","It spends the winter as a pupa, often near cow dung.",["https://arthropodafotos.de/dbsp.php?lang=eng&sc=1&sci=Rhingia&scisp=campestris&ta=t_38_dipt_bra_syr"]],"marmalade-fly":[14,9,"s","Some adults hibernate, and many more fly in from Europe each summer.",["https://link.springer.com/article/10.1186/s41938-020-00300-6","https://en.wikipedia.org/wiki/Episyrphus_balteatus"]],"hornet-robberfly":[400,21,"f","It spends at least one winter as a larva in the soil under dung.",["https://en.wikipedia.org/wiki/Asilus_crabroniformis","https://www.buglife.org.uk/bugs/bug-directory/hornet-robberfly/"]],"dark-edged-bee-fly":[30,21,"s","It spends the winter as a pupa inside a solitary bee's burrow.",["https://en.wikipedia.org/wiki/Bombylius_major"]],"twin-lobed-deer-fly":[200,14,"f","It spends the winter as a larva in wet mud.",["https://en.wikipedia.org/wiki/Tabanidae"]],"notch-horned-cleg":[200,14,"f","It spends the winter as a larva in damp soil.",["https://en.wikipedia.org/wiki/Tabanidae"]],"downlooker-snipefly":[200,14,"f","It spends the winter as a larva in soil or leaf litter.",["https://en.wikipedia.org/wiki/Rhagio_scolopaceus"]],"broad-centurion":[150,14,"f","It spends the winter as a larva in compost or rotting plants.",["https://en.wikipedia.org/wiki/Stratiomyidae"]],"st-marks-fly":[200,14,"f","It spends the winter as a larva in the soil, eating roots.",["https://en.wikipedia.org/wiki/Bibio_marci","https://en.wikipedia.org/wiki/Bibionidae"]],"crane-fly":[150,10,"s","It spends the winter as a leatherjacket larva in the soil.",["https://en.wikipedia.org/wiki/Tipula_paludosa","https://en.wikipedia.org/wiki/Crane_fly"]],"pellucid-hoverfly":[60,21,"s","It spends the winter as a pupa in the soil under a wasp nest.",["https://en.wikipedia.org/wiki/Volucella_pellucens"]],"two-banded-wasp-hoverfly":[60,14,"g","It spends the winter as a larva, probably near an ants' nest.",["https://en.wikipedia.org/wiki/Chrysotoxum_bicinctum"]],"bog-hoverfly":[120,14,"g","It spends the winter as a larva in a boggy pool.",["https://en.wikipedia.org/wiki/Sericomyia_silentis"]],"pied-hoverfly":[11,9,"g","Most arrive each year from mainland Europe.",["https://en.wikipedia.org/wiki/Scaeva_pyrastri"]],"snow-flea":[180,21,"s","Adults are active in winter, walking over moss and even snow.",["https://en.wikipedia.org/wiki/Boreus_hyemalis","https://en.wikipedia.org/wiki/Mecoptera"]],"land-caddis":[180,18,"s","Its larva is active in winter, feeding in damp woodland leaf litter.",["https://en.wikipedia.org/wiki/Enoicyla_pusilla","https://en.wikipedia.org/wiki/Caddisfly"]],"caddisfly":[250,18,"f","Most spend the winter as larvae underwater.",["https://en.wikipedia.org/wiki/Caddisfly"]],"scorpionfly":[30,12,"g","It spends the winter as a larva in the soil.",["https://en.wikipedia.org/wiki/Panorpa_communis","https://en.wikipedia.org/wiki/Mecoptera"]],"alder-fly":[250,14,"s","It spends the winter as a larva in pond or river mud.",["https://en.wikipedia.org/wiki/Sialis_lutaria","https://en.wikipedia.org/wiki/Megaloptera"]],"common-green-lacewing":[17,12,"s","Adults hibernate in sheds and houses and turn pinkish-brown.",["https://en.wikipedia.org/wiki/Chrysoperla_carnea"]],"cat-flea":[10,8,"s","It breeds all year round in warm homes.",["https://en.wikipedia.org/wiki/Cat_flea"]],"brown-lacewing":[14,12,"f","Some spend winter as adults, others as larvae or pupae.",["https://en.wikipedia.org/wiki/Hemerobiidae","https://en.wikipedia.org/wiki/Chrysoperla_carnea"]],"giant-lacewing":[200,18,"f","It spends the winter as a larva at the edge of a stream.",[]],"narrow-bordered-bee-hawk-moth":[35,21,"s","It spends the winter as a pupa in a cocoon on the ground.",["https://butterfly-conservation.org/moths/narrow-bordered-bee-hawk-moth","https://en.wikipedia.org/wiki/Hemaris_tityus"]],"burren-green":[60,28,"f","It spends the winter as an egg.",["https://en.wikipedia.org/wiki/Calamia_tridens","https://ukmoths.org.uk/species/calamia-tridens/"]]};
+/* Winter field notes and their sources */
+SPECIES.forEach(s=>{ const d=DUR[s.id]; if(!d) return;
+  if(d[3] && !s.facts.includes(d[3])) s.facts.push(d[3]);
+  if(CHECKED[s.id]) CHECKED[s.id].src.push(...d[4].filter(u=>!CHECKED[s.id].src.includes(u)));
+});
+const pupAt=id=>{ const d=DUR[id]; return d ? Math.max(1,Math.min(99,Math.round(100*d[0]/(d[0]+d[1])))) : 90; };
+/* % of the book at which each stage is reached: stages 1–8 evenly across the larval part, 9 (pupa) at pupAt, 10 at 100 */
+const stageAt=(k,id)=> k>=10 ? 100 : k===9 ? pupAt(id) : Math.round(k*pupAt(id)/9*10)/10;
+/* Habitats each species lives in (main habitat first), with sources: [keys, sources] */
+const HAB={"peacock":[["towns","woodland","farmland"],["https://butterfly-conservation.org/butterflies/peacock"]],"red-admiral":[["towns","farmland","woodland"],["https://butterfly-conservation.org/butterflies/red-admiral"]],"small-tortoiseshell":[["towns","farmland","grassland"],["https://butterfly-conservation.org/butterflies/small-tortoiseshell"]],"large-white":[["towns","farmland"],["https://butterfly-conservation.org/butterflies/large-white"]],"small-white":[["towns","farmland"],["https://butterfly-conservation.org/butterflies/small-white"]],"green-veined-white":[["farmland","wetland","woodland"],["https://butterfly-conservation.org/butterflies/green-veined-white"]],"meadow-brown":[["grassland","farmland","towns"],["https://butterfly-conservation.org/butterflies/meadow-brown"]],"speckled-wood":[["woodland","towns","farmland"],["https://butterfly-conservation.org/butterflies/speckled-wood"]],"painted-lady":[["grassland","towns","coast"],["https://butterfly-conservation.org/butterflies/painted-lady"]],"brimstone":[["woodland","farmland","grassland"],["https://butterfly-conservation.org/butterflies/brimstone"]],"orange-tip":[["farmland","woodland","towns"],["https://butterfly-conservation.org/butterflies/orange-tip"]],"small-copper":[["grassland","heath"],["https://butterfly-conservation.org/butterflies/small-copper"]],"holly-blue":[["towns","farmland","woodland"],["https://butterfly-conservation.org/butterflies/holly-blue"]],"common-blue":[["grassland","coast"],["https://butterfly-conservation.org/butterflies/common-blue"]],"monarch":[["coast","towns"],["https://butterfly-conservation.org/butterflies/monarch"]],"large-skipper":[["grassland","woodland","farmland"],["https://butterfly-conservation.org/butterflies/large-skipper"]],"small-skipper":[["grassland","farmland","woodland"],["https://butterfly-conservation.org/butterflies/small-skipper"]],"dingy-skipper":[["grassland","woodland","coast"],["https://butterfly-conservation.org/butterflies/dingy-skipper"]],"grizzled-skipper":[["woodland","grassland"],["https://butterfly-conservation.org/butterflies/grizzled-skipper"]],"duke-of-burgundy":[["grassland","woodland"],["https://butterfly-conservation.org/butterflies/duke-of-burgundy"]],"scotch-argus":[["grassland","heath","wetland"],["https://butterfly-conservation.org/butterflies/scotch-argus"]],"wood-white":[["woodland","coast","farmland"],["https://butterfly-conservation.org/butterflies/wood-white"]],"large-heath":[["wetland","heath"],["https://butterfly-conservation.org/butterflies/large-heath"]],"high-brown-fritillary":[["heath","woodland"],["https://butterfly-conservation.org/butterflies/high-brown-fritillary"]],"marsh-fritillary":[["wetland","grassland","coast"],["https://butterfly-conservation.org/butterflies/marsh-fritillary"]],"glanville-fritillary":[["coast","grassland"],["https://butterfly-conservation.org/butterflies/glanville-fritillary"]],"silver-studded-blue":[["heath","coast","grassland"],["https://butterfly-conservation.org/butterflies/silver-studded-blue"]],"white-letter-hairstreak":[["farmland","woodland"],["https://butterfly-conservation.org/butterflies/white-letter-hairstreak"]],"pearl-bordered-fritillary":[["woodland","heath"],["https://butterfly-conservation.org/butterflies/pearl-bordered-fritillary"]],"brown-hairstreak":[["farmland","woodland"],["https://butterfly-conservation.org/butterflies/brown-hairstreak"]],"small-pearl-bordered-fritillary":[["woodland","wetland","heath"],["https://butterfly-conservation.org/butterflies/small-pearl-bordered-fritillary"]],"small-blue":[["grassland","coast"],["https://butterfly-conservation.org/butterflies/small-blue"]],"adonis-blue":[["grassland"],["https://butterfly-conservation.org/butterflies/adonis-blue"]],"chalkhill-blue":[["grassland"],["https://butterfly-conservation.org/butterflies/chalk-hill-blue"]],"heath-fritillary":[["woodland","heath"],["https://butterfly-conservation.org/butterflies/heath-fritillary"]],"black-hairstreak":[["woodland","farmland"],["https://butterfly-conservation.org/butterflies/black-hairstreak"]],"small-heath":[["grassland","heath","coast"],["https://butterfly-conservation.org/butterflies/small-heath"]],"ringlet":[["woodland","grassland","farmland"],["https://butterfly-conservation.org/butterflies/ringlet"]],"gatekeeper":[["farmland","woodland","grassland"],["https://butterfly-conservation.org/butterflies/gatekeeper"]],"grayling":[["coast","heath","grassland"],["https://butterfly-conservation.org/butterflies/grayling"]],"marbled-white":[["grassland"],["https://butterfly-conservation.org/butterflies/marbled-white"]],"wall":[["grassland","coast","farmland"],["https://butterfly-conservation.org/butterflies/wall"]],"silver-washed-fritillary":[["woodland"],["https://butterfly-conservation.org/butterflies/silver-washed-fritillary"]],"dark-green-fritillary":[["grassland","coast","heath"],["https://butterfly-conservation.org/butterflies/dark-green-fritillary"]],"comma":[["woodland","towns"],["https://butterfly-conservation.org/butterflies/comma"]],"purple-emperor":[["woodland"],["https://butterfly-conservation.org/butterflies/purple-emperor"]],"swallowtail":[["wetland"],["https://butterfly-conservation.org/butterflies/swallowtail"]],"clouded-yellow":[["grassland","farmland"],["https://butterfly-conservation.org/butterflies/clouded-yellow"]],"green-hairstreak":[["grassland","heath","woodland"],["https://butterfly-conservation.org/butterflies/green-hairstreak"]],"purple-hairstreak":[["woodland","farmland","towns"],["https://butterfly-conservation.org/butterflies/purple-hairstreak"]],"brown-argus":[["grassland","coast"],["https://butterfly-conservation.org/butterflies/brown-argus"]],"white-admiral":[["woodland"],["https://butterfly-conservation.org/butterflies/white-admiral"]],"large-blue":[["grassland"],["https://butterfly-conservation.org/butterflies/large-blue"]],"small-magpie":[["towns","farmland"],["https://butterfly-conservation.org/moths/small-magpie"]],"early-grey":[["woodland","farmland","towns"],["https://butterfly-conservation.org/moths/early-grey"]],"double-striped-pug":[["towns","heath"],["https://ukmoths.org.uk/species/gymnoscelis-rufifasciata"]],"box-tree-moth":[["towns"],["https://ukmoths.org.uk/species/cydalima-perspectalis","https://www.rhs.org.uk/biodiversity/box-tree-caterpillar"]],"dingy-mocha":[["heath"],["https://ukmoths.org.uk/species/cyclophora-pendularia"]],"deaths-head-hawk-moth":[["farmland","towns"],["https://butterfly-conservation.org/moths/deaths-head-hawk-moth"]],"winter-moth":[["woodland","farmland","towns"],["https://butterfly-conservation.org/moths/winter-moth"]],"december-moth":[["woodland","farmland","towns"],["https://butterfly-conservation.org/moths/december-moth"]],"oak-eggar":[["heath","coast"],["https://ukmoths.org.uk/species/lasiocampa-quercus"]],"herald":[["woodland","farmland","towns"],["https://butterfly-conservation.org/moths/herald"]],"large-emerald":[["woodland","heath"],["https://butterfly-conservation.org/moths/large-emerald"]],"argent-and-sable":[["heath","woodland"],["https://ukmoths.org.uk/species/rheumaptera-hastata","https://en.wikipedia.org/wiki/Rheumaptera_hastata"]],"scarlet-tiger":[["wetland","freshwater","coast"],["https://butterfly-conservation.org/moths/scarlet-tiger"]],"mullein":[["towns","grassland"],["https://www.naturespot.org/species/mullein"]],"puss-moth":[["towns","farmland","woodland"],["https://butterfly-conservation.org/moths/puss-moth"]],"yellow-tail":[["woodland","farmland","towns"],["https://www.naturespot.org/species/yellow-tail"]],"knot-grass":[["grassland","farmland","towns"],["https://en.wikipedia.org/wiki/Acronicta_rumicis"]],"brown-tail":[["farmland","towns"],["https://butterfly-conservation.org/moths/brown-tail"]],"pale-tussock":[["towns","farmland","woodland"],["https://butterfly-conservation.org/moths/pale-tussock"]],"fox-moth":[["heath","grassland","coast"],["https://butterfly-conservation.org/moths/fox-moth"]],"orange-underwing":[["woodland","heath"],["https://butterfly-conservation.org/moths/orange-underwing"]],"mint-moth":[["towns","grassland"],["https://butterfly-conservation.org/moths/mint-moth"]],"chimney-sweeper":[["grassland"],["https://butterfly-conservation.org/moths/chimney-sweeper"]],"burnet-companion":[["grassland","woodland"],["https://butterfly-conservation.org/moths/burnet-companion"]],"mother-shipton":[["grassland","heath","woodland"],["https://butterfly-conservation.org/moths/mother-shipton"]],"jersey-tiger":[["towns","coast","farmland"],["https://butterfly-conservation.org/moths/jersey-tiger"]],"vapourer":[["woodland","towns","heath"],["https://butterfly-conservation.org/moths/vapourer"]],"drinker":[["wetland","grassland","woodland"],["https://butterfly-conservation.org/moths/drinker"]],"reddish-buff":[["heath"],["https://ukmoths.org.uk/species/acosmetia-caliginosa"]],"magpie-moth":[["heath","towns","farmland"],["https://butterfly-conservation.org/moths/magpie"]],"broad-bordered-bee-hawk-moth":[["woodland","heath"],["https://butterfly-conservation.org/moths/broad-bordered-bee-hawk-moth"]],"angle-shades":[["towns","farmland","woodland"],["https://butterfly-conservation.org/moths/angle-shades"]],"silver-y":[["towns","grassland","coast"],["https://butterfly-conservation.org/moths/silver-y"]],"large-yellow-underwing":[["grassland","towns"],["https://butterfly-conservation.org/moths/large-yellow-underwing"]],"cinnabar":[["grassland","coast","heath"],["https://butterfly-conservation.org/moths/cinnabar"]],"garden-tiger":[["towns","wetland","coast"],["https://butterfly-conservation.org/moths/garden-tiger"]],"buff-tip":[["woodland","farmland","towns"],["https://butterfly-conservation.org/moths/buff-tip"]],"elephant-hawk-moth":[["grassland","woodland","towns"],["https://butterfly-conservation.org/moths/elephant-hawk-moth"]],"hummingbird-hawk-moth":[["towns","coast"],["https://butterfly-conservation.org/moths/humming-bird-hawk-moth"]],"lime-hawk-moth":[["towns","woodland"],["https://butterfly-conservation.org/moths/lime-hawk-moth"]],"privet-hawk-moth":[["farmland","towns","woodland"],["https://butterfly-conservation.org/moths/privet-hawk-moth"]],"peppered-moth":[["woodland","farmland","towns"],["https://butterfly-conservation.org/moths/peppered-moth"]],"brimstone-moth":[["farmland","towns","woodland"],["https://butterfly-conservation.org/moths/brimstone-moth"]],"emperor-moth":[["heath","wetland","farmland"],["https://butterfly-conservation.org/moths/emperor-moth"]],"six-spot-burnet":[["grassland","coast"],["https://butterfly-conservation.org/moths/six-spot-burnet"]],"poplar-hawk-moth":[["woodland","towns","heath"],["https://butterfly-conservation.org/moths/poplar-hawk-moth"]],"eyed-hawk-moth":[["towns","woodland","freshwater"],["https://butterfly-conservation.org/moths/eyed-hawk-moth"]],"ruby-tiger":[["grassland","heath","towns"],["https://butterfly-conservation.org/moths/ruby-tiger"]],"white-ermine":[["towns","farmland","grassland"],["https://butterfly-conservation.org/moths/white-ermine"]],"muslin-moth":[["towns","farmland","coast"],["https://butterfly-conservation.org/moths/muslin-moth"]],"swallow-tailed-moth":[["woodland","farmland","towns"],["https://butterfly-conservation.org/moths/swallow-tailed-moth"]],"white-plume-moth":[["towns","grassland"],["https://www.naturespot.org/species/white-plume-moth"]],"burnished-brass":[["towns","farmland","wetland"],["https://butterfly-conservation.org/moths/burnished-brass"]],"red-tailed-mason-bee":[["grassland","woodland"],["https://bwars.com/bee/megachilidae/osmia-bicolor"]],"bilberry-bumblebee":[["heath"],["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/bilberry-bumblebee/"]],"ashy-mining-bee":[["grassland","towns","woodland"],["https://bwars.com/bee/andrenidae/andrena-cineraria"]],"bee-wolf":[["heath","coast"],["https://bwars.com/wasp/crabronidae/philanthinae/philanthus-triangulum"]],"ivy-bee":[["coast","towns","grassland"],["https://bwars.com/bee/colletidae/colletes-hederae"]],"buff-tailed-bumblebee":[["towns","farmland","grassland"],["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/buff-tailed-bumblebee/"]],"hairy-footed-flower-bee":[["towns","woodland","coast"],["https://bwars.com/bee/apidae/anthophora-plumipes"]],"heath-bumblebee":[["heath","towns","coast"],["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/heath-bumblebee/"]],"tree-bumblebee":[["towns","woodland"],["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/tree-bumblebee/"]],"early-bumblebee":[["towns","woodland","grassland"],["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/early-bumblebee/"]],"garden-bumblebee":[["towns","farmland","grassland"],["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/garden-bumblebee/"]],"shrill-carder-bee":[["grassland","coast"],["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/shrill-carder-bee/"]],"white-tailed-bumblebee":[["towns","grassland","heath"],["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/white-tailed-bumblebee/"]],"red-tailed-bumblebee":[["towns","grassland","farmland"],["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/red-tailed-bumblebee/"]],"common-carder-bee":[["towns","grassland","farmland"],["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/common-carder-bee/"]],"great-yellow-bumblebee":[["coast","grassland"],["https://www.buglife.org.uk/bugs/bug-directory/great-yellow-bumblebee/"]],"giant-horntail":[["woodland"],["https://en.wikipedia.org/wiki/Urocerus_gigas"]],"honey-bee":[["towns","farmland","grassland"],["https://en.wikipedia.org/wiki/Western_honey_bee"]],"patchwork-leaf-cutter-bee":[["towns"],["https://bwars.com/bee/megachilidae/megachile-centuncularis"]],"red-mason-bee":[["towns","farmland"],["https://www.naturespot.org/species/red-mason-bee"]],"tawny-mining-bee":[["towns","grassland"],["https://bwars.com/index.php/content/beginners-bees-wasps-andrena-fulva-tawny-mining-bee"]],"hornet":[["woodland","farmland"],["https://en.wikipedia.org/wiki/European_hornet"]],"common-wasp":[["towns","woodland","farmland"],["https://en.wikipedia.org/wiki/Vespula_vulgaris"]],"ruby-tailed-wasp":[["towns","woodland"],["https://en.wikipedia.org/wiki/Chrysis_ignita"]],"birch-clubhorn":[["woodland","heath"],["https://www.naturespot.org/species/birch-sawfly"]],"gooseberry-sawfly":[["towns"],["https://www.rhs.org.uk/biodiversity/gooseberry-sawfly"]],"solomons-seal-sawfly":[["towns","woodland"],["https://www.naturespot.org/species/solomons-seal-sawfly"]],"orange-tailed-mining-bee":[["towns","grassland","farmland"],["https://www.naturespot.org/species/early-mining-bee"]],"wool-carder-bee":[["towns","grassland","coast"],["https://www.bwars.com/bee/megachilidae/anthidium-manicatum"]],"nomad-bee":[["grassland","towns","woodland"],["https://bwars.com/bee/apidae/nomada-goodeniana"]],"violet-carpenter-bee":[["towns"],["https://www.bwars.com/content/xylocopa-britain"]],"pea-leaf-weevil":[["farmland","towns"],["https://en.wikipedia.org/wiki/Sitona_lineatus"]],"black-oil-beetle":[["grassland","coast"],["https://www.buglife.org.uk/bugs/bug-directory/black-oil-beetle/"]],"acorn-weevil":[["woodland"],["https://en.wikipedia.org/wiki/Curculio_glandium"]],"king-diving-beetle":[["wetland","freshwater"],["https://en.wikipedia.org/wiki/Dytiscidae"]],"great-silver-water-beetle":[["wetland","freshwater"],["https://en.wikipedia.org/wiki/Hydrophilus_piceus"]],"golden-bloomed-grey-longhorn":[["grassland","farmland"],["https://en.wikipedia.org/wiki/Agapanthia_villosoviridescens"]],"soldier-beetle":[["grassland","farmland","woodland"],["https://en.wikipedia.org/wiki/Cantharis_rustica"]],"red-breasted-carrion-beetle":[["woodland"],["https://www.naturespot.org/species/oiceoptoma-thoracicum"]],"black-snail-beetle":[["woodland"],["https://en.wikipedia.org/wiki/Phosphuga_atrata"]],"rosemary-beetle":[["towns"],["https://www.rhs.org.uk/biodiversity/rosemary-beetle"]],"black-spotted-longhorn":[["woodland"],["https://en.wikipedia.org/wiki/Rhagium_mordax"]],"black-and-yellow-longhorn":[["woodland","grassland"],["https://en.wikipedia.org/wiki/Rutpela_maculata"]],"swollen-thighed-beetle":[["grassland","towns","farmland"],["https://en.wikipedia.org/wiki/Oedemera_nobilis"]],"tansy-beetle":[["freshwater","wetland"],["https://www.buglife.org.uk/bugs/bug-directory/tansy-beetle/"]],"noble-chafer":[["farmland","woodland"],["https://ptes.org/wp-content/uploads/2014/06/Noble-chafer-fact-file-low-res.pdf"]],"violet-click-beetle":[["woodland"],["https://www.buglife.org.uk/bugs/bug-directory/violet-click-beetle/"]],"whirligig-beetle":[["freshwater"],["https://www.naturespot.org/species/whirligig-beetle"]],"great-diving-beetle":[["freshwater"],["https://www.naturespot.org/species/great-diving-beetle"]],"green-tortoise-beetle":[["grassland","wetland","freshwater"],["https://en.wikipedia.org/wiki/Cassida_viridis"]],"bloody-nosed-beetle":[["grassland","farmland","coast"],["https://www.naturespot.org/species/bloody-nosed-beetle"]],"wasp-beetle":[["woodland","farmland","towns"],["https://www.naturespot.org/species/wasp-beetle"]],"musk-beetle":[["wetland","freshwater"],["https://en.wikipedia.org/wiki/Aromia_moschata"]],"deathwatch-beetle":[["woodland","towns"],["https://en.wikipedia.org/wiki/Deathwatch_beetle"]],"22-spot-ladybird":[["grassland","farmland","towns"],["https://www.naturespot.org/species/22-spot-ladybird"]],"14-spot-ladybird":[["grassland","farmland","towns"],["https://www.naturespot.org/species/14-spot-ladybird"]],"harlequin-ladybird":[["towns","woodland","farmland"],["https://www.naturespot.org/species/harlequin-ladybird"]],"orange-ladybird":[["woodland","towns"],["https://www.naturespot.org/species/orange-ladybird"]],"7-spot-ladybird":[["towns","grassland","woodland"],["https://www.woodlandtrust.org.uk/trees-woods-and-wildlife/animals/beetles/7-spot-ladybird/"]],"eyed-ladybird":[["woodland","heath"],["https://www.naturespot.org/species/eyed-ladybird"]],"2-spot-ladybird":[["towns","woodland","farmland"],["https://www.naturespot.org/species/2-spot-ladybird"]],"red-headed-cardinal-beetle":[["woodland","farmland"],["https://www.naturespot.org/species/cardinal-beetle"]],"glow-worm":[["grassland","heath","farmland"],["https://www.naturespot.org/species/glow-worm"]],"common-red-soldier-beetle":[["grassland","farmland","towns"],["https://www.naturespot.org/species/common-red-soldier-beetle"]],"coppery-click-beetle":[["heath","grassland"],["https://www.naturespot.org/species/ctenicera-cuprea"]],"rose-chafer":[["towns","woodland","grassland"],["https://www.naturespot.org/species/rose-chafer"]],"common-cockchafer":[["farmland","woodland","towns"],["https://en.wikipedia.org/wiki/Common_cockchafer"]],"minotaur-beetle":[["heath","grassland"],["https://www.hiwwt.org.uk/blog/hiwwt/mighty-minotaur-beetle"]],"rhinoceros-beetle":[["woodland"],["https://www.naturespot.org/species/rhinoceros-beetle"]],"lesser-stag-beetle":[["woodland","towns","farmland"],["https://www.naturespot.org/species/lesser-stag-beetle"]],"stag-beetle":[["woodland","towns","farmland"],["https://www.nhm.ac.uk/discover/stag-beetles.html"]],"devils-coach-horse":[["woodland","towns","farmland"],["https://www.naturespot.org/species/devils-coach-horse"]],"common-sexton-beetle":[["woodland","heath","towns"],["https://en.wikipedia.org/wiki/Nicrophorus_vespilloides"]],"violet-ground-beetle":[["woodland","towns","farmland"],["https://en.wikipedia.org/wiki/Carabus_violaceus"]],"green-tiger-beetle":[["heath","grassland","coast"],["https://www.naturespot.org/species/green-tiger-beetle"]],"cream-spot-ladybird":[["woodland","farmland"],["https://www.naturespot.org/species/cream-spot-ladybird"]],"kidney-spot-ladybird":[["woodland","wetland"],["https://www.nhsn.org.uk/species/kidney-spot-ladybird/"]],"pine-ladybird":[["woodland","towns","farmland"],["https://www.naturespot.org/species/pine-ladybird","https://en.wikipedia.org/wiki/Exochomus_quadripustulatus"]],"striped-ladybird":[["woodland","heath"],["https://www.naturespot.org/species/striped-ladybird"]],"narrow-headed-ant":[["heath","woodland"],["https://www.bwars.com/ant/formicidae/formicinae/formica-exsecta","https://www.buglife.org.uk/bugs/bug-directory/narrow-headed-ant/"]],"wood-ant":[["woodland","heath"],["https://www.bwars.com/ant/formicidae/formicinae/formica-rufa"]],"red-ant":[["grassland","freshwater","towns"],["https://bwars.com/ant/formicidae/myrmicinae/myrmica-rubra"]],"yellow-meadow-ant":[["grassland","towns"],["https://www.naturespot.org/species/yellow-meadow-ant"]],"black-garden-ant":[["towns","grassland","coast"],["https://bwars.com/ant/formicidae/formicinae/lasius-niger"]],"bat-winged-phasia":[["woodland","farmland"],["https://www.naturespot.org/species/phasia-hemiptera"]],"ferruginous-bee-grabber":[["farmland","grassland"],["https://www.naturespot.org/species/sicus-ferrugineus"]],"the-footballer":[["freshwater","farmland","towns"],["https://www.naturespot.org/species/helophilus-pendulus"]],"bumblebee-mimic-hoverfly":[["farmland","woodland","towns"],["https://www.naturespot.org/species/volucella-bombylans"]],"batman-hoverfly":[["woodland","towns"],["https://www.naturespot.org/species/myathropa-florea"]],"narcissus-bulb-fly":[["towns"],["https://www.naturespot.org/species/narcissus-bulb-fly"]],"drone-fly":[["towns","farmland"],["https://www.naturespot.org/species/eristalis-tenax"]],"hornet-mimic-hoverfly":[["towns"],["https://www.naturespot.org/species/volucella-zonaria"]],"common-banded-hoverfly":[["towns","farmland","woodland"],["https://www.naturespot.org/species/syrphus-ribesii"]],"heineken-fly":[["farmland","woodland"],["https://www.naturespot.org/species/rhingia-campestris"]],"marmalade-fly":[["towns","farmland","woodland"],["https://www.naturespot.org/species/episyrphus-balteatus"]],"hornet-robberfly":[["grassland","heath"],["https://www.buglife.org.uk/bugs/bug-directory/hornet-robberfly/"]],"dark-edged-bee-fly":[["towns","woodland","farmland"],["https://www.buglife.org.uk/bugs/bug-directory/dark-edged-bee-fly/"]],"twin-lobed-deer-fly":[["wetland","freshwater","grassland"],["https://www.avonwildlifetrust.org.uk/wildlife-explorer/invertebrates/flies/twin-lobed-deer-fly"]],"notch-horned-cleg":[["grassland","woodland","wetland"],["https://www.bbowt.org.uk/wildlife-explorer/invertebrates/flies/notch-horned-cleg-fly-horse-fly"]],"downlooker-snipefly":[["woodland","farmland"],["https://www.naturespot.org/species/rhagio-scolopaceus"]],"broad-centurion":[["woodland","farmland","towns"],["https://en.wikipedia.org/wiki/Chloromyia_formosa"]],"crane-fly":[["grassland","towns","farmland"],["https://en.wikipedia.org/wiki/Tipula_paludosa","https://www.nhm.ac.uk/discover/crane-fly-daddy-long-legs-facts.html"]],"pellucid-hoverfly":[["woodland","farmland","towns"],["https://www.naturespot.org/species/pellucid-fly"]],"two-banded-wasp-hoverfly":[["grassland","farmland"],["https://www.naturespot.org/species/chrysotoxum-bicinctum"]],"bog-hoverfly":[["heath","wetland","woodland"],["https://www.naturespot.org/species/sericomyia-silentis"]],"pied-hoverfly":[["towns","grassland"],["https://www.naturespot.org/species/scaeva-pyrastri"]],"snow-flea":[["woodland","heath"],["https://www.derbyshirewildlifetrust.org.uk/wildlife-explorer/invertebrates/other-insects/snow-flea","https://www.naturespot.org/species/snow-flea"]],"land-caddis":[["woodland"],["https://en.wikipedia.org/wiki/Enoicyla_pusilla"]],"caddisfly":[["freshwater","wetland"],["https://www.hiwwt.org.uk/wildlife-explorer/invertebrates/other-insects/caddisfly"]],"st-marks-fly":[["farmland","woodland"],["https://www.naturespot.org/species/st-marks-fly"]],"scorpionfly":[["woodland","farmland"],["https://www.naturespot.org/species/scorpion-fly"]],"alder-fly":[["freshwater"],["https://en.wikipedia.org/wiki/Sialis_lutaria"]],"common-green-lacewing":[["towns","woodland","grassland"],["https://www.nwt.org.uk/wildlife-explorer/invertebrates/other-insects/common-green-lacewing"]],"cat-flea":[["towns"],["https://www.naturespot.org/species/cat-flea"]],"brown-lacewing":[["woodland","farmland"],["https://www.naturespot.org/species/hemerobius-humulinus"]],"giant-lacewing":[["freshwater","woodland"],["https://www.naturespot.org/species/giant-lacewing"]],"narrow-bordered-bee-hawk-moth":[["grassland","heath"],["https://butterfly-conservation.org/moths/narrow-bordered-bee-hawk-moth","https://ukmoths.org.uk/species/hemaris-tityus"]],"burren-green":[["grassland"],["https://ukmoths.org.uk/species/calamia-tridens","https://en.wikipedia.org/wiki/Calamia_tridens"]]};
+const HABITATS=[
+  {k:"woodland",name:"Woodland",desc:"Broadleaved and pine woods, woodland edges and rides, old trees and dead wood."},
+  {k:"grassland",name:"Grassland & Meadows",desc:"Meadows, pasture, rough grassland, chalk and limestone downs, and road verges."},
+  {k:"heath",name:"Heathland & Moorland",desc:"Lowland heath, moorland, uplands and mountains."},
+  {k:"wetland",name:"Wetlands & Bogs",desc:"Fens, marshes, reedbeds, wet meadows, and raised and blanket bogs."},
+  {k:"freshwater",name:"Rivers, Ponds & Lakes",desc:"In and beside open fresh water."},
+  {k:"coast",name:"Coast",desc:"Sand dunes, cliffs, shingle, saltmarsh and machair."},
+  {k:"farmland",name:"Farmland & Hedgerows",desc:"Fields, crops, orchards, hedgerows and scrub."},
+  {k:"towns",name:"Towns, Gardens & Homes",desc:"Gardens, parks, allotments, buildings and houses."}];
+const HAB_NEED=2;
+const habOf=id=>(HAB[id]&&HAB[id][0])||[];
 /* Spring-queen field notes for bumblebees, the Common Wasp and the Hornet */
 SPECIES.forEach(s=>{
   const k=/bumblebee|carder-bee$/.test(s.id)&&s.id!=="wool-carder-bee"?"bumblebee":(s.id==="common-wasp"||s.id==="hornet")?s.id:null;
@@ -1391,6 +1468,10 @@ const IE_STATUS={Common:"Widespread in Ireland",Uncommon:"Local in Ireland",Rare
 Object.entries(CHECKED).forEach(([id,c])=>{ if(c.ie) IE_NOTES[id]=[c.ie[0]||"",c.ie[1]||""]; });
 const PLACE_RE=/Brit|England|English|Scotland|Scottish|Wales|Welsh|London|Cumbria|Dorset|Norfolk|Isle of Wight|Somerset|Gloucestershire|Kent|Essex|Exmoor|Dartmoor|Morecambe|Oxford|Peterborough|\bYork\b|Thames|Midlands|Cornwall|Devon|East Anglia|Westminster|Channel Islands/;
 /* species lists for both countries, kept before filtering so the meta achievements can count either country */
+/* name and category of every species in every country, kept before the list is filtered to one country
+   (needed when collections are merged and a raised species isn't in this country's list) */
+const GB_RARITY=Object.fromEntries(SPECIES.filter(s=>!s.ieOnly).map(s=>[s.id,s.rarity]));
+const ALL_NAME=Object.fromEntries(SPECIES.map(s=>[s.id,s.name])), ALL_KIND=Object.fromEntries(SPECIES.map(s=>[s.id,s.kind]));
 const COUNTRY_IDS={gb:SPECIES.filter(s=>!s.ieOnly).map(s=>s.id), ie:SPECIES.filter(s=>IE_RARITY[s.id]).map(s=>s.id)};
 if(COUNTRY==="gb"){ const keep=SPECIES.filter(s=>!s.ieOnly); SPECIES.length=0; keep.forEach(s=>SPECIES.push(s)); }
 if(COUNTRY==="ie"){
@@ -1419,7 +1500,7 @@ const RARITY_CHIP = {Common:"ok",Uncommon:"accent",Rare:"rare"};
 /* Category unlocks: only butterflies hatch at first. Each other category unlocks once enough butterflies have been
    raised from books (repeats count). */
 const UNLOCKS=[{kind:"moth",n:2},{kind:"beewasp",n:4},{kind:"beetle",n:6},{kind:"fly",n:8},{kind:"ant",n:10},{kind:"other",n:12}];
-const butterfliesRaised=()=>state.collection.filter(c=>SP[c.species]&&SP[c.species].kind==="butterfly").length;
+const butterfliesRaised=()=>coll().filter(c=>ALL_KIND[c.species]==="butterfly").length;
 const unlockFor=k=>UNLOCKS.find(u=>u.kind===k);
 const isUnlocked=k=>k==="butterfly" || butterfliesRaised()>=(unlockFor(k)||{n:0}).n;
 /* Pick from every uncollected species of the book's tier in the unlocked categories, ignoring category, so small
@@ -1431,8 +1512,9 @@ const pickOne=a=>a[Math.floor(Math.random()*a.length)];
 function missingForms(id){
   const busy=[...state.books,...state.waiting].filter(x=>x.species===id);
   if(busy.length) return [];
-  if(!isDimorph(id)) return state.collection.some(c=>c.species===id) ? [] : [null];
-  return formsOf(id).filter(x=>!state.collection.some(c=>c.species===id && c.sex===x));
+  const C=coll();
+  if(!isDimorph(id)) return C.some(c=>c.species===id) ? [] : [null];
+  return formsOf(id).filter(x=>!C.some(c=>c.species===id && c.sex===x));
 }
 function pickSpecies(tier){
   const pool=SPECIES.filter(s=>s.rarity===tier && isUnlocked(s.kind));
@@ -1459,6 +1541,8 @@ state.wtr=state.wtr||[]; state.unlocks=state.unlocks||{};
   Object.keys(state.seen).forEach(id=>{ if(MERGED[id]){ const to=m(id); state.seen[to]=[...new Set([...(state.seen[to]||[]),...state.seen[id]])]; delete state.seen[id]; changed=true; } });
   if(changed) save();
 })();
+/* Saves from before species-specific pupation points: move larvae forward to their new stage (never backwards) */
+(function restage(){ let ch=false; state.books.forEach(b=>{ const s=stageFor(pct(b),b.species); if(s>b.stage && s<10){ b.stage=s; ch=true; } }); if(ch) save(); })();
 /* Saves from before male and female forms: give existing larvae and raised adults of those species a form */
 (function migrateSex(){
   let changed=false;
@@ -1470,6 +1554,58 @@ state.wtr=state.wtr||[]; state.unlocks=state.unlocks||{};
     else if(isDimorph(x.species) && !x.sex){ x.sex=Math.random()<.5?"m":"f"; changed=true; } });
   if(changed) save();
 })();
+/* ---------- merged collections (Easy Mode) ----------
+   Each country keeps its own save, and every raised adult records the country it was collected in. When collections are
+   merged, the app reads every country's raised adults together (coll()); nothing is copied, so unmerging simply goes back
+   to reading this country's own save. */
+const MERGE_KEY="bookworm-merged";
+const isMerged=()=>{ try{ return localStorage.getItem(MERGE_KEY)==="1"; }catch(e){ return false; } };
+state.collection.forEach(c=>{ if(!c.country){ c.country=COUNTRY; } });
+function ownCollection(code){
+  if(code===COUNTRY) return state.collection;
+  try{ const s=JSON.parse(localStorage.getItem(COUNTRIES[code].key)); return ((s&&s.collection)||[]).map(c=>({...c,country:c.country||code})); }catch(e){ return []; }
+}
+let OTHER=null;
+function otherCollections(){ if(!OTHER) OTHER=Object.keys(COUNTRIES).filter(c=>c!==COUNTRY).flatMap(ownCollection); return OTHER; }
+function coll(){ return isMerged() ? [...state.collection,...otherCollections()] : state.collection; }
+/* ---------- score and titles ----------
+   Each finished book earns points for the rarity its species had in the country it was raised in. The score is the
+   user's total across every country (merging doesn't change it), and titles are earned at score thresholds. */
+const POINTS={Common:100,Uncommon:200,Rare:300};
+const rarityIn=(id,code)=>(code==="ie"?IE_RARITY[id]:GB_RARITY[id])||GB_RARITY[id]||IE_RARITY[id]||"Common";
+const pointsOf=c=>c.points!=null?c.points:POINTS[rarityIn(c.species,c.country||COUNTRY)];
+const rarityOfPoints=n=>n>=300?"Rare":n>=200?"Uncommon":"Common";
+(function addPoints(){ let ch=false; state.collection.forEach(c=>{ if(c.points==null){ c.points=pointsOf(c); ch=true; } }); if(ch) save(); })();
+const totalScore=()=>[...state.collection,...otherCollections()].reduce((t,c)=>t+pointsOf(c),0);
+const TITLES=[
+  {id:"t0",n:0,name:"Egg Explorer"},
+  {id:"t1",n:500,name:"Hungry Hatchling"},
+  {id:"t2",n:1500,name:"Caterpillar Chapter-Chaser"},
+  {id:"t3",n:3000,name:"Larva Librarian"},
+  {id:"t4",n:5000,name:"Paperback Pupa"},
+  {id:"t5",n:8000,name:"Bookish Butterfly"},
+  {id:"t6",n:12000,name:"Moth of the Margins"},
+  {id:"t7",n:17000,name:"Bumblebee Bibliophile"},
+  {id:"t8",n:23000,name:"Hawk-moth Historian"},
+  {id:"t9",n:30000,name:"Lepidoptera Laureate"},
+  {id:"t10",n:40000,name:"Entomology Encyclopaedist"},
+  {id:"t11",n:55000,name:"Metamorphosis Maestro"},
+  {id:"t12",n:75000,name:"Monarch of the Manuscripts"}];
+const TITLE_KEY="bookworm-titles";
+function loadTitles(){ try{ return JSON.parse(localStorage.getItem(TITLE_KEY))||{}; }catch(e){ return {}; } }
+const currentTitle=s=>[...TITLES].reverse().find(t=>s>=t.n);
+/* records newly reached titles; returns them (used for the banner on the "emerged" screen) */
+function checkTitles(){
+  const got=loadTitles(), s=totalScore(), fresh=[];
+  TITLES.forEach(t=>{ if(t.n>0 && s>=t.n && !got[t.id]){ got[t.id]=new Date(now()).toISOString(); fresh.push(t); } });
+  if(fresh.length){ try{ localStorage.setItem(TITLE_KEY,JSON.stringify(got)); }catch(e){} }
+  return fresh;
+}
+function renderScore(){
+  const s=totalScore(), t=currentTitle(s);
+  $("score-pts").textContent=`${s.toLocaleString("en-GB")} points`;
+  $("score-title").textContent=t.name;
+}
 function load(){try{const s=localStorage.getItem(KEY);return s?JSON.parse(s):null}catch(e){return null}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 const now = ()=>Date.now()+(state.offset||0);
@@ -1478,13 +1614,14 @@ const esc = s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":
 
 function tierFor(p){ if(p>=800) return "Rare"; if(p>=450) return "Uncommon"; return "Common"; }
 function pct(b){ return b.mode==="pages" ? Math.min(100,b.progress/b.pages*100) : Math.min(100,b.progress); }
-function stageFor(p){ if(p>=100) return 10; return Math.min(9,Math.floor(p/10)); }
+function stageFor(p,id){ if(p>=100) return 10; const P=pupAt(id); if(p>=P) return 9; return Math.min(8,Math.floor(p/P*9+1e-9)); }
 function lengthMm(stage,sp){ const max=(SP[sp]||SP.monarch).len; return Math.round(2+Math.min(stage,8)*(max-2)/8); }
 /* A larva that reaches Hungry at any point is remembered as having gone hungry (decides queen or worker) */
-function markHungry(b){ if(b && b.status==="reading" && !b.hungry && (now()-b.lastFed)/DAY>=2){ b.hungry=true; return true; } return false; }
+function markHungry(b){ if(b && b.status==="reading" && b.stage<9 && !b.hungry && (now()-b.lastFed)/DAY>=2){ b.hungry=true; return true; } return false; }
 const finalForm=b=>isCaste(b.species)?(b.sex==="m"?"m":(b.hungry?"w":"q")):(b.sex||null);
 function moodFor(b){
   if(b.status==="frozen") return {k:"content",label:"Frozen",cls:"frozen"};
+  if(b.stage>=9) return {k:"content",label:"Pupating",cls:"ok"};   /* pupae don't feed, so they never get hungry */
   const d=(now()-b.lastFed)/DAY;
   if(d>=5) return {k:"xhungry",label:"Extremely hungry",cls:"danger"};
   if(d>=2) return {k:"hungry",label:"Hungry",cls:"warn"};
@@ -1637,23 +1774,24 @@ function renderShelf(){
   document.querySelectorAll("#wait-list .bk").forEach(el=>el.onclick=()=>openWaiting(+el.dataset.i));
   document.querySelectorAll("#cur-list .bk,#frz-list .bk").forEach(el=>el.onclick=()=>go("book",el.dataset.id));
   /* Want To Read and Completed Books: the three most recent, tap for the whole list */
-  const wtr=[...state.wtr].reverse(), done=[...state.collection].reverse();
+  const wtr=[...state.wtr].reverse(), done=[...coll()].sort((a,b)=>new Date(b.date)-new Date(a.date));
   $("wtr-count").textContent=state.wtr.length;
   $("wtr-list").innerHTML = wtr.length ? wtr.slice(0,3).map(w=>`<button type="button" class="mini-row" data-open="wtr"><span class="meta"><b>${esc(w.title)}</b><span class="small muted">${esc(w.author||"Unknown author")} · <span class="mono">${w.pages} pp</span></span></span></button>`).join("")
     : `<p class="small muted">Nothing here yet. When you find a book you'd like to read later, choose "Add to Want To Read list" on the Add a book page.</p>`;
   $("wtr-all").hidden=!wtr.length;
-  $("done-count").textContent=state.collection.length;
+  $("done-count").textContent=coll().length;
   $("done-list").innerHTML = done.length ? done.slice(0,3).map(doneRow).join("")
     : `<p class="small muted">Books you finish will appear here, with the insect each one raised.</p>`;
   $("done-all").hidden=!done.length;
   document.querySelectorAll('#wtr-list [data-open]').forEach(el=>el.onclick=openWtrList);
   document.querySelectorAll('#done-list [data-open]').forEach(el=>el.onclick=openDoneList);
 }
+const ptsChip=c=>{ const n=pointsOf(c); return `<span class="chip ${RARITY_CHIP[rarityOfPoints(n)]} pts-chip" title="${rarityOfPoints(n)}: ${n} points">+${n}</span>`; };
 const formText=c=>c.sex?`${SEX_WORD[c.sex].toLowerCase()} `:"";
 function doneRow(c){
   const sp=SP[c.species];
-  return `<button type="button" class="mini-row" data-open="done"><span class="meta"><b>${esc(c.title)}</b><span class="small muted">${esc(c.author||"Unknown author")} · <span class="mono">${c.pages} pp</span> · ${fmtDate(c.date)}</span>
-    <span class="small">Raised ${sp?`${article(formText(c)+sp.name)} ${formText(c)}${esc(sp.name)}`:"a species from another country"}</span></span></button>`;
+  return `<button type="button" class="mini-row" data-open="done" ><span class="meta"><b>${esc(c.title)}</b><span class="small muted">${esc(c.author||"Unknown author")} · <span class="mono">${c.pages} pp</span> · ${fmtDate(c.date)}</span>
+    <span class="small">Raised ${(()=>{const n=sp?sp.name:ALL_NAME[c.species]||c.species;return `${article(formText(c)+n)} ${formText(c)}${esc(n)}`})()}${c.country&&c.country!==COUNTRY?` in ${esc(COUNTRIES[c.country].name)}`:""}</span></span>${ptsChip(c)}</button>`;
 }
 function openWtrList(){
   const render=()=>{
@@ -1668,9 +1806,9 @@ function openWtrList(){
   render(); $("m-list").hidden=false;
 }
 function openDoneList(){
-  const list=[...state.collection].reverse();
+  const list=[...coll()].sort((a,b)=>new Date(b.date)-new Date(a.date));
   $("ml-h").textContent="Completed Books"; $("ml-count").textContent=list.length;
-  $("ml-list").innerHTML=list.map(doneRow).join("").replace(/<button type="button" class="mini-row" data-open="done">/g,'<div class="mini-row">').replace(/<\/button>/g,"</div>");
+  $("ml-list").innerHTML=list.map(doneRow).join("").replace(/<button type="button" class="mini-row" data-open="done"[^>]*>/g,'<div class="mini-row">').replace(/<\/button>/g,"</div>");
   $("m-list").hidden=false;
 }
 $("wtr-all").onclick=openWtrList; $("done-all").onclick=openDoneList;
@@ -1783,7 +1921,7 @@ function sameBook(a,b){
 function priorUse(book){
   const r=state.books.find(b=>sameBook(b,book));
   if(r) return r.status==="frozen" ? "It's on your shelf as a frozen book." : "You're reading it right now.";
-  const c=[...state.collection].reverse().find(x=>sameBook(x,book));
+  const c=[...coll()].reverse().find(x=>sameBook(x,book));
   if(c) return `You finished it on ${fmtDate(c.date)}.`;
   const w=state.wtr.find(x=>sameBook(x,book));
   if(w) return "It's on your Want To Read list.";
@@ -1859,10 +1997,11 @@ function renderRead(){
   $("sex").hidden=!b.sex; if(b.sex) $("sex").textContent=`${SEX_SYM[b.sex]} ${SEX_WORD[b.sex]}`;
   const cn=isCaste(b.species) && b.sex==="f";
   $("caste-note").hidden=!cn;
-  if(cn) $("caste-note").textContent = b.hungry
+  if(cn) $("caste-note").textContent = st>=9 ? (b.hungry ? "She went hungry as a larva, so she'll emerge as a worker." : "She was well fed all through her larval stage, so she'll emerge as a queen.") : b.hungry
     ? `She got hungry, so she'll grow up to be a worker. In real colonies, how well a larva is fed decides whether she becomes a queen or a worker.`
     : `Keep her well fed until you finish the book and she'll become a queen. If she ever gets Hungry, she'll be a worker instead.`;
-  $("lbl-pupa").textContent=cap1(pupa)+" 90%"; $("lbl-adult").textContent=cap1(sp.noun)+" 100%";
+  const P=pupAt(sp.id);
+  $("lbl-pupa").textContent=cap1(pupa)+" "+P+"%"; $("lbl-adult").textContent=cap1(sp.noun)+" 100%";
   $("hab-cap").innerHTML = `${esc(sp.name)} ${st<9?K.young:pupa} <span class="chip ${RARITY_CHIP[sp.rarity]}">${sp.rarity} ${sp.noun}</span>${seasonChip(sp)}`;
   $("b-eyebrow").textContent = isFrozen ? "Frozen" : "Currently reading";
   $("b-title").textContent=b.title;
@@ -1871,13 +2010,14 @@ function renderRead(){
   $("b-pct").textContent=fmtPct(p);
   $("b-pages").textContent = b.mode==="pages" ? `Page ${b.progress} of ${b.pages}` : `Tracking by % · ${b.pages} pp`;
   $("stem-fill").style.width=p+"%";
-  $("stem-nodes").innerHTML=[...Array(10)].map((_,i)=>{const at=(i+1)*10;return `<div class="node${p>=at?" done":""}${at===90?" chrys":""}${at===100?" fly":""}"><span></span></div>`}).join("");
-  const nextAt=st>=9?100:(st+1)*10;
-  const lbl=nextAt===100?`the ${sp.noun} emerges`:nextAt===90?(sp.kind==="butterfly"?"it forms a chrysalis":"it pupates"):`your ${K.young} grows`;
+  $("stem-nodes").innerHTML=[...Array(10)].map((_,i)=>{const k=i+1, at=stageAt(k,sp.id);return `<div class="node${p>=at?" done":""}${k===9?" chrys":""}${k===10?" fly":""}" style="left:${at}%"><span></span></div>`}).join("");
+  const nextK=st>=9?10:st+1, nextAt=stageAt(nextK,sp.id);
+  const lbl=nextK===10?`the ${sp.noun} emerges`:nextK===9?(sp.kind==="butterfly"?"it forms a chrysalis":"it pupates"):`your ${K.young} grows`;
   const where=b.mode==="pages"?` (page ${Math.ceil(b.pages*nextAt/100)})`:"";
-  const days=Math.floor((now()-b.lastFed)/DAY);
+  const days=Math.floor((now()-b.lastFed)/DAY), isPupa=st>=9;
   $("next-stage").innerHTML = isFrozen ? `At <b>${nextAt}%</b>${where} ${lbl}.`
-    : `At <b>${nextAt}%</b>${where} ${lbl}. <span class="muted">Last fed ${days===0?"today":days===1?"yesterday":days+" days ago"}.</span>`;
+    : `At <b>${nextAt}%</b>${where} ${lbl}. <span class="muted">${isPupa?`The ${pupa} doesn't feed, so read on to help it grow.`:`Last fed ${days===0?"today":days===1?"yesterday":days+" days ago"}.`}</span>`;
+  $("feed-btn").textContent = isPupa ? "Grow" : "Feed";
   $("log-form").hidden=isFrozen;
   $("frozen-note").hidden=!isFrozen;
   $("frozen-note").textContent=`This book is frozen. Its ${st<9?K.young:pupa} is dormant: it won't grow or get hungry until you unfreeze it. Many real insects do the same thing to wait out winter. It's called diapause.`;
@@ -1903,10 +2043,11 @@ function feed(v){
   markHungry(b);
   const gained=Math.round((v-b.progress)*10)/10;
   b.progress=v; b.lastFed=now();
-  const ns=stageFor(pct(b)); const grew=ns>b.stage; b.stage=ns;
+  const wasPupa=b.stage>=9;
+  const ns=stageFor(pct(b),b.species); const grew=ns>b.stage; b.stage=Math.max(ns,b.stage);
   save(); renderRead();
   const art=$("art"); art.classList.remove("munch"); void art.offsetWidth; art.classList.add("munch");
-  const f=document.createElement("div"); f.className="floater"; f.textContent=`Munch! +${gained}${b.mode==="pages"?" pp":"%"}`; $("habitat").appendChild(f); setTimeout(()=>f.remove(),1200);
+  const f=document.createElement("div"); f.className="floater"; f.textContent=`${wasPupa?"Growing!":"Munch!"} +${gained}${b.mode==="pages"?" pp":"%"}`; $("habitat").appendChild(f); setTimeout(()=>f.remove(),1200);
   if(grew) setTimeout(()=>celebrate(b,ns),650);
 }
 function blockNote(msg){ $("act-note").textContent=msg; $("act-note").hidden=false; }
@@ -1964,7 +2105,7 @@ $("edit-form").addEventListener("submit",e=>{
   if(prog>max){ toast(isP?`The book only has ${pages} pages`:"Progress can't be more than 100%"); return; }
   const before=b.stage; markHungry(b);
   b.title=title; b.author=$("e-author").value.trim(); b.pages=pages; b.progress=prog; b.mode=editMode;
-  b.stage=stageFor(pct(b)); save(); $("m-edit").hidden=true; renderRead();
+  b.stage=stageFor(pct(b),b.species); save(); $("m-edit").hidden=true; renderRead();
   if(b.stage===10) { celebrate(b,10); return; }
   toast(b.stage===before ? "Book updated." : `Book updated. Your larva is now at growth stage ${Math.min(b.stage,9)}.`);
 });
@@ -2052,28 +2193,32 @@ function celebrate(b,stage,moved){
       (isCaste(sp.id)&&b.sex==="f"?" Keep her well fed the whole way through and she'll become a queen.":"");
     acts.innerHTML=`<button class="primary" type="button" id="mc-ok">Start reading</button>`;
   } else if(stage<9){
-    $("mc-eyebrow").textContent=`${stage*10}% read · Growth stage ${stage} of 8`;
+    $("mc-eyebrow").textContent=`${Math.round(stageAt(stage,sp.id))}% read · Growth stage ${stage} of 8`;
     $("mc-h").textContent= stage===8 ? `Your ${sp.name} is fully grown!` : `Your ${sp.name} ${K.young} grew!`;
     $("mc-sub").textContent= stage===8 ? `It's about ${lengthMm(stage,b.species)} mm long now. One more stretch and it'll ${K.pupaVerb}.` : `It's now about ${lengthMm(stage,b.species)} mm long.`;
     acts.innerHTML=`<button class="primary" type="button" id="mc-ok">Keep reading</button>`;
   } else if(stage===9){
-    $("mc-eyebrow").textContent="90% read";
+    $("mc-eyebrow").textContent=`${pupAt(sp.id)}% read`;
     $("mc-h").textContent= sp.kind==="butterfly" ? "It made a chrysalis!" : "It's pupating!";
     $("mc-sub").textContent=`Finish the book and your ${sp.name} will emerge.`;
     acts.innerHTML=`<button class="primary" type="button" id="mc-ok">Nearly there</button>`;
   } else {
-    const isNew=!state.collection.some(c=>c.species===sp.id);
+    const isNew=!coll().some(c=>c.species===sp.id);
     markHungry(b);
     const form=finalForm(b);
-    const newForm=!isNew && form && !state.collection.some(c=>c.species===sp.id && c.sex===form);
-    const entry={species:sp.id,title:b.title,author:b.author,isbn:b.isbn||"",pages:b.pages,date:new Date(now()).toISOString(),...(form?{sex:form}:{})};
+    const newForm=!isNew && form && !coll().some(c=>c.species===sp.id && c.sex===form);
+    const entry={species:sp.id,country:COUNTRY,points:POINTS[sp.rarity],title:b.title,author:b.author,isbn:b.isbn||"",pages:b.pages,date:new Date(now()).toISOString(),...(form?{sex:form}:{})};
     state.collection.push(entry); state.books=state.books.filter(x=>x.id!==b.id); save();
-    const unlocked=checkAchievements(), opened=checkUnlocks();
-    const banners=[...opened.map(u=>`<span class="ach-medal">${MEDAL}</span><span><b>New category unlocked: ${esc(KIND_TITLE[u.kind])}!</b><span class="small">${esc(cap1(KINDS[u.kind].label.toLowerCase()))} can now hatch from your books.</span></span>`),
+    const unlocked=checkAchievements(), opened=checkUnlocks(), titled=checkTitles(), habs=checkHabitats(); renderScore();
+    const banners=[...habs.map(H=>`<span class="ach-medal">${MEDAL}</span><span><b>New habitat unlocked: ${esc(H.name)}!</b><span class="small">See who lives there in your Collection.</span></span>`),...titled.map(t=>`<span class="ach-medal">${MEDAL}</span><span><b>New title: ${esc(t.name)}!</b><span class="small">You reached ${t.n.toLocaleString("en-GB")} points.</span></span>`),...opened.map(u=>`<span class="ach-medal">${MEDAL}</span><span><b>New category unlocked: ${esc(KIND_TITLE[u.kind])}!</b><span class="small">${esc(cap1(KINDS[u.kind].label.toLowerCase()))} can now hatch from your books.</span></span>`),
       ...unlocked.map(a=>`<span class="ach-medal">${MEDAL}</span><span><b>${a.country?"Meta achievement":"Achievement"} unlocked: ${esc(a.name)}</b><span class="small">Every one of the ${a.total} raised!</span></span>`)];
-    if(banners.length){ $("mc-ach").innerHTML=banners.join(""); $("mc-ach").hidden=false; }
+    if(banners.length){
+      $("mc-ach").innerHTML=banners.join("")+`<button type="button" class="ach-x" id="mc-ach-x" aria-label="Dismiss">×</button>`;
+      $("mc-ach").hidden=false;
+      $("mc-ach-x").onclick=()=>{ $("mc-ach").hidden=true; };   /* dismissible so the buttons below are always reachable */
+    }
     const who=form?`${SEX_WORD[form].toLowerCase()} `:"";
-    const still=form?formsOf(sp.id).filter(x=>!state.collection.some(c=>c.species===sp.id && c.sex===x)):[];
+    const still=form?formsOf(sp.id).filter(x=>!coll().some(c=>c.species===sp.id && c.sex===x)):[];
     const stillText=still.length?` Raise ${still.map(x=>article(SEX_WORD[x])+" "+SEX_WORD[x].toLowerCase()).join(" and ")} too to see every form.`:"";
     if(isCaste(sp.id) && form!=="m"){
       $("mc-fact-h").textContent = form==="q" ? "Why a queen?" : "Why a worker?";
@@ -2081,7 +2226,7 @@ function celebrate(b,stage,moved){
     }
     $("mc-eyebrow").textContent=`Book finished · ${isNew?"New species!":newForm?"New form!":"Added to collection"}`;
     $("mc-h").textContent=`${cap1(article(who+sp.name))} ${who}${sp.name} emerged!`;
-    $("mc-sub").textContent=`Raised on ${entry.title}. ${isNew?"It's a new species for your collection."+stillText:newForm?(still.length?`A new form for your collection!${stillText}`:`You now have every form of the ${sp.name}.`):"You now have "+state.collection.filter(c=>c.species===sp.id).length+" of these."}`;
+    $("mc-sub").textContent=`Raised on ${entry.title}. +${entry.points} points. ${isNew?"It's a new species for your collection."+stillText:newForm?(still.length?`A new form for your collection!${stillText}`:`You now have every form of the ${sp.name}.`):"You now have "+coll().filter(c=>c.species===sp.id).length+" of these."}`;
     acts.innerHTML=`<button type="button" id="mc-ok">Back to my books</button><button class="primary" type="button" id="mc-coll">See collection</button>`;
     $("mc-coll").onclick=()=>{$("m-cel").hidden=true;view="shelf";tab="coll";collKind=sp.kind;show();openSpecies(sp.id);};
     done=()=>{$("m-cel").hidden=true;go("shelf");};
@@ -2109,8 +2254,8 @@ function collectionOf(country){
   if(country===COUNTRY) return state.collection;
   try{ const s=JSON.parse(localStorage.getItem(COUNTRIES[country].key)); return (s&&s.collection)||[]; }catch(e){ return []; }
 }
-function metaProgress(m){ const got=new Set(collectionOf(m.country).map(c=>c.species)); return COUNTRY_IDS[m.country].filter(id=>got.has(id)).length; }
-function achProgress(a){ const got=new Set(state.collection.map(c=>c.species)); return SPECIES.filter(s=>s.kind===a.kind && got.has(s.id)).length; }
+function metaProgress(m,own){ const got=new Set((own||!isMerged()?collectionOf(m.country):coll()).map(c=>c.species)); return COUNTRY_IDS[m.country].filter(id=>got.has(id)).length; }
+function achProgress(a){ const got=new Set(coll().map(c=>c.species)); return SPECIES.filter(s=>s.kind===a.kind && got.has(s.id)).length; }
 function checkAchievements(){
   const fresh=[];
   ACHIEVEMENTS.forEach(a=>{ if(!state.achievements[a.id] && achProgress(a)>=a.total){ state.achievements[a.id]=new Date(now()).toISOString(); fresh.push(a); } });
@@ -2126,6 +2271,13 @@ function checkUnlocks(){
   if(fresh.length) save();
   return fresh;
 }
+function habCount(k){ const got=new Set(coll().map(c=>c.species)); return SPECIES.filter(s=>habOf(s.id).includes(k) && got.has(s.id)).length; }
+function checkHabitats(){
+  state.habitats=state.habitats||{}; const fresh=[];
+  HABITATS.forEach(H=>{ if(!state.habitats[H.k] && habCount(H.k)>=HAB_NEED){ state.habitats[H.k]=new Date(now()).toISOString(); fresh.push(H); } });
+  if(fresh.length) save();
+  return fresh;
+}
 const MEDAL='<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M16 4h7l-4 12h-7z" fill="currentColor" opacity=".55"/><path d="M32 4h-7l4 12h7z" fill="currentColor" opacity=".55"/><circle cx="24" cy="28" r="14" fill="currentColor"/><circle cx="24" cy="28" r="9.5" fill="none" stroke="var(--surface)" stroke-width="2"/><path d="m24 21.5 2 4.2 4.6.6-3.4 3.1.9 4.6-4.1-2.3-4.1 2.3.9-4.6-3.4-3.1 4.6-.6z" fill="var(--surface)"/></svg>';
 const fmtDate=d=>new Date(d).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"});
 function achCard(a,n,at,extra){
@@ -2134,7 +2286,7 @@ function achCard(a,n,at,extra){
       <span class="ach-medal">${MEDAL}</span>
       <span class="ach-meta"><b>${esc(a.name)}</b><span class="small muted">${extra||""}${esc(a.desc)}${a.unit===""?"":` (${a.total} ${a.unit||"species"})`}</span>
         <span class="bar" aria-hidden="true"><i style="width:${p}%"></i></span>
-        <span class="ach-foot"><span class="mono small">${n} of ${a.total}</span>${at?`<span class="chip ok">Unlocked ${fmtDate(at)}</span>`:""}</span>
+        <span class="ach-foot"><span class="mono small">${n.toLocaleString("en-GB")} of ${a.total.toLocaleString("en-GB")}</span>${at?`<span class="chip ok">Unlocked ${fmtDate(at)}</span>`:""}</span>
       </span></div>`;
 }
 function renderAch(){
@@ -2146,20 +2298,57 @@ function renderAch(){
   const meta=loadMeta();
   $("meta-count").textContent=`${META.filter(m=>meta[m.id]).length} of ${META.length}`;
   $("meta-list").innerHTML=META.map(m=>achCard(m,metaProgress(m),meta[m.id],`<span class="ach-flag">${flagSVG(m.country)}</span>`)).join("");
+  const sc=totalScore(), tg=loadTitles();
+  $("title-count").textContent=`${TITLES.filter(t=>sc>=t.n).length} of ${TITLES.length}`;
+  $("title-list").innerHTML=TITLES.filter(t=>t.n>0).map(t=>achCard({name:t.name,desc:`Reach ${t.n.toLocaleString("en-GB")} points`,total:t.n,unit:""},sc,sc>=t.n?(tg[t.id]||new Date(now()).toISOString()):null)).join("");
   const n=butterfliesRaised();
   $("unl-count").textContent=`${UNLOCKS.filter(u=>n>=u.n).length+1} of ${UNLOCKS.length+1}`;
   $("unl-list").innerHTML=UNLOCKS.map(u=>achCard({name:`${KIND_TITLE[u.kind]} unlocked`,desc:`Raise ${u.n} butterflies so ${KINDS[u.kind].label.toLowerCase()} can hatch from your books`,total:u.n,unit:""},n,n>=u.n?(state.unlocks[u.kind]||new Date(now()).toISOString()):null)).join("");
 }
-checkAchievements(); checkUnlocks();
+checkAchievements(); checkUnlocks(); checkHabitats();
 
 /* ---------- collection ---------- */
 const ORDER={Common:0,Uncommon:1,Rare:2};
 let collKind="butterfly";
+let collView="species";
+$("cv-species").onclick=()=>{collView="species";renderColl()};
+$("cv-habitats").onclick=()=>{collView="habitats";renderColl()};
+function renderHabitats(){
+  const open=HABITATS.filter(H=>habCount(H.k)>=HAB_NEED).length;
+  $("hab-count").textContent=`${open} of ${HABITATS.length}`;
+  $("hab-list").innerHTML=HABITATS.map(H=>{
+    const n=habCount(H.k), total=SPECIES.filter(s=>habOf(s.id).includes(H.k)).length, isOpen=n>=HAB_NEED;
+    return `<button type="button" class="hab-card ${isOpen?"open":"shut"}" data-h="${H.k}"${isOpen?"":" aria-disabled=\"true\""}><b>${isOpen?"":"🔒 "}${esc(H.name)}</b>
+      <span class="small">${esc(H.desc)}</span>
+      <span class="small mono">${isOpen?`${n} of ${total} species raised`:`Raise ${HAB_NEED-n} more species that live${HAB_NEED-n>1?"":"s"} here to unlock (${n} of ${HAB_NEED})`}</span></button>`;
+  }).join("");
+  $("hab-list").querySelectorAll(".hab-card").forEach(el=>el.onclick=()=>{
+    const H=HABITATS.find(x=>x.k===el.dataset.h);
+    if(habCount(H.k)<HAB_NEED){ toast(`Raise ${HAB_NEED} species that live in ${H.name.toLowerCase()} to unlock it.`); return; }
+    openHabitat(H);
+  });
+}
+/* Placeholder habitat screen: a plain title and the species that live there (raised ones first, in bold) */
+function openHabitat(H){
+  const got=new Set(coll().map(c=>c.species));
+  const list=SPECIES.filter(s=>habOf(s.id).includes(H.k)).sort((a,b)=>(got.has(b.id)-got.has(a.id))||a.name.localeCompare(b.name));
+  $("hb-h").textContent=H.name;
+  $("hb-sub").textContent=`${list.filter(s=>got.has(s.id)).length} of ${list.length} species raised. ${H.desc}`;
+  $("hb-list").innerHTML=list.map(s=>`<li class="${got.has(s.id)?"got":""}">${esc(s.name)}${got.has(s.id)?" ✓":""}${inSeason(s)?` <span class="season-key" title="In season now">${LEAF_ICON}</span>`:""}</li>`).join("");
+  const inNow=list.filter(inSeason).length;
+  $("hb-sub").innerHTML=`${esc($("hb-sub").textContent)} <span class="season-key">${LEAF_ICON}</span> marks the ${inNow} species in season in ${MONTHS[currentMonth()]}.`;
+  $("m-hab").hidden=false;
+}
+$("hb-close").onclick=()=>{$("m-hab").hidden=true};
 function renderColl(){
-  const counts={}; state.collection.forEach(c=>counts[c.species]=(counts[c.species]||0)+1);
+  $("cv-species").setAttribute("aria-pressed",collView==="species"); $("cv-habitats").setAttribute("aria-pressed",collView==="habitats");
+  $("species-view").hidden=collView!=="species"; $("hab-view").hidden=collView!=="habitats";
+  if(collView==="habitats") renderHabitats();
+  const counts={}; coll().forEach(c=>counts[c.species]=(counts[c.species]||0)+1);
+  $("easy-chip").hidden=!isMerged();
   const found=SPECIES.filter(s=>counts[s.id]).length;
   const seenN=Object.keys(state.seen).length;
-  $("coll-count").innerHTML=`<span>${found} of ${SPECIES.length} species</span><span>${state.collection.length} raised · ${seenN} seen</span>`;
+  $("coll-count").innerHTML=`<span>${found} of ${SPECIES.length} species</span><span>${coll().length} raised · ${seenN} seen</span>`;
   const of=k=>{const all=SPECIES.filter(s=>s.kind===k);return `${all.filter(s=>counts[s.id]).length}/${all.length}`};
   $("seg").innerHTML=Object.keys(KINDS).map(k=>`<button type="button" data-k="${k}" aria-pressed="${collKind===k}">${KINDS[k].label} <span class="mono">${of(k)}</span></button>`).join("");
   $("seg").querySelectorAll("button").forEach(btn=>btn.onclick=()=>{collKind=btn.dataset.k;renderColl()});
@@ -2173,7 +2362,7 @@ function renderColl(){
     : `<button type="button" class="slot locked" data-sp="${s.id}"><span class="q">?</span><span class="nm">${esc(s.name)}</span><span class="chip ${RARITY_CHIP[s.rarity]}">${s.rarity}</span>${seenNote(s)}${badge(s)}</button>`).join("");
   $("coll-grid").querySelectorAll(".slot").forEach(el=>el.onclick=()=>openSpecies(el.dataset.sp));
 }
-function formsHave(id){ return formsOf(id).filter(x=>state.collection.some(c=>c.species===id && c.sex===x)); }
+function formsHave(id){ const C=coll(); return formsOf(id).filter(x=>C.some(c=>c.species===id && c.sex===x)); }
 function formsNote(s){
   if(!isDimorph(s.id)) return "";
   const have=formsHave(s.id);
@@ -2337,6 +2526,7 @@ function renderLearn(s,P="ms"){
   const add=l=>{ if(!seen.has(l.u)){ seen.add(l.u); list.push(l); } };
   if(c){ c.src.forEach(u=>add({t:srcLabel(u),u})); if(COUNTRY==="ie" && c.srcIE) c.srcIE.forEach(u=>add({t:srcLabel(u),u})); }
   formSrc(s.id).forEach(u=>add({t:srcLabel(u),u}));
+  if(HAB[s.id]) HAB[s.id][1].forEach(u=>add({t:srcLabel(u),u}));
   sourceLinks(s).forEach(add);
   $(P+"-src").innerHTML=list.map(linkLI).join("");
   $(P+"-src").hidden=!list.length;
@@ -2364,7 +2554,7 @@ $("btn-notes").onclick=openNotes;
 $("mn-close").onclick=()=>{$("m-notes").hidden=true};
 
 function openSpecies(id){
-  const s=SP[id], raised=state.collection.some(c=>c.species===id);
+  const s=SP[id], raised=coll().some(c=>c.species===id);
   $("ms-h").textContent=s.name; $("ms-sci").textContent=s.sci; $("ms-kind").textContent=s.noun.charAt(0).toUpperCase()+s.noun.slice(1);
   $("ms-rarity").className="chip "+RARITY_CHIP[s.rarity]; $("ms-rarity").textContent=s.rarity; $("ms-season").innerHTML=seasonChip(s);
   const forms=isDimorph(id)?formsHave(id):[];
@@ -2378,12 +2568,12 @@ function openSpecies(id){
   $("ms-seen-note").classList.toggle("is-seen",sl.length>0);
   $("ms-seen").textContent = sl.length ? "Edit what I've seen" : "I've seen it!";
   $("ms-locked").hidden=raised; $("ms-facts-wrap").hidden=!raised; $("ms-raised-wrap").hidden=!raised;
-  $("ms-kv").innerHTML=[["Family",FAMILY[s.family]||s.family],[KINDS[s.kind].size,s.wing],[KINDS[s.kind].food,s.food],["When to see it",s.season],[COUNTRY_INFO.inLabel,s.status],...formsOf(id).map(k=>[SEX_WORD[k],formDesc(id,k)])]
+  $("ms-kv").innerHTML=[["Family",FAMILY[s.family]||s.family],[KINDS[s.kind].size,s.wing],[KINDS[s.kind].food,s.food],["When to see it",s.season],[COUNTRY_INFO.inLabel,s.status],["Habitats",habOf(id).map(k=>HABITATS.find(H=>H.k===k).name).join("; ")],...formsOf(id).map(k=>[SEX_WORD[k],formDesc(id,k)]),...(DUR[id]?[["Life cycle",`About ${DUR[id][0]} days growing as ${article(KINDS[s.kind].young)} ${KINDS[s.kind].young}, then ${DUR[id][1]} as ${article(KINDS[s.kind].pupa)} ${KINDS[s.kind].pupa}, not counting winter${DUR[id][2]!=="s"?" (estimated from close relatives)":""}. It ${s.kind==="butterfly"?"forms its chrysalis":"pupates"} at ${pupAt(id)}% of the book.`]]:[])]
     .map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("");
   $("ms-facts").innerHTML=s.facts.map(f=>`<li>${esc(f)}</li>`).join("");
-  $("ms-list").innerHTML=state.collection.filter(c=>c.species===id).map((c,i)=>`
+  $("ms-list").innerHTML=coll().filter(c=>c.species===id).map((c,i)=>`
     <div class="result" style="border:1px solid var(--line);border-radius:12px"><span class="spine" style="background:#e8741c"></span>
-    <span class="meta"><b>#${i+1} · ${esc(c.title)}${c.sex?` · ${SEX_WORD[c.sex]}`:""}</b><span class="small muted">${esc(c.author||"Unknown author")} · <span class="mono">${c.pages} pp</span> · ${new Date(c.date).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"})}</span></span></div>`).join("");
+    <span class="meta"><b>#${i+1} · ${esc(c.title)}${c.sex?` · ${SEX_WORD[c.sex]}`:""} ${ptsChip(c)}</b><span class="small muted">Collected in ${esc(COUNTRIES[c.country||COUNTRY].name)} · ${esc(c.author||"Unknown author")} · <span class="mono">${c.pages} pp</span> · ${new Date(c.date).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"})}</span></span></div>`).join("");
   renderLearn(s);
   $("ms-seen").dataset.id=id;
   $("m-sp").hidden=false;
@@ -2409,7 +2599,8 @@ $("flag-btn").onclick=()=>{
   $("m-country").hidden=false;
 };
 $("mco-close").onclick=()=>{$("m-country").hidden=true};
-renderCountryHeader();
+renderCountryHeader(); checkTitles(); renderScore();
+$("score-box").onclick=()=>{ tab="ach"; show(); $("titles-card").scrollIntoView(); };
 try{ if(sessionStorage.getItem("bookworm-switched")){ sessionStorage.removeItem("bookworm-switched"); setTimeout(()=>toast(`Now showing ${COUNTRY_INFO.adj} species.`),300); } }catch(e){}
 
 /* ---------- tools ---------- */
@@ -2425,6 +2616,112 @@ $("reset").onclick=()=>{
   if(!resetArmed){resetArmed=true;$("reset").textContent="Tap again to confirm";setTimeout(()=>{resetArmed=false;$("reset").textContent="Reset everything"},3000);return;}
   state=freshState();save();resetArmed=false;$("reset").textContent="Reset everything";go("shelf");toast("Prototype reset");
 };
+/* ---------- settings ---------- */
+let wasMergedAtReset=false;
+const APP_VERSION="0.9.0 (prototype, October 2026)";
+const GEAR_BACK=`<button type="button" class="ghost" data-v="menu">Back</button>`;
+function setView(v){
+  const B=$("set-body"), merged=isMerged();
+  if(v==="menu"){
+    $("set-h").textContent="Settings";
+    B.innerHTML=`<div class="opts">
+      <button type="button" class="opt" data-v="about"><b>About</b><span class="small muted">What Bookworm is for, and the version number.</span></button>
+      <button type="button" class="opt" data-v="merge"><b>${merged?"Unmerge Collections":"Merge Collections"}</b><span class="small muted">${merged?"Easy Mode is on. Go back to separate collections for each country.":"Easy Mode: share what you've collected across every country."}</span></button>
+      <button type="button" class="opt" data-v="reset"><b>Reset App</b><span class="small muted">Start your collections over from scratch.</span></button></div>
+      <button type="button" class="primary" data-close>Close</button>`;
+  } else if(v==="about"){
+    $("set-h").textContent="About Bookworm";
+    B.innerHTML=`<div class="set-text">
+      <p>Bookworm turns your reading into a nature collection. Every book you start hatches an insect larva. The pages you read feed it, it grows through its life stages and pupates, and when you finish the book the adult emerges and joins your Species Collection.</p>
+      <p>Every species is a real insect from the United Kingdom or Ireland, and all of them go through complete metamorphosis: egg, larva, pupa and adult.</p>
+      <p><b>What you'll learn</b></p>
+      <ul>
+        <li>How complete metamorphosis works, and how long real species spend as a larva and as a pupa.</li>
+        <li>How to recognise common British and Irish butterflies, moths, bees, wasps, beetles, ants, flies and more.</li>
+        <li>How males and females, and queens and workers, can look different, and why.</li>
+        <li>When each species is out and about, so you know what to look for in the wild.</li>
+        <li>Which plants you can grow to bring insects into your garden.</li>
+        <li>Where to find trustworthy information from conservation charities and recording schemes.</li>
+      </ul>
+      <p>Field notes were checked against trusted sources in October 2026, and each species card lists the pages used.</p>
+      <p class="small muted">Version ${APP_VERSION}<br><a href="https://sauvryn.github.io/Bookworm/" target="_blank" rel="noopener noreferrer">sauvryn.github.io/Bookworm</a></p></div>
+      ${GEAR_BACK}`;
+  } else if(v==="merge"){
+    $("set-h").textContent=merged?"Unmerge Collections":"Merge Collections";
+    B.innerHTML= merged ? `<div class="set-text">
+      <p>Easy Mode is on: your collections are shared across every country.</p>
+      <p>Unmerging gives each country its own collection again. Every species and form goes back to the country it was originally collected in.</p>
+      <p>Any achievements and meta achievements that were only complete because the collections were merged will be removed. You can earn them again the long way, or merge again at any time.</p></div>
+      <div class="actions">${GEAR_BACK}<button type="button" class="primary" id="do-unmerge">Unmerge collections</button></div>`
+    : `<div class="set-text">
+      <p>Want an easier game? You can turn on <b>Easy Mode</b> by merging your collections across all countries.</p>
+      <p>From then on, everything you've collected, and everything you collect in future, counts in every country where that species lives. For example, species you raised in the United Kingdom that also live in Ireland will be marked as collected in Ireland too. You'd only have the rest to find, including species found only in Ireland.</p>
+      <p>Each raised adult remembers which country it was collected in, so you can unmerge later and go back to separate collections.</p>
+      <p class="small muted">This makes the meta achievements easier to earn. If you'd like the full challenge, keep your collections separate.</p></div>
+      <div class="actions">${GEAR_BACK}<button type="button" class="primary" id="do-merge">Merge collections</button></div>`;
+  } else if(v==="reset"){
+    $("set-h").textContent="Reset App";
+    B.innerHTML=`<div class="set-text"><p>Would you like to reset the app? In every country, this deletes:</p>
+      <ul><li>all collections and completed books</li><li>all achievements, titles and your score</li><li>larvae waiting for a book</li><li>everything you've marked with "I've seen it!"</li></ul>
+      <p>Your Want To Read list, frozen larvae and current books are kept.</p></div>
+      <div class="actions"><button type="button" class="ghost" data-v="menu">No</button><button type="button" class="primary" data-v="reset2">Yes</button></div>`;
+  } else if(v==="reset2"){
+    $("set-h").textContent="Are you sure?";
+    B.innerHTML=`<p><b>This cannot be undone.</b></p>
+      <div class="actions"><button type="button" class="ghost" data-v="menu">No</button><button type="button" class="primary" id="do-reset">Yes, reset</button></div>`;
+  } else if(v==="reset-done"){
+    $("set-h").textContent="App reset";
+    B.innerHTML=`<div class="set-text"><p>Your collections, completed books, achievements, titles, score, waiting larvae and sightings have been deleted in every country${wasMergedAtReset?", and Merge Collections has been switched off, so each country collects separately again":""}.</p>
+      <p>Your Want To Read list, frozen larvae and current books haven't been touched. Remove them by hand if you'd like to start completely fresh.</p></div>
+      <button type="button" class="primary" data-close>OK</button>`;
+  }
+  B.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>setView(b.dataset.v));
+  B.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>{$("m-set").hidden=true;});
+  if($("do-merge")) $("do-merge").onclick=mergeCollections;
+  if($("do-unmerge")) $("do-unmerge").onclick=unmergeCollections;
+  if($("do-reset")) $("do-reset").onclick=resetApp;
+}
+$("gear-btn").onclick=()=>{ setView("menu"); $("m-set").hidden=false; };
+function mergeCollections(){
+  try{ localStorage.setItem(MERGE_KEY,"1"); }catch(e){}
+  OTHER=null; const fresh=checkAchievements(); checkUnlocks();
+  $("m-set").hidden=true; show();
+  toast(`Collections merged. Easy Mode is on.${fresh.length?` ${fresh.length} achievement${fresh.length>1?"s":""} completed!`:""}`);
+}
+/* Unmerging removes achievements, meta achievements and category unlocks that only counted because of merging,
+   checking every country's own save against its own raised adults. */
+function unmergeCollections(){
+  try{ localStorage.removeItem(MERGE_KEY); }catch(e){}
+  OTHER=null; let removed=0;
+  Object.keys(COUNTRIES).forEach(code=>{
+    const own=code===COUNTRY?state:(()=>{ try{ return JSON.parse(localStorage.getItem(COUNTRIES[code].key)); }catch(e){ return null; } })();
+    if(!own) return;
+    const got=new Set((own.collection||[]).map(c=>c.species));
+    Object.keys(own.achievements||{}).forEach(aid=>{
+      const k=aid.replace(/^all-/,""), ids=COUNTRY_IDS[code].filter(id=>ALL_KIND[id]===k);
+      if(ids.some(id=>!got.has(id))){ delete own.achievements[aid]; removed++; }
+    });
+    const bf=(own.collection||[]).filter(c=>ALL_KIND[c.species]==="butterfly").length;
+    Object.keys(own.habitats||{}).forEach(k=>{ const n=COUNTRY_IDS[code].filter(id=>got.has(id) && habOf(id).includes(k)).length; if(n<HAB_NEED) delete own.habitats[k]; });
+    Object.keys(own.unlocks||{}).forEach(k=>{ const u=UNLOCKS.find(x=>x.kind===k); if(u && bf<u.n) delete own.unlocks[k]; });
+    if(code===COUNTRY) save(); else { try{ localStorage.setItem(COUNTRIES[code].key,JSON.stringify(own)); }catch(e){} }
+  });
+  const meta=loadMeta();
+  META.forEach(m=>{ if(meta[m.id] && metaProgress(m,true)<m.total){ delete meta[m.id]; removed++; } });
+  try{ localStorage.setItem(META_KEY,JSON.stringify(meta)); }catch(e){}
+  $("m-set").hidden=true; show();
+  toast(`Collections unmerged. Each country has its own collection again.${removed?` ${removed} achievement${removed>1?"s":""} earned only through merging ${removed>1?"were":"was"} removed.`:""}`);
+}
+function resetApp(){
+  wasMergedAtReset=isMerged();
+  Object.keys(COUNTRIES).forEach(code=>{
+    if(code===COUNTRY){ state.collection=[]; state.achievements={}; state.unlocks={}; state.waiting=[]; state.seen={}; state.habitats={}; save(); return; }
+    try{ const s=JSON.parse(localStorage.getItem(COUNTRIES[code].key)); if(s){ s.collection=[]; s.achievements={}; s.unlocks={}; s.waiting=[]; s.seen={}; s.habitats={}; localStorage.setItem(COUNTRIES[code].key,JSON.stringify(s)); } }catch(e){}
+  });
+  try{ localStorage.removeItem(META_KEY); localStorage.removeItem(MERGE_KEY); localStorage.removeItem(TITLE_KEY); }catch(e){}
+  OTHER=null; renderScore(); show(); setView("reset-done");
+}
+
 let tt;
 function toast(msg){const t=$("toast");t.textContent=msg;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,2200+msg.length*25);}
 document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o&&o.id!=="m-cel")o.hidden=true}));
