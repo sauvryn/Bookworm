@@ -31,6 +31,27 @@ It's meant to be educational and friendly for beginners in entomology. Every spe
 - **Locally:** open `index.html` in any modern browser. No install or build step is needed.
 - **Saves:** progress is stored in the browser's `localStorage`. Clearing site data wipes it, and each browser or device has its own save.
 
+## Saving, testers and moving progress
+
+Progress lives in the browser's own storage (`localStorage`) for the site it's opened from, e.g. `sauvryn.github.io`.
+
+**A tester keeps their progress as long as they use the same browser on the same device and open the same link.** Updating `index.html` on GitHub doesn't wipe saves: the new version reads the same storage keys.
+
+Progress is lost or hidden in these cases:
+- **A different device or browser:** each has its own separate save, and nothing syncs between them.
+- **Private or incognito windows:** the save is thrown away when the window closes.
+- **Clearing browsing data:** clearing cookies and site data deletes the save.
+- **iPhone and iPad (Safari):** storage can be deleted after about a week without a visit. Adding the page to the home screen ("Share" → "Add to Home Screen") usually prevents this.
+- **Other projects on the same GitHub Pages site:** they share the same storage area. All Bookworm keys start with `bookworm`, so they won't clash unless another project uses those names.
+
+### Export / Import Save (Settings)
+- **Export** writes every `bookworm…` storage key to a dated file, e.g. `bookworm-save-2026-10-03.json`. That covers every country's save, the country choice, the Merge Collections setting, meta achievements and titles.
+- **Import** reads a save file, shows when it was exported and how many completed books it holds, warns that it **replaces all Bookworm progress in this browser**, then loads it and reloads the page. Storage that doesn't belong to Bookworm is left alone.
+- **Copy and paste instead:** a fallback for browsers that can't download or pick files. "Copy my save" puts the save text on the clipboard (or in a box to copy by hand), and "Import pasted save" loads pasted text.
+- **Uses:** moving a tester to a new device, backing up before a big test, or loading a tester's save to reproduce a bug.
+- **The claude.ai preview:** downloading doesn't work there, so use copy and paste. Downloads work on GitHub Pages.
+- **Save file format:** `{app:"bookworm-save", format:1, version, exported, data:{key: value}}`. Import rejects anything else, or any key that doesn't start with `bookworm`. For the Android build, keep this format, or write a converter, so testers' saves can move into the app.
+
 ## How the game works
 
 ### Books and larvae
@@ -113,6 +134,8 @@ It's meant to be educational and friendly for beginners in entomology. Every spe
 ### I've Seen It!
 On any species card you can mark which life stages you've seen in the wild: egg, larva, pupa or adult. Seen species get a marker in the collection. This works even for species you haven't raised yet.
 
+Ticking a stage shows an editable **Date seen**, which defaults to today and can't be in the future. The species card shows the dates, e.g. "You've seen: adult (3 Oct 2026)". Dates are stored in `state.seenDates`, and Reset App clears them. Unticking a stage first asks "Are you sure you want to remove this sighting?" (Keep it / Remove), in case of a stray tap.
+
 ### Habitats
 - **The habitats:** 8 broad habitats, based on the Wildlife Trusts' habitat groups:
   - Woodland;
@@ -124,8 +147,10 @@ On any species card you can mark which life stages you've seen in the wild: egg,
   - Farmland & Hedgerows;
   - Towns, Gardens & Homes.
 - **Which species live where:** each species lives in 1–3 of them, main habitat first. They're in `HAB`, sourced mostly from Butterfly Conservation, BWARS, the Bumblebee Conservation Trust, NatureSpot and Wikipedia.
-- **Unlocking:** a habitat unlocks once you've raised **2** species that live there (`HAB_NEED`), with a banner on the "emerged" screen. Merged collections count, and unmerging re-locks any habitats that only unlocked through merging. Reset App clears habitat unlocks.
-- **Where they are:** the Collection screen has a **Species / Habitats** switch. Each unlocked habitat opens a simple placeholder screen: its name and a list of the species that live there, with raised ones first and ticked. Species in season this month get the leaf mark, so you can see what should be active there now. Species cards also list their habitats.
+- **Unlocking:** each adult you raise unlocks **one** habitat at most: the first habitat on its species card that's still locked. If that one is already open, it unlocks the second, and so on. So habitats open one at a time, but a habitat needs only one raised species that lives there. Each unlock gets a banner on the "emerged" screen.
+  - **Older saves:** these were recalculated once with this rule, replaying finished books oldest first.
+  - **Merging and resetting:** merged collections replay the same way. Unmerging re-locks habitats that only opened through merging, and Reset App clears them all.
+- **Where they are:** the Collection screen has a **Species / Habitats** switch. Each unlocked habitat opens a simple placeholder screen: its name and a list of the species that live there, with raised ones first and ticked. Species in season this month get the leaf mark, so you can see what should be active there now. Tapping a species name opens its species card, and closing the card returns to the habitat. Species cards also list their habitats as links: tapping one opens that habitat (or, if it's still locked, says how to unlock it).
 
 ### Score and titles
 - **Points:** every finished book earns points for its species' rarity in the country it was raised in: **100** Common, **200** Uncommon, **300** Rare. Repeats count. Completed Books and species cards show each book's points in that rarity's colour.
@@ -190,10 +215,34 @@ Old saves are migrated automatically through the `MERGED` alias map.
 - **Irish checks:** every British species was checked against Irish records, mainly National Biodiversity Data Centre maps, the Irish Red Lists, MothsIreland and the All-Ireland Pollinator Plan. Species with no Irish records, or only one-off strays, are left out of the Irish collection.
 - **The Monarch** is the app's original species. It stays in both collections as a rare vagrant.
 
-## Countries: United Kingdom and Ireland
+## Countries: United Kingdom, Ireland and the United States
 
 - **Switching country.** Tap the flag in the top-right corner to change country. The page reloads with that country's data.
-- **What's separate.** Each country has its own species list, rarity tiers, status lines, field notes, save and achievements. The two saves are `bookworm-proto-v1` and `bookworm-proto-v1-ie`, and the chosen country is stored in `bookworm-country`.
+- **What's separate.** Each country has its own species list, rarity tiers, status lines, field notes, save and achievements. The saves are `bookworm-proto-v1`, `bookworm-proto-v1-ie` and `bookworm-proto-v1-us`, and the chosen country is stored in `bookworm-country`.
+- **United States (in progress: everything except bees and wasps so far).** The collection has 214 species.
+  - **Butterflies (67):** 62 American species plus 5 shared with the UK. The shared ones are the Monarch, Painted Lady and Red Admiral, plus the Small White and Small Copper, which go by their American names, Cabbage White and American Copper.
+  - **Moths (59):** 51 American species plus 8 shared with the UK, using American rarity and notes. The shared moths are the Garden Tiger, Large Yellow Underwing, Peppered Moth, Cinnabar (released in the Pacific Northwest to control ragwort), Ruby Tiger, Herald, Winter Moth and Box-tree Moth (the last two are invasive). The American moths range from silk moths (Luna, Cecropia, Polyphemus, Regal) and hawk moths to the woolly bear, Yucca Moth, Black Witch and pests such as the Spongy Moth and Indian Meal Moth.
+  - **Other insects (15):** 8 American species (Eastern Dobsonfly, whose larva is the hellgrammite; Antlion, the doodlebug; Owlfly; Snakefly; Wasp Mantidfly; Fishfly; Hanging Scorpionfly; Earwigfly) plus 7 shared with the UK (Common Green Lacewing, Brown Lacewing, Cat Flea, Caddisfly, Scorpionfly, Alder Fly, Snow Flea). The Dobsonfly, Snakefly and Earwigfly have male and female forms. The achievement is "Backyard Curiosities", and the category unlocks after 12 butterflies. Their "Want To Learn More?" links go to a BugGuide search (Iowa State University), because Butterflies and Moths of North America only covers butterflies and moths.
+  - **Ants (10):** 9 American species plus the UK's Red Ant, which is called the European Fire Ant in the US, where it's an invasive pest. The American ones are the Black Carpenter Ant, Red Imported Fire Ant, Odorous House Ant, Pavement Ant, Argentine Ant, Red Harvester Ant, Honeypot Ant, Allegheny Mound Ant and Texas Leafcutter Ant.
+    - **Queens and workers:** all have queen and worker forms, decided by feeding as elsewhere. Their descriptions are in `US_ANT_CASTE`.
+    - **Achievement and unlock:** the achievement is "Anthill Americana", and the category unlocks after 10 butterflies.
+    - **Life cycle:** each uses a rough 21-day larva and 21-day pupa estimate.
+    - **Possible addition:** leafcutter ants have true big-headed soldiers (majors), so a "soldier" form could be added for them later.
+  - **Flies (22):** 18 American species plus 4 shared with the UK: Drone-fly, Crane Fly, Narcissus Bulb Fly and Dark-edged Bee-fly.
+    - **The American species:** House Fly, Black Soldier Fly, American Hover Fly, Transverse Flower Fly, Virginia Flower Fly, Red-footed Cannibalfly, Deer Fly, Black Horse Fly, Greenhead, Common Green Bottle Fly, Common Fruit Fly, Asian Tiger Mosquito, Feather-legged Fly, Golden-backed Snipe Fly, Phantom Crane Fly, Long-legged Fly, Rabbit Bot Fly and Mydas Fly.
+    - **Forms:** there are no male and female forms, because the main differences in flies are eye spacing or antennae, which the rules exclude.
+    - **Achievement and unlock:** the achievement is "Fly-Over Country", and the category unlocks after 8 butterflies.
+  - **Beetles (41):** 36 American species plus 5 shared with the UK.
+    - **Shared with the UK:** the 7-spot, Harlequin, 2-spot and 14-spot ladybirds appear under their American "lady beetle" names; the Harlequin is called the Asian Lady Beetle. The Devil's Coach Horse is the fifth.
+    - **The American species:** they include the Eastern Hercules Beetle, Giant and Reddish-brown Stag Beetles, the Japanese Beetle, Green June Beetle, Rainbow Scarab, Eastern Eyed Click Beetle, Big Dipper and Synchronous Fireflies, Six-spotted Tiger Beetle, Colorado Potato Beetle, Red Milkweed Beetle, Golden Tortoise Beetle, Emerald Ash Borer, Asian Longhorned Beetle, American Burying Beetle, Bess Beetle, Bombardier Beetle, Convergent Lady Beetle, Diabolical Ironclad Beetle and Boll Weevil.
+    - **Male and female forms:** five have them (Hercules Beetle, both stag beetles, Rainbow Scarab and Ten-lined June Beetle).
+    - **Achievement and unlock:** the achievement is "Lightning Bug Legion", and the category unlocks after 6 butterflies.
+  - **Moth forms and unlocks:** six moths have male and female forms (Promethea, Io, Salt Marsh, Spongy, White-marked Tussock and Bagworm). In the US, moths unlock after 2 butterflies, as elsewhere. Their achievement is "Porch-Light Parade".
+  - **How it was written:** the American species notes, rarity, sizes, seasons, life cycles, habitats, gardening tips and male/female forms were **written from general knowledge and haven't been fact-checked yet**, and species cards say so.
+  - **Look-alikes:** these are folded in the same way as for the UK and Ireland, e.g. Canadian into Eastern Tiger Swallowtail, Eastern Comma into Question Mark, Northern into Pearl Crescent, Five-spotted Hawk Moth into Carolina Sphinx, Snowberry into Hummingbird Clearwing, and Forest into Eastern Tent Caterpillar Moth.
+  - **What it has:** category achievements ("Star-Spangled Wings" for butterflies, "Porch-Light Parade" for moths) and a meta achievement, "Collect All American Species".
+  - **Learn More links:** Butterflies and Moths of North America (each species page was checked), the North American Butterfly Association and the Xerces Society.
+  - **Still to do:** fact-check the butterflies, moths and other insects, then add bees and wasps, the last category. They need queen and worker forms for bumblebees, yellowjackets and paper wasps. US-specific habitat descriptions are also needed, because the current eight are written for Britain and Ireland.
 - **Coverage.** The **United Kingdom collection includes Northern Ireland**. Both countries get the complete experience.
 - **Wording, chosen to respect cultural identity:**
   - The country picker reads **"United Kingdom"** and **"Ireland"**.
@@ -213,6 +262,7 @@ Tap the gear under the flag to open Settings.
   - **How it works:** each raised adult records the country it was collected in (`country`). Nothing is copied. While merged, the app reads every country's saves together (`coll()`). So species raised in the United Kingdom that also live in Ireland count as collected in Ireland, which leaves only the rest, including Ireland-only species. This works for any country added later.
   - **What changes on screen:** the collection shows an "Easy Mode" chip. Species cards and Completed Books show where each one was collected. Category unlocks also count butterflies from every country.
   - **Unmerge Collections:** the menu item changes to this once merged. Unmerging goes back to each country's own collection. It removes any category achievements, meta achievements and category unlocks that were only complete because of merging. Nothing else depends on them, so nothing breaks.
+- **Export / Import Save:** **Export** saves every `bookworm…` storage key to a dated `.json` file: every country's progress, the country choice, merge setting, meta achievements and titles. **Import** loads one, after a warning that it replaces everything in this browser. A copy-and-paste option covers browsers that can't download or pick files. Use it to move a tester to a new device, or to load a tester's save and reproduce a bug.
 - **Reset App:** asks twice ("Are you sure? This cannot be undone."). In every country it then deletes:
   - collections and completed books;
   - achievements, meta achievements, titles, the score and category unlocks;
@@ -296,7 +346,7 @@ Everything runs inside one IIFE in `bookworm.html`.
 - **`SPECIES`:** the original 15 butterflies as object literals.
 - **Category rows:** `BFLY_ROWS`, `MOTH_ROWS`, `BEEWASP_ROWS`, `BEETLE_ROWS`, `ANT_ROWS`, `FLY_ROWS` and `OTHER_ROWS`. Each row is laid out as `[id, name, sci, family, rarity, size, larvaLength, food, season, status, facts, noun]`. `MOTH_ROWS` rows have no `noun`.
 - **Extras:** `EXTRA` holds species added for both countries, and `IE_ONLY` holds Ireland-only species.
-- **`HAB`:** each species' habitats and sources. `HABITATS` lists the 8 habitats with descriptions.
+- **`HAB`:** each species' habitats and sources. `HABITATS` lists the 8 habitats with descriptions. Unlocks are stored in `state.habitats`, using `unlockHabitatFor()` and `replayHabitats()`.
 - **`DUR`:** active larva and pupa days, basis (species, genus or family), winter note and sources. `pupAt(id)` gives the pupation %, `stageAt(k,id)` the % for each stage, and `stageFor(p,id)` the stage for a given %.
 - **`DIMORPH`:** the species with male and female forms, as `[male description, female description, sources]`.
 - **`CASTE`:** the queen, worker and (Red-tailed Bumblebee) male descriptions with sources, plus `why` (how caste is decided, for ants, honey bees, bumblebees and wasps) and `spring` (spring-queen field notes).
