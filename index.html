@@ -1,0 +1,1743 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#eaf0e1">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="description" content="Bookworm: raise British insects by reading books.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 34 20%22%3E%3Crect x=%221%22 y=%226%22 width=%2226%22 height=%2212%22 rx=%226%22 fill=%22%23fbfbf4%22 stroke=%22%231b1b1b%22 stroke-width=%221.5%22/%3E%3Crect x=%229%22 y=%226%22 width=%223%22 height=%2212%22 fill=%22%23f2c230%22/%3E%3Ccircle cx=%2227%22 cy=%2211%22 r=%226%22 fill=%22%231b1b1b%22/%3E%3C/svg%3E">
+<title>Bookworm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grandstander:wght@500;700;800&family=Atkinson+Hyperlegible:wght@400;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single phone-width app column, milkweed-leaf greens with monarch orange as the one accent; bottom tab bar. */
+:root{
+  --bg:#eaf0e1; --surface:#fbfcf7; --surface-2:#f2f6ea; --ink:#1f2a1c; --muted:#5a6852;
+  --line:#d3dbc6; --leaf:#77a24f; --leaf-dark:#4d7631; --accent:#d4621a; --accent-soft:#fbe3cf;
+  --on-accent:#ffffff; --warn:#b5651d; --warn-soft:#f8e6d2; --danger-soft:#f6dcd6; --danger:#a63d2a;
+  --ok:#3f7a3a; --ok-soft:#dcebd2; --rare:#6a3fa0; --rare-soft:#ece2f7; --ice:#2b6a8c; --ice-soft:#dcecf5; --shadow:0 6px 24px rgba(40,60,30,.10);
+  --f-display:"Grandstander","Comic Neue","Trebuchet MS",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"DM Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111710; --surface:#1a2218; --surface-2:#212b1e; --ink:#e5ecd9; --muted:#9dab92;
+  --line:#2e3a2a; --leaf:#5f8c3c; --leaf-dark:#3f6427; --accent:#f08a3c; --accent-soft:#3a2516;
+  --on-accent:#1a0e04; --warn:#e9a35c; --warn-soft:#38291a; --danger-soft:#3b1f19; --danger:#f0937f;
+  --ok:#8fcf7f; --ok-soft:#1f3320; --rare:#c9a8f0; --rare-soft:#2c2040; --ice:#8fcbea; --ice-soft:#1b2c37; --shadow:0 6px 24px rgba(0,0,0,.35); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111710; --surface:#1a2218; --surface-2:#212b1e; --ink:#e5ecd9; --muted:#9dab92;
+  --line:#2e3a2a; --leaf:#5f8c3c; --leaf-dark:#3f6427; --accent:#f08a3c; --accent-soft:#3a2516;
+  --on-accent:#1a0e04; --warn:#e9a35c; --warn-soft:#38291a; --danger-soft:#3b1f19; --danger:#f0937f;
+  --ok:#8fcf7f; --ok-soft:#1f3320; --rare:#c9a8f0; --rare-soft:#2c2040; --ice:#8fcbea; --ice-soft:#1b2c37; --shadow:0 6px 24px rgba(0,0,0,.35); color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{background:var(--bg);color:var(--ink);margin:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{font-family:var(--f-body);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:0 96px}
+.app{max-width:460px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+header.top{display:flex;align-items:center;justify-content:space-between;padding-block:16px 4px}
+.wordmark{font-family:var(--f-display);font-weight:800;font-size:28px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.wordmark svg{width:34px;height:20px}
+.top .sub{font-size:13px;color:var(--muted)}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.15}
+h2{font-size:22px;font-weight:700}
+h3{font-size:17px;font-weight:700}
+p{margin:0}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+label{font-size:14px;font-weight:700;display:flex;flex-direction:column;gap:6px}
+input[type=text],input[type=number],input[type=search]{font:inherit;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%;min-width:0}
+input:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.row{display:flex;gap:10px;align-items:flex-end}
+.row>*{flex:1;min-width:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{font:inherit;cursor:pointer;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);padding:10px 14px;font-weight:700}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+button.ghost{background:transparent}
+button:disabled{opacity:.45;cursor:not-allowed}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;border-radius:999px;padding:3px 10px;background:var(--surface-2);border:1px solid var(--line);white-space:nowrap}
+.chip.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.chip.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.chip.danger{background:var(--danger-soft);color:var(--danger);border-color:transparent}
+.chip.accent{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.chip.rare{background:var(--rare-soft);color:var(--rare);border-color:transparent}
+.dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+
+/* search */
+.results{display:flex;flex-direction:column;gap:6px}
+.result{display:flex;gap:12px;align-items:center;text-align:left;font-weight:400;padding:10px 12px;width:100%}
+.result .spine{width:8px;align-self:stretch;border-radius:3px;flex:none}
+.result .meta{min-width:0;display:flex;flex-direction:column}
+.result b{font-weight:700}
+.result .isbn{font-size:12px;color:var(--muted)}
+.result.selected{border-color:var(--accent);background:var(--accent-soft)}
+.cover{width:34px;height:50px;object-fit:cover;border-radius:3px;flex:none;background:var(--line)}
+.result .spine{width:34px;height:50px;min-height:0;border-radius:3px;flex:none;background:var(--line)}
+.note.warn{background:var(--warn-soft);border-color:transparent;color:var(--ink)}
+.credit a{color:inherit}
+.note{font-size:13px;color:var(--muted);background:var(--surface-2);border:1px dashed var(--line);border-radius:12px;padding:8px 12px}
+
+/* habitat */
+.habitat{position:relative;border-radius:22px;background:
+  radial-gradient(120% 90% at 50% 110%,color-mix(in srgb,var(--leaf) 28%,transparent),transparent 60%),var(--surface);
+  border:1px solid var(--line);padding:12px 12px 4px;overflow:hidden}
+.habitat svg.art{display:block;width:100%;height:auto;max-width:100%}
+.habitat .mood{position:absolute;top:12px;left:12px}
+.habitat .len{position:absolute;top:12px;right:12px}
+.hab-cap{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;font-family:var(--f-display);font-weight:700;font-size:17px;padding-block:2px 10px;text-align:center}
+.art-wrap{transform-origin:50% 80%}
+.crawl .body-g{animation:crawl 2.6s ease-in-out infinite;transform-origin:50% 100%;transform-box:fill-box}
+@keyframes crawl{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.96) translateY(-1px)}}
+.sway{animation:sway 4s ease-in-out infinite;transform-origin:50% 0;transform-box:view-box}
+@keyframes sway{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg)}}
+.flutter .wing-l,.flutter .wing-r{animation:flap 1.8s ease-in-out infinite;transform-box:view-box;transform-origin:160px 110px}
+@keyframes flap{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.72)}}
+.munch{animation:munch .6s ease}
+@keyframes munch{0%{transform:scale(1)}30%{transform:scale(1.06,.94)}60%{transform:scale(.97,1.04)}100%{transform:scale(1)}}
+.floater{position:absolute;left:50%;top:40%;transform:translateX(-50%);font-family:var(--f-display);font-weight:800;color:var(--accent);font-size:22px;pointer-events:none;animation:float 1.1s ease forwards}
+@keyframes float{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,-40px)}}
+
+/* progress */
+.book-head{display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
+.book-head .t{min-width:0}
+.book-head h2{overflow-wrap:anywhere}
+.stat-line{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.big{font-family:var(--f-display);font-weight:800;font-size:34px;line-height:1}
+.stem{position:relative;height:30px}
+.stem .track{position:absolute;left:0;right:0;top:13px;height:5px;border-radius:3px;background:var(--line)}
+.stem .fill{position:absolute;left:0;top:13px;height:5px;border-radius:3px;background:var(--leaf-dark);transition:width .5s ease}
+.stem .nodes{position:absolute;inset:0;display:grid;grid-template-columns:repeat(10,1fr)}
+.stem .node{display:flex;justify-content:flex-end;align-items:center}
+.stem .node span{width:16px;height:16px;border-radius:50%;background:var(--surface);border:2px solid var(--line);transform:translateX(50%)}
+.stem .node.done span{background:var(--leaf);border-color:var(--leaf-dark)}
+.stem .node.chrys span{border-radius:50% 50% 50% 50%/60% 60% 40% 40%}
+.stem .node.fly span{background:var(--surface);border-color:var(--accent)}
+.stem .node.fly.done span{background:var(--accent)}
+.stem-labels{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted)}
+.quick{display:flex;gap:8px;flex-wrap:wrap}
+.quick button{flex:1;min-width:64px;padding:8px;white-space:nowrap}
+.actions{display:flex;gap:10px}
+.actions>*{flex:1}
+
+/* collection */
+.seg{display:flex;flex-wrap:wrap;gap:4px;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:4px}
+.seg button{flex:1 1 auto;border:0;background:transparent;color:var(--muted);padding:8px 10px;white-space:nowrap;font-size:14px}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.coll-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.slot{min-width:0;min-height:150px;max-width:100%;border-radius:16px;border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px;text-align:center;font-weight:400}
+.slot svg{width:100%;height:auto}
+.slot.locked .chip{font-size:11px;padding:1px 8px}
+.slot .nm{font-family:var(--f-display);font-weight:700;font-size:12.5px;line-height:1.1;overflow-wrap:break-word;hyphens:manual}
+.slot.locked{border-style:dashed;color:var(--muted);background:transparent;cursor:pointer}
+.slot.locked .q{font-family:var(--f-display);font-size:30px;font-weight:800;opacity:.5}
+.slot.got{border-color:var(--accent);cursor:pointer}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;min-width:0}
+.facts{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px}
+
+/* tabs */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;z-index:5}
+nav.tabs .in{max-width:460px;width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+nav.tabs button{padding:6px 4px;font-size:12.5px;gap:2px;min-width:0;flex-direction:column}
+nav.tabs svg{flex:none}
+nav.tabs button{background:transparent;border-color:transparent;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--muted)}
+nav.tabs button[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
+nav.tabs svg{width:22px;height:22px}
+
+/* modals */
+.overlay{position:fixed;inset:0;background:rgba(10,16,8,.55);display:flex;align-items:flex-end;justify-content:center;z-index:20;padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+.sheet{background:var(--surface);border-radius:24px;max-width:460px;width:100%;max-height:calc(100% - 24px);overflow:auto;padding:20px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow)}
+@media (min-width:600px){.overlay{align-items:center}}
+.choice{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice button{display:flex;flex-direction:column;gap:4px;align-items:flex-start;text-align:left;padding:14px;font-weight:400}
+.choice button b{font-family:var(--f-display);font-size:18px}
+.choice button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.celebrate{text-align:center;align-items:center;position:relative;overflow:hidden}
+.celebrate .burst{position:absolute;inset:-40% -20% auto;height:420px;background:repeating-conic-gradient(from 0deg at 50% 60%,color-mix(in srgb,var(--accent) 16%,transparent) 0 10deg,transparent 10deg 20deg);animation:spin 30s linear infinite;pointer-events:none;-webkit-mask:radial-gradient(circle at 50% 60%,#000 20%,transparent 65%);mask:radial-gradient(circle at 50% 60%,#000 20%,transparent 65%)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.celebrate>*{position:relative}
+.celebrate h2{font-size:28px}
+.celebrate .artbox{width:100%;max-width:340px}
+.celebrate .fact{background:var(--surface-2);border-radius:14px;padding:12px 14px;text-align:left;font-size:15px;width:100%}
+.celebrate .fact b{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.confetti i{position:absolute;top:-10px;width:8px;height:12px;border-radius:2px;animation:fall 2.4s ease-in forwards}
+@keyframes fall{to{transform:translateY(560px) rotate(540deg);opacity:.2}}
+
+details.tools{font-size:14px}
+details.tools summary{cursor:pointer;color:var(--muted);font-weight:700}
+details.tools .in{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:700;z-index:30;max-width:calc(100% - 32px)}
+.stack{display:flex;flex-direction:column;gap:16px}
+.back{background:transparent;border:0;padding:4px 0;color:var(--accent);align-self:flex-start}
+#screen-add{display:flex;flex-direction:column;gap:16px}
+#screen-add[hidden]{display:none}
+.shelf{display:flex;flex-direction:column;gap:8px}
+.bk{display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px;align-items:center;text-align:left;font-weight:400;padding:8px 12px 8px 8px;width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:14px}
+.bk-art svg{width:76px;height:auto;display:block}
+.bk-meta{display:flex;flex-direction:column;gap:4px;min-width:0}
+.bk-meta b{font-family:var(--f-display);font-size:16px;line-height:1.2;overflow-wrap:anywhere}
+.bar{display:block;height:5px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--leaf-dark)}
+.bk-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+
+.bk.is-frozen .bk-art,.habitat.is-frozen .art-wrap{filter:saturate(.15) brightness(1.06)}
+.chip.season{background:var(--ok-soft);color:var(--ok);border-color:transparent;gap:5px}
+.slot{position:relative}
+.slot-season{position:absolute;top:6px;right:6px;color:var(--ok);display:flex}
+.season-key{color:var(--ok);display:inline-flex;vertical-align:-2px}
+.ms-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+#mc-season:empty{display:none}
+.ach-list{display:flex;flex-direction:column;gap:8px}
+.ach{display:grid;grid-template-columns:52px minmax(0,1fr);gap:12px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2)}
+.ach-medal{color:var(--line);display:flex}
+.ach-medal svg{width:48px;height:48px}
+.ach.done{border-color:var(--gold-line,var(--accent));background:var(--accent-soft)}
+.ach.done .ach-medal{color:var(--accent)}
+.ach-meta{display:flex;flex-direction:column;gap:4px;min-width:0}
+.ach-meta b{font-family:var(--f-display);font-size:17px}
+.ach-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.ach-banner{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center;text-align:left;width:100%;background:var(--accent-soft);border-radius:14px;padding:10px 12px}
+.ach-banner[hidden]{display:none}
+.ach-banner .ach-medal{color:var(--accent)}
+.ach-banner .ach-medal svg{width:44px;height:44px}
+.ach-banner b{display:block;font-family:var(--f-display)}
+#m-seen{z-index:25}
+.seen-note{display:inline-flex;align-items:center;gap:4px;font-size:11px;line-height:1.2;color:var(--ice);font-weight:700}
+.seen-note svg,.slot .seen-note svg{width:12px;height:12px;flex:none}
+.slot .slot-season svg{width:13px;height:13px}
+.seen-box{display:flex;flex-direction:column;gap:8px;background:var(--surface-2);border-radius:14px;padding:12px}
+#ms-seen-note{display:flex;align-items:center;gap:6px;color:var(--muted)}
+#ms-seen-note.is-seen{color:var(--ice);font-weight:700}
+.silhouette svg{filter:brightness(0);opacity:.18}
+.check{flex-direction:row;align-items:center;gap:12px;font-weight:700;font-size:16px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2);cursor:pointer}
+.check input{width:22px;height:22px;accent-color:var(--accent);flex:none}
+.check:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.actions.three{flex-wrap:wrap}
+.actions.three>*{flex:1 1 30%;min-width:0;padding-inline:8px}
+.month-pick{flex-direction:row;align-items:center;gap:8px;font-weight:400;font-size:14px}
+.month-pick select{font:inherit;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:6px 8px}
+.chip.frozen{background:var(--ice-soft);color:var(--ice);border-color:transparent}
+.frozen-note{background:var(--ice-soft);border-radius:12px;padding:10px 12px}
+.block-note{background:var(--warn-soft);border-radius:12px;padding:10px 12px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;font-weight:400;padding:10px 12px}
+.opt b{font-family:var(--f-display)}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.choice button:disabled{opacity:.45}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="wordmark" aria-label="Bookworm">
+        <svg viewBox="0 0 34 20" aria-hidden="true"><rect x="1" y="6" width="26" height="12" rx="6" fill="#fbfbf4" stroke="#1b1b1b" stroke-width="1.5"/><rect x="6" y="6" width="3" height="12" fill="#1b1b1b"/><rect x="12" y="6" width="3" height="12" fill="#f2c230"/><rect x="18" y="6" width="3" height="12" fill="#1b1b1b"/><circle cx="27" cy="11" r="6" fill="#1b1b1b"/><circle cx="29" cy="10" r="1.4" fill="#fff"/><path d="M24 6 Q22 1 19 1" stroke="#1b1b1b" stroke-width="1.5" fill="none"/></svg>
+        Bookworm
+      </div>
+      <div class="sub">Prototype · up to 5 books at once · 197 British species</div>
+    </div>
+  </header>
+
+  <!-- SHELF -->
+  <section id="screen-shelf" hidden>
+    <div class="stack">
+      <div class="card">
+        <div class="stat-line"><h2>Your books</h2><span class="chip mono" id="cur-count"></span></div>
+        <div class="shelf" id="cur-list"></div>
+        <button type="button" class="primary" id="add-book">Add a book</button>
+        <p class="small block-note" id="add-note" hidden>You're reading 5 books, the most at once. Finish, freeze or abandon one to add another.</p>
+      </div>
+      <div class="card" id="wait-card" hidden>
+        <div class="stat-line"><h3>Waiting larvae</h3><span class="chip mono" id="wait-count"></span></div>
+        <p class="small muted">Transferred from abandoned books. Each moves into a new book of the same length tier, starting again from zero.</p>
+        <div class="shelf" id="wait-list"></div>
+      </div>
+      <div class="card">
+        <div class="stat-line"><h3>Frozen</h3><span class="chip mono" id="frz-count"></span></div>
+        <div class="shelf" id="frz-list"></div>
+      </div>
+      <div class="card">
+        <details class="tools">
+          <summary>Prototype tools</summary>
+          <div class="in">
+            <button type="button" id="skip-day">Skip ahead 1 day</button>
+            <button type="button" id="reset">Reset everything</button>
+            <label class="month-pick">Season month <select id="month-pick"></select></label>
+          </div>
+          <p class="small muted" style="margin-top:8px">Skipping time lets you see larvae get hungry. They never die; they wait at "Extremely hungry" until you read again. Frozen larvae don't get hungry at all.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADD BOOK -->
+  <section id="screen-add" hidden>
+    <button type="button" class="back" id="add-back">← Your books</button>
+    <div class="card">
+      <div class="empty">
+        <svg viewBox="0 0 120 60" width="140" aria-hidden="true"><path d="M8 48 Q60 20 112 48 Q60 62 8 48Z" fill="var(--leaf)"/><path d="M12 48 Q60 40 108 48" stroke="var(--leaf-dark)" stroke-width="1.5" fill="none"/><ellipse cx="60" cy="38" rx="5" ry="6.5" fill="#f4efd8" stroke="#c9bf8f"/><path d="M56 34 L64 34 M55.5 38 L64.5 38 M56 42 L64 42" stroke="#d8cfa4" stroke-width=".8"/></svg>
+        <h2>An egg is waiting</h2>
+        <p class="muted small">Find the book you're reading. When you start it, the egg hatches into an insect larva, and your reading feeds it. Longer books hatch rarer species.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="eyebrow">Find your book</span>
+      <form id="search-form" class="row" autocomplete="off">
+        <label style="flex:3">Title, author or ISBN
+          <input id="q" type="search" placeholder="e.g. Project Hail Mary">
+        </label>
+        <button type="submit" style="flex:1" id="search-btn">Search</button>
+      </form>
+      <p class="note" id="search-note">Search Open Library by title, author or ISBN.</p>
+      <div id="results" class="results" aria-live="polite"></div>
+      <p class="small muted credit">Book data from <a href="https://openlibrary.org" target="_blank" rel="noopener">Open Library</a>.</p>
+    </div>
+
+    <form id="book-form" class="card" autocomplete="off">
+      <span class="eyebrow">Book details</span>
+      <label>Title <input id="f-title" type="text" required></label>
+      <label>Author <input id="f-author" type="text"></label>
+      <div class="grid2">
+        <label>ISBN <input id="f-isbn" type="text" inputmode="numeric"></label>
+        <label>Pages <input id="f-pages" type="number" min="1" step="1" required></label>
+      </div>
+      <p class="small muted" id="tier-hint">Page count is needed for every book. It sets the rarity tier of the species that hatches.</p>
+      <button class="primary" type="submit">Next: choose how to track</button>
+    </form>
+  </section>
+
+  <!-- READING -->
+  <section id="screen-read" hidden>
+    <div class="stack">
+      <button type="button" class="back" id="read-back">← Your books</button>
+      <div class="habitat" id="habitat">
+        <span class="chip mood" id="mood"></span>
+        <span class="chip len mono" id="len"></span>
+        <div class="art-wrap" id="art"></div>
+        <p class="hab-cap" id="hab-cap"></p>
+      </div>
+
+      <div class="card">
+        <div class="book-head">
+          <div class="t">
+            <span class="eyebrow" id="b-eyebrow">Currently reading</span>
+            <h2 id="b-title"></h2>
+            <p class="muted small" id="b-author"></p>
+          </div>
+          <span class="chip accent" id="b-tier"></span>
+        </div>
+        <div class="stat-line">
+          <span class="big mono" id="b-pct"></span>
+          <span class="muted small mono" id="b-pages"></span>
+        </div>
+        <div>
+          <div class="stem" aria-hidden="true">
+            <div class="track"></div><div class="fill" id="stem-fill"></div>
+            <div class="nodes" id="stem-nodes"></div>
+          </div>
+          <div class="stem-labels"><span>0%</span><span id="lbl-pupa">Chrysalis 90%</span><span id="lbl-adult">Butterfly 100%</span></div>
+        </div>
+        <p class="small" id="next-stage"></p>
+      </div>
+
+      <form class="card" id="log-form" autocomplete="off">
+        <span class="eyebrow">Log reading</span>
+        <div class="quick" id="quick"></div>
+        <div class="row">
+          <label style="flex:2" id="log-label">I'm now on page <input id="log-val" type="number" min="0" step="1"></label>
+          <button class="primary" type="submit">Feed</button>
+        </div>
+      </form>
+
+      <div class="card">
+        <p class="small frozen-note" id="frozen-note" hidden></p>
+        <div class="actions three"><button type="button" id="btn-edit">Edit book</button><button type="button" id="btn-freeze">Freeze book</button><button type="button" id="btn-abandon">Abandon book</button></div>
+        <p class="small block-note" id="act-note" hidden></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLECTION -->
+  <section id="screen-ach" hidden>
+    <div class="card">
+      <div class="stat-line">
+        <h2>Achievements</h2>
+        <span class="chip mono" id="ach-count"></span>
+      </div>
+      <p class="muted small">Raise every species in a category to complete its achievement. Only species raised from your books count, not sightings.</p>
+      <div class="ach-list" id="ach-list"></div>
+    </div>
+  </section>
+
+  <section id="screen-coll" hidden>
+    <div class="card">
+      <div class="stat-line">
+        <h2>Species Collection</h2>
+        <span class="chip mono" id="coll-count"></span>
+      </div>
+      <p class="muted small">Each finished book adds the adult insect it raised. Tap a species to read its field notes. <span class="season-key"><svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><path d="M2 14C2 7 7 2 14 2c0 7-5 12-12 12Z" fill="currentColor"/></svg></span> marks species in season now.</p>
+      <div class="seg" role="group" aria-label="Category" id="seg"></div>
+      <div class="coll-grid" id="coll-grid"></div>
+    </div>
+  </section>
+</div>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="in">
+    <button type="button" id="tab-read" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5c3-1 7-1 10 1 3-2 7-2 10-1v14c-3-1-7-1-10 1-3-2-7-2-10-1z"/><path d="M12 6v14"/></svg>Reading</button>
+    <button type="button" id="tab-coll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v13"/><path d="M12 9C9 3 3 4 3 8c0 3 4 5 9 4"/><path d="M12 9c3-6 9-5 9-1 0 3-4 5-9 4"/><path d="M12 13c-3 0-6 2-5 5 1 2 4 1 5-3"/><path d="M12 13c3 0 6 2 5 5-1 2-4 1-5-3"/></svg>Collection</button>
+    <button type="button" id="tab-ach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></svg>Achievements</button>
+  </div>
+</nav>
+
+<!-- Tracking choice -->
+<div class="overlay" id="m-track" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mt-h">
+    <h2 id="mt-h">How do you want to track this book?</h2>
+    <p class="muted small" id="mt-sub"></p>
+    <div class="choice">
+      <button type="button" id="mode-pages" aria-pressed="true"><b>Page numbers</b><span class="small muted">Best for printed books. Starts at page 0.</span></button>
+      <button type="button" id="mode-pct" aria-pressed="false"><b>Percentage</b><span class="small muted">Best for e-books, where pages don't match print. Starts at 0%.</span></button>
+    </div>
+    <div id="mt-who" class="opts" hidden>
+      <span class="eyebrow">What hatches?</span>
+      <div class="opts" id="mt-who-list"></div>
+    </div>
+    <div class="actions">
+      <button type="button" class="ghost" id="mt-cancel">Back</button>
+      <button type="button" class="primary" id="mt-go">Hatch my egg</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit book -->
+<div class="overlay" id="m-edit" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="me-h">
+    <h2 id="me-h">Edit book</h2>
+    <form id="edit-form" class="stack" autocomplete="off">
+      <label>Title <input id="e-title" type="text" required></label>
+      <label>Author <input id="e-author" type="text"></label>
+      <div class="grid2">
+        <label>Total pages <input id="e-pages" type="number" min="1" step="1" required></label>
+        <label><span id="e-prog-label">Current page</span> <input id="e-prog" type="number" min="0" step="1" required></label>
+      </div>
+      <p class="small muted" id="e-hint"></p>
+      <div class="actions"><button type="button" class="ghost" id="e-cancel">Cancel</button><button type="submit" class="primary">Save changes</button></div>
+    </form>
+  </div>
+</div>
+
+<!-- Waiting larva -->
+<div class="overlay" id="m-wait" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mw-h">
+    <div class="stat-line">
+      <div><span class="eyebrow">Waiting larva</span><h2 id="mw-h"></h2></div>
+      <span class="ms-chips"><span class="chip" id="mw-cat"></span><span id="mw-season"></span></span>
+    </div>
+    <div id="mw-art"></div>
+    <dl class="kv" id="mw-kv"></dl>
+    <p class="small block-note" id="mw-confirm" hidden></p>
+    <div class="actions">
+      <button type="button" class="ghost" id="mw-close">Keep waiting</button>
+      <button type="button" id="mw-release">Release</button>
+    </div>
+  </div>
+</div>
+
+<!-- Abandon -->
+<div class="overlay" id="m-ab" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="ab-h">
+    <h2 id="ab-h">Abandon this book?</h2>
+    <p class="muted small" id="ab-sub"></p>
+    <div class="choice">
+      <button type="button" id="ab-release"><b>Release</b><span class="small muted" id="ab-release-t"></span></button>
+      <button type="button" id="ab-transfer"><b>Transfer</b><span class="small muted" id="ab-transfer-t"></span></button>
+    </div>
+    <p class="small block-note" id="ab-note" hidden></p>
+    <button type="button" class="ghost" id="ab-cancel">Keep the book</button>
+  </div>
+</div>
+
+<!-- Celebration -->
+<div class="overlay" id="m-cel" hidden>
+  <div class="sheet celebrate" role="dialog" aria-modal="true" aria-labelledby="mc-h">
+    <div class="burst"></div>
+    <div class="confetti" id="confetti"></div>
+    <span class="eyebrow" id="mc-eyebrow"></span>
+    <h2 id="mc-h"></h2>
+    <div id="mc-season"></div>
+    <div class="artbox" id="mc-art"></div>
+    <p id="mc-sub" class="muted"></p>
+    <div id="mc-ach" class="ach-banner" hidden></div>
+    <div class="fact"><b id="mc-fact-h">Did you know?</b><span id="mc-fact"></span></div>
+    <div class="actions" style="width:100%" id="mc-actions"></div>
+  </div>
+</div>
+
+<!-- Species detail -->
+<div class="overlay" id="m-sp" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="ms-h">
+    <div class="stat-line">
+      <div><h2 id="ms-h"></h2><p class="muted small"><span id="ms-kind"></span> · <i id="ms-sci"></i></p></div>
+      <span class="ms-chips"><span class="chip" id="ms-rarity"></span><span id="ms-season"></span></span>
+    </div>
+    <div id="ms-art"></div>
+    <div class="seen-box">
+      <p class="small" id="ms-seen-note"></p>
+      <button type="button" class="primary" id="ms-seen">I've seen it!</button>
+    </div>
+    <dl class="kv" id="ms-kv"></dl>
+    <p class="small note" id="ms-locked">Raise one from a book to unlock its field notes.</p>
+    <div id="ms-facts-wrap" class="stack"><h3>Field notes</h3><ul class="facts" id="ms-facts"></ul></div>
+    <div id="ms-raised-wrap" class="stack"><h3>Raised from your books</h3><div id="ms-list" class="results"></div></div>
+    <button type="button" class="primary" id="ms-close">Close</button>
+  </div>
+</div>
+
+<!-- Seen in the wild -->
+<div class="overlay" id="m-seen" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sn-h">
+    <span class="eyebrow">I've seen it!</span>
+    <h2 id="sn-h"></h2>
+    <p class="small muted">Tick every stage you've spotted in real life. Untick one if you tapped it by mistake.</p>
+    <div class="opts" id="sn-list"></div>
+    <button type="button" class="primary" id="sn-done">Done</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+(function(){
+const DAY = 86400000;
+const CATALOGUE = [
+  {title:"Project Hail Mary",author:"Andy Weir",isbn:"9780593135204",pages:496,c:"#2f5d8a"},
+  {title:"The Hobbit",author:"J. R. R. Tolkien",isbn:"9780547928227",pages:300,c:"#7a5a2c"},
+  {title:"Piranesi",author:"Susanna Clarke",isbn:"9781635575637",pages:272,c:"#4f6f7a"},
+  {title:"The Name of the Wind",author:"Patrick Rothfuss",isbn:"9780756404741",pages:662,c:"#8a3b2a"},
+  {title:"Dune",author:"Frank Herbert",isbn:"9780441172719",pages:896,c:"#b7832f"},
+  {title:"Charlotte's Web",author:"E. B. White",isbn:"9780064400558",pages:192,c:"#5d8a4a"}
+];
+/* Facts for growth stages 1–9 apply to all species. Stage 0 uses the species' food plant; stage 10 uses its first field note. */
+const STAGE_FACTS = [
+  null,
+  "Most caterpillars are fussy eaters. Each species can only eat a few kinds of plant, called its food plants.",
+  "A caterpillar's skin can't stretch. To grow, it sheds the old skin and wriggles out bigger. This is called moulting.",
+  "Each stage between moults is called an instar. Most butterfly caterpillars go through four or five.",
+  "A caterpillar has six true legs at the front. The stubby ones further back are prolegs, which grip with rings of tiny hooks.",
+  "Caterpillars breathe through a row of tiny holes along their sides called spiracles.",
+  "A caterpillar has a ring of simple eyes on each side of its head, but it sees little more than light, dark and blurry shapes.",
+  "Many caterpillars grow to well over a thousand times their hatching weight before they pupate.",
+  "When it's fully grown, a caterpillar stops eating and wanders off to find a safe place to pupate.",
+  "Inside the chrysalis, most of the caterpillar's body breaks down and rebuilds itself as a butterfly."
+];
+
+const MOTH_PUPA_FACT = "Many moth caterpillars spin a silk cocoon or burrow into the soil before they pupate. Inside, the body rebuilds itself as a moth.";
+/* rarity is a gameplay tier, loosely based on how often each species is seen in Britain */
+const SPECIES = [
+  {id:"peacock",name:"Peacock",sci:"Aglais io",family:"Nymphalidae",rarity:"Common",wing:"63–75 mm",len:42,
+   food:"Common nettle",season:"March–May and July–September; adults hibernate",status:"Common and widespread",
+   facts:["Each wing carries a large eyespot. Flashed open suddenly, the four 'eyes' can startle a hungry bird.",
+     "When disturbed it rubs its wings together to make a hissing sound, which can scare off mice.",
+     "Adults hibernate through winter in hollow trees, sheds and lofts, and can live for almost a year.",
+     "The black, spiny caterpillars live together in silk webs on nettles."]},
+  {id:"red-admiral",name:"Red Admiral",sci:"Vanessa atalanta",family:"Nymphalidae",rarity:"Common",wing:"64–78 mm",len:35,
+   food:"Common nettle",season:"Mostly May–October; increasingly seen in winter",status:"Common migrant, now also overwinters in southern Britain",
+   facts:["Most Red Admirals in Britain fly in each spring from continental Europe and North Africa.",
+     "Milder winters mean some now survive the winter here as adults.",
+     "The caterpillar folds a nettle leaf into a tent with silk and feeds hidden inside it.",
+     "In autumn it loves fallen, rotting fruit and ivy flowers."]},
+  {id:"small-tortoiseshell",name:"Small Tortoiseshell",sci:"Aglais urticae",family:"Nymphalidae",rarity:"Common",wing:"45–62 mm",len:25,
+   food:"Common nettle",season:"March–October; may appear on warm winter days",status:"Widespread, but has declined sharply since the 1970s",
+   facts:["It's often one of the first butterflies of spring, waking from hibernation as an adult.",
+     "A row of bright blue crescents runs along the edges of its wings.",
+     "Females lay eggs in big batches, and the young caterpillars live together in silk webs.",
+     "Numbers have fallen a lot in southern England. A parasitic fly that arrived in the late 1990s is one suspected cause."]},
+  {id:"large-white",name:"Large White",sci:"Pieris brassicae",family:"Pieridae",rarity:"Common",wing:"63–70 mm",len:40,
+   food:"Cabbages and other brassicas; also nasturtium",season:"April–October, in two broods",status:"Common; numbers boosted by migrants",
+   facts:["Gardeners call it the cabbage white. A batch of its caterpillars can strip a cabbage to the stalk.",
+     "The yellow and black caterpillars store mustard oils from their food, which makes them taste bad to birds.",
+     "Females have two black spots on each forewing. Males have none on the upper side.",
+     "Females lay their yellow eggs in clusters of dozens on the undersides of leaves."]},
+  {id:"small-white",name:"Small White",sci:"Pieris rapae",family:"Pieridae",rarity:"Common",wing:"about 45–55 mm",len:25,
+   food:"Cabbages and other brassicas; also nasturtium",season:"April–October, in two or more broods",status:"Very common",
+   facts:["Its velvety green caterpillars hide perfectly along the midrib of a cabbage leaf.",
+     "It was accidentally taken to North America around 1860 and is now one of the commonest butterflies there.",
+     "It lays single eggs rather than clusters, spreading its caterpillars across many plants.",
+     "Summer adults have darker wingtips and spots than spring ones."]},
+  {id:"green-veined-white",name:"Green-veined White",sci:"Pieris napi",family:"Pieridae",rarity:"Common",wing:"40–52 mm",len:25,
+   food:"Wild crucifers such as garlic mustard, cuckooflower and watercress",season:"April–September",status:"Common and widespread",
+   facts:["The green veins are an optical trick. They're lines of black and yellow scales on the underside of the hindwing.",
+     "Males give off a lemony scent from special wing scales, which helps attract females.",
+     "Unlike its cabbage-eating cousins, it rarely touches garden crops.",
+     "It prefers damp places such as hedgerows, ditches and woodland rides."]},
+  {id:"meadow-brown",name:"Meadow Brown",sci:"Maniola jurtina",family:"Nymphalidae",rarity:"Common",wing:"40–60 mm",len:25,
+   food:"Grasses such as fescues, bents and meadow-grasses",season:"June–September",status:"One of Britain's most abundant butterflies",
+   facts:["It keeps flying on dull, cloudy days when most butterflies stay hidden.",
+     "Each forewing has a black eyespot with a single white pupil.",
+     "The caterpillars feed at night and spend the winter as caterpillars, nibbling grass on mild days.",
+     "Females are larger than males and have more orange on the forewing."]},
+  {id:"speckled-wood",name:"Speckled Wood",sci:"Pararge aegeria",family:"Nymphalidae",rarity:"Common",wing:"46–56 mm",len:25,
+   food:"Grasses such as false brome, cock's-foot and Yorkshire fog",season:"March–October, in several broods",status:"Common and spreading north",
+   facts:["Males guard patches of sunlight on the woodland floor and spiral upwards in battles with rivals.",
+     "It's the only British butterfly that can spend the winter as either a caterpillar or a chrysalis.",
+     "Its cream spots on brown wings blend in with dappled sunlight under trees.",
+     "It has spread a long way north in Britain over recent decades."]},
+  {id:"painted-lady",name:"Painted Lady",sci:"Vanessa cardui",family:"Nymphalidae",rarity:"Uncommon",wing:"58–74 mm",len:40,
+   food:"Thistles; also mallows and viper's-bugloss",season:"April–October; numbers vary hugely from year to year",status:"Summer migrant",
+   facts:["Its yearly migration between tropical Africa and Europe covers up to about 12,000 km, spread over several generations.",
+     "It's one of the most widespread butterflies in the world.",
+     "In big migration years, such as 2009 and 2019, millions arrive in Britain.",
+     "No stage of its life survives a British winter, so every one seen here is a migrant or the child of one."]},
+  {id:"brimstone",name:"Brimstone",sci:"Gonepteryx rhamni",family:"Pieridae",rarity:"Uncommon",wing:"60–74 mm",len:33,
+   food:"Buckthorn and alder buckthorn",season:"Almost all year; adults hibernate",status:"Widespread in England and Wales",
+   facts:["One theory says the word 'butterfly' comes from this butter-coloured species.",
+     "Its wings are shaped and veined like leaves, so it's very hard to spot when resting in ivy or holly.",
+     "Males are sulphur yellow and females are pale greenish-white.",
+     "Adults can live for about a year, one of the longest lifespans of any British butterfly.",
+     "It always rests with its wings closed."]},
+  {id:"orange-tip",name:"Orange-tip",sci:"Anthocharis cardamines",family:"Pieridae",rarity:"Uncommon",wing:"40–52 mm",len:30,
+   food:"Cuckooflower and garlic mustard",season:"April–June, one brood a year",status:"Widespread",
+   facts:["Only males have the orange wingtips. Females are white with grey tips and are easily mistaken for other whites.",
+     "The mossy green pattern under the hindwing is made from black and yellow scales, and is great camouflage on cow parsley.",
+     "Females lay one egg per flower stalk, and each egg turns orange after a few days.",
+     "Caterpillars eat smaller ones they meet, so each plant usually raises just one.",
+     "It spends about ten months of the year as a chrysalis."]},
+  {id:"small-copper",name:"Small Copper",sci:"Lycaena phlaeas",family:"Lycaenidae",rarity:"Uncommon",wing:"32–35 mm",len:16,
+   food:"Common sorrel and sheep's sorrel",season:"April–October, in two or three broods",status:"Widespread",
+   facts:["Males are fiercely territorial and dart out to chase off other insects, even much bigger ones.",
+     "Its forewings shine bright copper-orange with black spots.",
+     "Some individuals have a row of small blue spots on the hindwing.",
+     "It spends the winter as a small caterpillar."]},
+  {id:"holly-blue",name:"Holly Blue",sci:"Celastrina argiolus",family:"Lycaenidae",rarity:"Uncommon",wing:"26–34 mm",len:14,
+   food:"Holly in spring, ivy in late summer",season:"April–May and July–September",status:"Common, especially in gardens",
+   facts:["Spring caterpillars eat holly buds and berries, and the summer brood switches to ivy.",
+     "It's usually the first blue butterfly of spring, and often flies high around bushes and trees.",
+     "Its underside is pale silvery blue with tiny black dots and no orange spots.",
+     "Its numbers rise and crash in cycles over several years, driven by a parasitic wasp that targets it."]},
+  {id:"common-blue",name:"Common Blue",sci:"Polyommatus icarus",family:"Lycaenidae",rarity:"Uncommon",wing:"29–36 mm",len:14,
+   food:"Common bird's-foot-trefoil and other legumes",season:"May–September",status:"Britain's most widespread blue",
+   facts:["Males are bright violet-blue. Females are mostly brown with orange spots.",
+     "Ants look after the caterpillars, which make a sugary liquid for the ants to drink.",
+     "At night it roosts on grass stems, often head-down.",
+     "It lives everywhere from coastal dunes to mountains, across the whole of Britain."]},
+  {id:"monarch",name:"Monarch",sci:"Danaus plexippus",family:"Nymphalidae",rarity:"Rare",wing:"89–102 mm",len:45,
+   food:"Milkweed only (not native to Britain)",season:"Autumn, after strong westerly winds",status:"Rare vagrant from North America and Iberia",
+   facts:["Only a handful reach Britain, mostly blown across the Atlantic by autumn storms to the south-west.",
+     "Eastern North American monarchs fly up to 4,800 km each autumn to spend winter in the mountains of central Mexico.",
+     "No single butterfly makes the round trip. It takes several generations to get back north in spring.",
+     "Toxins from milkweed stay in the adult's body, so birds that try one learn to avoid them.",
+     "Males have a small black scent patch on a vein of each hindwing. Females don't."]}
+];
+/* More butterflies from the Wildlife Trusts' British list. Same row format as moths. */
+const BFLY_ROWS = [
+ ["essex-skipper","Essex Skipper","Thymelicus lineola","Hesperiidae","Common","26–30 mm",22,"Grasses such as cock's-foot and creeping soft-grass","July–August","Common in the south-east and spreading",
+  ["Tell it from the Small Skipper by its antenna tips, which are black underneath as if dipped in ink.","It wasn't recognised as a separate British species until 1889.","It spends the winter as an egg tucked inside a grass sheath."]],
+ ["large-skipper","Large Skipper","Ochlodes sylvanus","Hesperiidae","Common","29–36 mm",28,"Grasses such as cock's-foot and purple moor-grass","June–August","Common in England and Wales",
+  ["It rests like a little jet fighter, hindwings flat and forewings half raised.","Males perch on sunny leaves and dart out at anything that passes.","The caterpillar lives in a tube made from a grass blade folded together with silk."]],
+ ["small-skipper","Small Skipper","Thymelicus sylvestris","Hesperiidae","Common","27–34 mm",22,"Mainly Yorkshire fog grass","June–August","Common in England and Wales",
+  ["Its antenna tips are orange-brown underneath, unlike the Essex Skipper's.","Caterpillars hatch in late summer and go straight into hibernation without eating.","It darts low and fast over long grass."]],
+ ["dingy-skipper","Dingy Skipper","Erynnis tages","Hesperiidae","Uncommon","27–34 mm",20,"Common bird's-foot-trefoil and horseshoe vetch","May–June","Widespread but local and declining",
+  ["At night it rests with its wings wrapped round a dead flowerhead, just like a moth.","It's often mistaken for a day-flying moth.","The caterpillar spends the winter rolled up in a tent of leaves."]],
+ ["grizzled-skipper","Grizzled Skipper","Pyrgus malvae","Hesperiidae","Uncommon","23–29 mm",18,"Wild strawberry, agrimony and creeping cinquefoil","April–June","Local in southern England; declining",
+  ["Its chequered black and white wings blur as it zips low over the ground.","It basks with its wings spread wide on bare ground.","It spends the winter as a pupa."]],
+ ["duke-of-burgundy","Duke of Burgundy","Hamearis lucina","Riodinidae","Rare","29–31 mm",17,"Cowslip and primrose","May–June","Rare; scattered colonies in southern and northern England",
+  ["It's Britain's only member of the metalmark family.","Males fight fiercely over small sunny patches of scrubby grassland.","Males walk on four legs, because their front pair is tiny. Females use six."]],
+ ["scotch-argus","Scotch Argus","Erebia aethiops","Nymphalidae","Uncommon","35–42 mm",25,"Purple moor-grass and blue moor-grass","July–September","Widespread in Scotland; just two English sites",
+  ["It flies only in sunshine and drops into the grass as soon as a cloud passes over.","In England it survives at just two sites, both in Cumbria.","Its dark wings soak up warmth in cool northern summers."]],
+ ["wood-white","Wood White","Leptidea sinapis","Pieridae","Uncommon","42–48 mm",20,"Meadow vetchling, bird's-foot-trefoil and tufted vetch","May–August","Rare and declining, in scattered woodland colonies",
+  ["It has a slow, floppy flight and almost never rests with its wings open.","In courtship, the male waves his head and antennae in front of the female.","A near-identical species, the Cryptic Wood White, was only recognised in 2011."]],
+ ["large-heath","Large Heath","Coenonympha tullia","Nymphalidae","Uncommon","35–40 mm",25,"Hare's-tail cottongrass","June–July","Local on wet bogs in northern Britain and Wales",
+  ["It lives on wet peat bogs, where its food plant grows.","It always rests with its wings closed.","Its eyespots vary a lot from place to place, from bold rings to almost none."]],
+ ["high-brown-fritillary","High Brown Fritillary","Fabriciana adippe","Nymphalidae","Rare","50–64 mm",35,"Common dog-violet and hairy violet","June–August","Endangered; very few sites remain",
+  ["It's often called Britain's most threatened butterfly.","Its caterpillars bask on dead bracken to warm up on cool spring days.","It now survives mainly on bracken slopes around Morecambe Bay, Dartmoor and Exmoor."]],
+ ["marsh-fritillary","Marsh Fritillary","Euphydryas aurinia","Nymphalidae","Uncommon","30–50 mm",30,"Devil's-bit scabious","May–June","Declined; protected by law",
+  ["Its caterpillars live together in silk webs and bask in black clusters in spring.","Colonies boom and crash over the years, partly because of parasitic wasps.","It's one of only a few butterflies with full legal protection in the UK."]],
+ ["glanville-fritillary","Glanville Fritillary","Melitaea cinxia","Nymphalidae","Rare","38–52 mm",25,"Ribwort plantain","May–June","Rare; mainly on the Isle of Wight's south coast",
+  ["In Britain it lives almost only on the crumbling cliffs of the Isle of Wight.","It's named after Eleanor Glanville, a 17th-century collector whose will was challenged because her relatives said butterfly-hunting proved she was mad.","Its caterpillars live together in silk webs."]],
+ ["silver-studded-blue","Silver-studded Blue","Plebejus argus","Lycaenidae","Uncommon","26–32 mm",14,"Heather, gorse and bird's-foot-trefoil","June–August","Local on heathland",
+  ["It's named after the silvery-blue studs under its hindwings.","Black ants look after its caterpillars and even carry them into their nests.","It lives in tight colonies and rarely travels far."]],
+ ["white-letter-hairstreak","White-letter Hairstreak","Satyrium w-album","Lycaenidae","Uncommon","32–38 mm",15,"Elm","July–August","Local; hit hard by Dutch elm disease",
+  ["A white W under its hindwing gives it its name.","It spends most of its life high in elm treetops, sipping honeydew left by aphids.","Dutch elm disease wiped out many colonies in the 1970s."]],
+ ["pearl-bordered-fritillary","Pearl-bordered Fritillary","Boloria euphrosyne","Nymphalidae","Uncommon","38–46 mm",22,"Common dog-violet","April–June","Declined sharply; now local",
+  ["It's one of the first fritillaries of the year.","Seven silver 'pearls' line the edge of its hindwing underside.","It needs freshly cleared woodland, so it declined when coppicing stopped."]],
+ ["brown-hairstreak","Brown Hairstreak","Thecla betulae","Lycaenidae","Uncommon","38–42 mm",16,"Blackthorn","July–September","Local in southern England and Wales",
+  ["Adults gather around a 'master tree', often an ash, high in the canopy.","It's easiest to find in winter by searching blackthorn twigs for its tiny white eggs.","Females are brighter than males, with orange patches on the forewings."]],
+ ["small-pearl-bordered-fritillary","Small Pearl-bordered Fritillary","Boloria selene","Nymphalidae","Uncommon","35–42 mm",22,"Violets, especially marsh violet","May–July","Local; commoner in Wales and Scotland",
+  ["It looks like the Pearl-bordered Fritillary but has more silver patches under the hindwing.","It prefers damper places, such as boggy grassland and woodland clearings.","It flies a few weeks later in the year than its larger cousin."]],
+ ["small-blue","Small Blue","Cupido minimus","Lycaenidae","Uncommon","18–27 mm",10,"Kidney vetch","May–June","Local, mostly on chalk and limestone",
+  ["It's Britain's smallest butterfly.","Its caterpillars eat only the flowers and seeds of kidney vetch.","Males are dusky brown with just a dusting of blue."]],
+ ["adonis-blue","Adonis Blue","Lysandra bellargus","Lycaenidae","Uncommon","30–40 mm",14,"Horseshoe vetch","May–June and August–September","Local on southern chalk downs",
+  ["Males are a dazzling sky blue.","Ants tend the caterpillars and even bury them at night for protection.","It needs very short, rabbit-grazed chalk grassland."]],
+ ["chalkhill-blue","Chalkhill Blue","Lysandra coridon","Lycaenidae","Uncommon","33–40 mm",16,"Horseshoe vetch","July–August","Local on chalk and limestone in the south",
+  ["Males are a pale silvery blue and can gather in hundreds.","Ants bury its pupae in the soil and guard them.","It's found only on chalk and limestone grassland."]],
+ ["heath-fritillary","Heath Fritillary","Melitaea athalia","Nymphalidae","Rare","39–47 mm",22,"Common cow-wheat, ribwort plantain and foxglove","June–July","Rare; a few sites in Kent, Essex, Exmoor and Cornwall",
+  ["It was called the 'woodman's follower' because it moved into freshly coppiced woods.","It was once one of Britain's rarest butterflies, and is now recovering thanks to conservation work.","Its caterpillars bask together in the sun."]],
+ ["black-hairstreak","Black Hairstreak","Satyrium pruni","Lycaenidae","Rare","34–38 mm",15,"Blackthorn","June–July","Rare; old thickets between Oxford and Peterborough",
+  ["It's one of Britain's rarest butterflies, living in old blackthorn thickets in the East Midlands.","It wasn't discovered in Britain until 1828.","Its pupa looks exactly like a bird dropping."]],
+ ["small-heath","Small Heath","Coenonympha pamphilus","Nymphalidae","Common","33–37 mm",20,"Fine grasses such as fescues and bents","April–September","Widespread but declining",
+  ["It always rests with its wings closed, tilted towards the sun.","It's one of Britain's most widespread butterflies, but numbers have fallen.","Males wait at landmarks like bushes for females to come by."]],
+ ["ringlet","Ringlet","Aphantopus hyperantus","Nymphalidae","Common","42–52 mm",22,"Grasses such as cock's-foot and false brome","June–August","Common and spreading north",
+  ["The yellow-ringed spots under its wings give it its name.","It keeps flying in cloudy weather and even light rain.","Females scatter their eggs while flying over long grass."]],
+ ["gatekeeper","Gatekeeper","Pyronia tithonus","Nymphalidae","Common","37–48 mm",25,"Grasses such as bents, fescues and meadow-grasses","July–August","Common in the south",
+  ["It's also called the Hedge Brown, and is often seen around hedges and field gates.","Its eyespots have two white pupils, which tells it apart from the Meadow Brown.","It loves bramble flowers."]],
+ ["grayling","Grayling","Hipparchia semele","Nymphalidae","Uncommon","51–62 mm",30,"Grasses such as sheep's-fescue and marram","July–September","Declining; mostly coasts and heaths",
+  ["It tilts its closed wings towards the sun so it casts almost no shadow.","Its grey-brown underside makes it nearly invisible on rocks and bare ground.","The caterpillar pupates underground in a silk-lined chamber."]],
+ ["marbled-white","Marbled White","Melanargia galathea","Nymphalidae","Common","46–56 mm",28,"Grasses such as red fescue and sheep's-fescue","June–August","Common in southern England",
+  ["Despite its looks, it isn't one of the whites. It's related to the browns.","Females drop their eggs loose into long grass while flying.","It loves purple flowers like knapweeds and thistles."]],
+ ["wall","Wall","Lasiommata megera","Nymphalidae","Uncommon","44–52 mm",25,"Grasses such as cock's-foot and Yorkshire fog","April–September, in two or three broods","Declined inland; now mostly coastal",
+  ["It's named for its habit of basking on walls, paths and bare ground.","It has vanished from much of inland England, but holds on near the coast.","It has two or three generations a year."]],
+ ["silver-washed-fritillary","Silver-washed Fritillary","Argynnis paphia","Nymphalidae","Uncommon","69–80 mm",38,"Common dog-violet","June–August","Widespread in southern woods and spreading",
+  ["It's Britain's largest fritillary.","Females lay eggs on tree bark a metre or two above patches of violets.","Some females are a dusky greenish form called valesina."]],
+ ["dark-green-fritillary","Dark Green Fritillary","Speyeria aglaja","Nymphalidae","Uncommon","58–68 mm",38,"Violets","June–August","Widespread but local",
+  ["It's a fast, powerful flier over open grassland, moors and dunes.","Its name comes from the green wash under its hindwings, which are dotted with silver.","It's the most widespread fritillary in Britain."]],
+ ["comma","Comma","Polygonia c-album","Nymphalidae","Common","50–64 mm",35,"Common nettle, hop and elm","All year; adults hibernate","Common and spreading north",
+  ["Its ragged wing edges make it look like a dead leaf.","A small white comma under the hindwing gives it its name.","Its caterpillar is disguised as a bird dropping."]],
+ ["purple-emperor","Purple Emperor","Apatura iris","Nymphalidae","Rare","70–84 mm",40,"Sallows (goat willow and grey willow)","June–August","Local in southern woods; hard to see",
+  ["Males come down from the treetops to feed on dung, carrion and even sweaty boots.","Only males flash purple, and only when light hits their wing scales at the right angle.","It spends most of its life high in the oak canopy."]],
+ ["swallowtail","Swallowtail","Papilio machaon","Papilionidae","Rare","76–93 mm",45,"Milk-parsley","May–July, sometimes August","Rare; British race found only in the Norfolk Broads",
+  ["It's Britain's largest native butterfly.","The British race lives only in the Norfolk Broads, where its food plant grows in the fens.","When threatened, the caterpillar pushes out a forked orange horn that gives off a strong smell."]],
+ ["clouded-yellow","Clouded Yellow","Colias croceus","Pieridae","Uncommon","52–62 mm",30,"Clovers, lucerne and bird's-foot-trefoil","May–October","Migrant; numbers vary hugely by year",
+  ["It arrives from southern Europe and North Africa, in big numbers in so-called 'Clouded Yellow years'.","It always rests with its wings closed, hiding the black borders on top.","Most can't survive a British winter, though a few may on the south coast."]],
+ ["green-hairstreak","Green Hairstreak","Callophrys rubi","Lycaenidae","Uncommon","27–34 mm",16,"Gorse, broom, bird's-foot-trefoil, bilberry and others","March–July","Widespread but local",
+  ["It's Britain's only butterfly with a truly green underside. The colour comes from the structure of its scales, not pigment.","It always rests with its wings closed.","Its pupa can make squeaking sounds that attract ants."]],
+ ["purple-hairstreak","Purple Hairstreak","Favonius quercus","Lycaenidae","Uncommon","31–40 mm",15,"Oak","July–August","Widespread but rarely noticed",
+  ["It lives high in the oak canopy, sipping honeydew left by aphids.","Its upperwings have a purple sheen.","It's easiest to spot on warm evenings, fluttering around oak tops."]],
+ ["brown-argus","Brown Argus","Aricia agestis","Lycaenidae","Common","25–31 mm",13,"Common rock-rose, storksbills and crane's-bills","May–September","Common in the south and spreading north",
+  ["It's a 'blue' with no blue on it: brown wings edged with orange spots.","It has spread north in recent decades, helped by warmer summers.","Ants tend its caterpillars."]],
+ ["white-admiral","White Admiral","Limenitis camilla","Nymphalidae","Uncommon","56–66 mm",25,"Honeysuckle","June–August","Local in southern woods",
+  ["It glides gracefully along woodland rides with few wingbeats.","Its caterpillar spends winter inside a honeysuckle leaf it has folded into a shelter.","It spread in the 20th century as woods became shadier."]],
+ ["large-blue","Large Blue","Phengaris arion","Lycaenidae","Rare","38–52 mm",15,"Wild thyme and marjoram, then red ant grubs","June–July","Rare; reintroduced",
+  ["It went extinct in Britain in 1979 and was reintroduced from Sweden from 1983.","Its caterpillar tricks red ants into carrying it into their nest, where it eats their grubs.","It now lives at sites in Somerset and Gloucestershire."]]
+];
+BFLY_ROWS.forEach(([id,name,sci,family,rarity,wing,len,food,season,status,facts])=>SPECIES.push({id,name,sci,family,rarity,wing,len,food,season,status,facts,kind:"butterfly"}));
+/* Moths: the Wildlife Trusts' British moth list. Fields: id, name, sci, family, rarity, wingspan, caterpillar length (mm), food, season, status, facts */
+const MOTH_ROWS = [
+ ["small-magpie","Small Magpie","Anania hortulata","Crambidae","Common","24–28 mm",20,"Common nettle; also mint and bindweed","May–August","Common",
+  ["One of Britain's larger micro-moths, and often flushed out of nettle beds by day.","The caterpillar spins nettle leaves together and spends the winter in a silk cocoon.","Despite the name, it isn't related to the larger Magpie Moth."]],
+ ["early-grey","Early Grey","Xylocampa areola","Noctuidae","Common","30–36 mm",35,"Honeysuckle","March–May","Common",
+  ["One of the first moths of spring, often seen on the first mild nights.","Its streaky grey wings are perfect camouflage on bark and fence posts.","The caterpillar pupates in a cocoon among leaf litter."]],
+ ["double-striped-pug","Double-striped Pug","Gymnoscelis rufifasciata","Geometridae","Common","15–20 mm",15,"Flowers and berries of holly, gorse, ivy, buddleia and many more","March–October, in two or more broods","Common",
+  ["Pugs are small moths that rest with their wings spread flat. This is one of the commonest.","Its caterpillars eat flowers and berries rather than leaves.","In mild areas it can be seen in almost any month."]],
+ ["box-tree-moth","Box-tree Moth","Cydalima perspectalis","Crambidae","Common","about 40 mm",40,"Box (Buxus)","Spring to autumn, in several broods","Non-native; spreading fast, especially in the south-east",
+  ["Native to East Asia, it arrived in Britain around 2007 on imported box plants.","Its caterpillars can strip a box hedge bare in a single season.","Most adults are white with a brown border, but there's also an all-brown form."]],
+ ["dingy-mocha","Dingy Mocha","Cyclophora pendularia","Geometridae","Rare","22–26 mm",20,"Small willows on heathland","May–June and August","One of Britain's rarest moths, on a few Dorset heaths",
+  ["It survives in Britain on just a handful of wet heaths in Dorset.","Its caterpillars feed on low willow bushes growing among the heather.","Like a butterfly, its pupa is held to a leaf by a silk girdle."]],
+ ["deaths-head-hawk-moth","Death's-head Hawk-moth","Acherontia atropos","Sphingidae","Rare","90–130 mm",125,"Potato and other nightshades","Mostly late summer and autumn","Rare migrant from southern Europe and Africa",
+  ["The skull-like pattern on its back made it a famous omen of death.","When disturbed it squeaks loudly by pushing air out through its mouthparts.","It sneaks into beehives to steal honey.","Its caterpillar can grow to around 12 cm long before burrowing underground to pupate."]],
+ ["winter-moth","Winter Moth","Operophtera brumata","Geometridae","Common","22–28 mm (males)",20,"Oak, apple and many other trees","October–February","Very common",
+  ["Females are almost wingless and climb tree trunks to wait for males.","Males fly in the depths of winter and often show up in car headlights.","Its caterpillars hatch as oak buds open, just in time to feed nesting blue tits."]],
+ ["december-moth","December Moth","Poecilocampa populi","Lasiocampidae","Uncommon","30–45 mm",45,"Oak, birch, hawthorn and other trees","October–January","Fairly common",
+  ["Its furry body works like a winter coat for flying on frosty nights.","Adults can't feed. They live on energy stored up as caterpillars.","It spends the winter as eggs laid on twigs."]],
+ ["oak-eggar","Oak Eggar","Lasiocampa quercus","Lasiocampidae","Uncommon","45–75 mm",75,"Heather, bramble, hawthorn and bilberry","July–August","Widespread but local",
+  ["The name comes from its acorn-shaped cocoon. The caterpillars rarely eat oak.","Males fly fast by day, following the scent of females.","In the north, the caterpillar can take two years to grow up."]],
+ ["herald","Herald","Scoliopteryx libatrix","Erebidae","Uncommon","40–45 mm",45,"Willows and poplars","August–June; adults hibernate","Widespread",
+  ["Adults hibernate in caves, cellars and outbuildings, sometimes in large groups.","Its ragged, orange-flecked wings look like a dead leaf.","It's said to herald autumn, as one of the first moths to go into hibernation."]],
+ ["large-emerald","Large Emerald","Geometra papilionaria","Geometridae","Uncommon","about 50–60 mm",35,"Birch, alder, hazel and beech","June–August","Widespread but local",
+  ["Its green colour is unstable and fades towards white as the moth ages.","The caterpillar spends winter on a birch twig, turning brown to match.","It often rests with its wings spread like a butterfly."]],
+ ["argent-and-sable","Argent & Sable","Rheumaptera hastata","Geometridae","Rare","30–38 mm",25,"Birch; bog-myrtle in Scotland","May–July","Scarce and declining",
+  ["Its name means silver and black in the language of heraldry.","Unusually for a moth, it flies by day in sunshine.","The caterpillar lives in a shelter of leaves spun together with silk."]],
+ ["scarlet-tiger","Scarlet Tiger","Callimorpha dominula","Erebidae","Uncommon","45–55 mm",40,"Comfrey, nettle and bramble","June–July","Local, mainly in the south",
+  ["Its hidden scarlet hindwings flash in flight to warn birds that it's toxic.","It flies by day in damp places along rivers and ditches.","A colony near Oxford has been studied since the 1940s to understand evolution."]],
+ ["mullein","Mullein","Cucullia verbasci","Noctuidae","Common","44–50 mm",50,"Mulleins, figworts and buddleia","April–May","Common in the south",
+  ["The adult is rarely noticed, as it rests looking just like a broken twig.","Its white, yellow and black caterpillars feed out in the open.","The pupa can stay underground for several years before the moth emerges."]],
+ ["puss-moth","Puss Moth","Cerura vinula","Notodontidae","Uncommon","62–80 mm",70,"Willows and poplars","April–July","Widespread",
+  ["When threatened, the caterpillar rears up to show a red-ringed face and whips two tail filaments.","The caterpillar can also squirt formic acid at attackers.","Its cocoon is so hard that the adult releases a special liquid to soften its way out."]],
+ ["yellow-tail","Yellow-tail","Euproctis similis","Erebidae","Common","35–45 mm",30,"Hawthorn, blackthorn and many other trees","July–August","Common",
+  ["When disturbed, it curls up to flash a golden-yellow tail tuft.","The hairy caterpillars can irritate skin, so it's best not to handle them.","The female covers her eggs with hairs from her tail."]],
+ ["knot-grass","Knot Grass","Acronicta rumicis","Noctuidae","Common","34–40 mm",35,"Docks, plantains, knotgrass and bramble","May–September","Common",
+  ["Knotgrass is just one of many low plants its caterpillar eats.","The hairy caterpillar is dark with a line of red and white spots.","A small white mark near the edge of the forewing helps identify the adult."]],
+ ["brown-tail","Brown-tail","Euproctis chrysorrhoea","Erebidae","Common","36–42 mm",35,"Hawthorn, blackthorn and bramble","July–August","Locally common, mostly on southern and eastern coasts",
+  ["Its caterpillars spend the winter together in silk tents in hedges.","Their hairs can cause itchy rashes, so they shouldn't be touched.","Some years they're so numerous that whole hedges are stripped."]],
+ ["pale-tussock","Pale Tussock","Calliteara pudibunda","Erebidae","Common","40–60 mm",45,"Oak, birch, hazel and other trees","May–June","Common in England and Wales",
+  ["Its yellow-green caterpillar has four tufts on its back and a red tail tuft.","Hop-pickers once called the caterpillar the 'hop dog'.","The adult rests with its furry front legs stretched forward."]],
+ ["fox-moth","Fox Moth","Macrothylacia rubi","Lasiocampidae","Uncommon","40–60 mm",70,"Heather, bramble and bilberry","May–June","Widespread on heaths and moors",
+  ["Its big furry caterpillars are often seen sunbathing on heaths in autumn.","The caterpillar spends winter fully grown and pupates in spring without feeding again.","Males fly by day, searching for females."]],
+ ["orange-underwing","Orange Underwing","Archiearis parthenias","Geometridae","Uncommon","35–40 mm",30,"Birch","March–April","Widespread but easily missed",
+  ["It flies in early spring sunshine, high around the tops of birch trees.","Its orange hindwings are hidden when it rests.","Young caterpillars feed on birch catkins before moving on to leaves."]],
+ ["mint-moth","Mint Moth","Pyrausta aurata","Crambidae","Common","15–20 mm",15,"Mint, marjoram and other herbs","March–September","Common",
+  ["This tiny purple and gold moth flies by day in gardens.","Its caterpillars feed on mint and marjoram under a light silk web.","It's often mistaken for a butterfly because it's out in the sunshine."]],
+ ["chimney-sweeper","Chimney Sweeper","Odezia atrata","Geometridae","Uncommon","23–30 mm",20,"Pignut flowers and seeds","June–July","Local, in meadows",
+  ["It's sooty black with white wingtips, like a sweep's brush.","It flies by day over flowery meadows.","Its caterpillars eat only pignut."]],
+ ["burnet-companion","Burnet Companion","Euclidia glyphica","Erebidae","Common","25–30 mm",35,"Clovers and trefoils","May–July","Common in grassland",
+  ["It flies by day, often alongside burnet moths, which gives it its name.","It rests with its wings closed over its back.","It's easily mistaken for a Dingy Skipper butterfly."]],
+ ["mother-shipton","Mother Shipton","Euclidia mi","Erebidae","Uncommon","30–35 mm",35,"Grasses and clovers","May–June","Widespread in grassland",
+  ["Named after a Yorkshire prophetess, because its wing pattern looks like a witch's face.","It flies by day in grassy places.","The caterpillar is a looper, moving with an arching walk."]],
+ ["jersey-tiger","Jersey Tiger","Euplagia quadripunctaria","Erebidae","Uncommon","52–65 mm",45,"Nettle, ground-ivy and bramble","July–September","Spreading; now common in parts of the south and London",
+  ["Once mostly found in the Channel Islands and south Devon, it has spread to London and beyond.","Its black and cream striped forewings hide bright orange or red hindwings.","It flies by day and night and loves buddleia."]],
+ ["vapourer","Vapourer","Orgyia antiqua","Erebidae","Common","about 35 mm (males)",30,"Many deciduous trees and shrubs","July–October","Common, even in cities",
+  ["Females are wingless and lay their eggs on the cocoon they came out of.","Rusty-orange males fly by day looking for females.","The caterpillar has four cream tufts on its back like little toothbrushes."]],
+ ["drinker","Drinker","Euthrix potatoria","Lasiocampidae","Common","45–65 mm",70,"Coarse grasses and reeds","July–August","Common in damp places",
+  ["It's named after its caterpillar, which was thought to drink dew from grass stems.","The caterpillar spends the winter part-grown and finishes feeding in spring.","Its cocoon is a long, yellowish case on a grass stem."]],
+ ["reddish-buff","Reddish Buff","Acosmetia caliginosa","Noctuidae","Rare","28–32 mm",30,"Saw-wort","June","Found only on the Isle of Wight; protected by law",
+  ["In Britain it now lives only on the Isle of Wight.","Its caterpillars eat only saw-wort.","It's one of a few moths protected under the Wildlife and Countryside Act."]],
+ ["magpie-moth","Magpie Moth","Abraxas grossulariata","Geometridae","Common","35–45 mm",30,"Gooseberry, currant, blackthorn and hawthorn","June–August","Widespread but declining",
+  ["Its bold black, white and yellow pattern warns birds that it tastes bad.","The caterpillar and pupa share the same warning colours.","It's a looper, moving with an arching walk."]],
+ ["broad-bordered-bee-hawk-moth","Broad-bordered Bee Hawk-moth","Hemaris fuciformis","Sphingidae","Rare","38–48 mm",45,"Honeysuckle","May–June","Scarce, in open woodland",
+  ["It looks remarkably like a bumblebee.","Its wings lose most of their scales on its first flight, leaving clear windows.","It feeds by day, hovering at flowers like bugle and rhododendron."]],
+ ["angle-shades","Angle Shades","Phlogophora meticulosa","Noctuidae","Common","45–50 mm",45,"Many low plants, including garden plants","Can be seen in every month","Very common",
+  ["It rests with its wings creased, looking just like a crumpled dead leaf.","It has been recorded in every month of the year.","Numbers are boosted by migrants from Europe."]],
+ ["silver-y","Silver Y","Autographa gamma","Noctuidae","Common","35–40 mm",35,"Many low plants","May–October","Abundant migrant",
+  ["It's named after the silver Y mark on each forewing.","Millions arrive from southern Europe and North Africa each year.","Radar studies show they fly high and pick winds to help them along."]],
+ ["large-yellow-underwing","Large Yellow Underwing","Noctua pronuba","Noctuidae","Common","50–60 mm",50,"Grasses and many low plants","June–October","Very common",
+  ["It's often the most common moth in garden moth traps.","Its yellow hindwings flash in flight to startle predators.","The caterpillar is a 'cutworm' that feeds at night at ground level."]],
+ ["cinnabar","Cinnabar","Tyria jacobaeae","Erebidae","Common","35–45 mm",30,"Ragwort","May–July","Common",
+  ["Its yellow and black caterpillars eat ragwort and store its toxins.","The adult's red and black wings warn predators to keep away.","It has been taken to other countries to help control ragwort."]],
+ ["garden-tiger","Garden Tiger","Arctia caja","Erebidae","Uncommon","50–78 mm",60,"Many plants, including nettle and dock","July–August","Widespread but declined sharply",
+  ["Its hairy caterpillar is the 'woolly bear'.","Numbers have fallen by around 90% since the late 1960s.","When disturbed it flashes orange hindwings and oozes a foul-tasting fluid."]],
+ ["buff-tip","Buff-tip","Phalera bucephala","Notodontidae","Common","55–68 mm",60,"Oak, birch, willow and lime","May–July","Common",
+  ["At rest it looks exactly like a snapped-off birch twig.","Its caterpillars feed together in groups and can strip whole branches.","The caterpillar pupates underground."]],
+ ["elephant-hawk-moth","Elephant Hawk-moth","Deilephila elpenor","Sphingidae","Common","45–60 mm",80,"Rosebay willowherb, bedstraws and fuchsia","May–August","Common",
+  ["Its caterpillar's trunk-like head gives it its name.","When alarmed, the caterpillar swells its front end to show snake-like eyespots.","The adult can see colour in very dim light."]],
+ ["hummingbird-hawk-moth","Hummingbird Hawk-moth","Macroglossum stellatarum","Sphingidae","Uncommon","40–45 mm",50,"Bedstraws","Spring to autumn","Regular migrant from southern Europe",
+  ["It hovers at flowers like a tiny hummingbird, with wings beating so fast they hum.","It drinks nectar through a long tongue while hovering.","It flies by day and is often seen in gardens in summer."]],
+ ["lime-hawk-moth","Lime Hawk-moth","Mimas tiliae","Sphingidae","Uncommon","70–80 mm",65,"Lime, elm, alder and birch","May–July","Common in the south, including towns",
+  ["It's often found in towns along lime-lined streets.","Adults can't feed and live for only a short time.","The caterpillar has a bluish horn on its tail end."]],
+ ["privet-hawk-moth","Privet Hawk-moth","Sphinx ligustri","Sphingidae","Uncommon","100–120 mm",100,"Privet, lilac and ash","June–July","Fairly common in southern England",
+  ["It's Britain's largest resident moth.","Its abdomen is striped pink and black.","The bright green caterpillar has purple and white diagonal stripes."]],
+ ["peppered-moth","Peppered Moth","Biston betularia","Geometridae","Common","45–62 mm",60,"Many trees and shrubs","May–August","Common",
+  ["During the Industrial Revolution, black forms took over in polluted cities: a classic example of natural selection.","As the air got cleaner, the pale peppered form became common again.","Its caterpillars look just like twigs."]],
+ ["brimstone-moth","Brimstone Moth","Opisthograptis luteolata","Geometridae","Common","33–42 mm",35,"Hawthorn and blackthorn","April–October","Very common",
+  ["It's bright sulphur-yellow with chestnut marks on the front edge of each wing.","The caterpillar is a twig-mimicking looper.","It's no relation of the Brimstone butterfly, though they share a colour."]],
+ ["emperor-moth","Emperor Moth","Saturnia pavonia","Saturniidae","Uncommon","55–85 mm",60,"Heather, bramble and blackthorn","April–May","Widespread on heaths and moors",
+  ["It's Britain's only member of the silk moth family.","Males can pick up a female's scent from a long way off with their feathery antennae.","Each wing carries a large eyespot."]],
+ ["six-spot-burnet","Six-spot Burnet","Zygaena filipendulae","Zygaenidae","Common","30–38 mm",22,"Bird's-foot-trefoil","June–August","Common in grassland",
+  ["Its red spots warn that it's poisonous: it contains cyanide compounds.","It flies by day and is often seen on knapweed and thistles.","Its papery cocoon is spun high up on a grass stem."]]
+];
+MOTH_ROWS.forEach(([id,name,sci,family,rarity,wing,len,food,season,status,facts])=>SPECIES.push({id,name,sci,family,rarity,wing,len,food,season,status,facts,kind:"moth"}));
+SPECIES.forEach(s=>{ if(!s.kind) s.kind="butterfly"; });
+/* Bees, wasps, beetles and ants from the Wildlife Trusts' lists.
+   Row: id, name, sci, family, rarity, adult body length, larva length (mm), larval food, season, status, facts, noun */
+const BEEWASP_ROWS = [
+ ["red-tailed-mason-bee","Red-tailed Mason Bee","Osmia bicolor","Megachilidae","Uncommon","8–10 mm",10,"Pollen and nectar packed into the nest by its mother","March–June","Local on chalk and limestone grassland in the south",
+  ["It builds its nest inside an empty snail shell.","After sealing in her eggs, the female hides the shell under a little pile of grass stems and twigs.","Females have a bright foxy-red tail."],"bee"],
+ ["bilberry-bumblebee","Bilberry Bumblebee","Bombus monticola","Apidae","Rare","11–16 mm",15,"Pollen and nectar, especially from bilberry","April–August","Uplands of the north and west; declining",
+  ["It's also called the mountain bumblebee.","Its orange-red tail stretches much further up its body than a Red-tailed Bumblebee's.","It relies on bilberry flowers on moorland in spring."],"bee"],
+ ["ashy-mining-bee","Ashy Mining Bee","Andrena cineraria","Andrenidae","Common","10–12 mm",10,"Pollen and nectar from spring flowers","March–June","Widespread",
+  ["It's black with two bands of ash-grey hair, so it's easy to recognise.","Each female digs her own burrow in bare soil, often alongside hundreds of others.","It's a solitary bee, so there are no workers or queen."],"bee"],
+ ["bee-wolf","Bee-wolf","Philanthus triangulum","Crabronidae","Uncommon","12–17 mm",18,"Honey bees, caught and paralysed by its mother","July–September","Once very rare; now locally common in the south",
+  ["Females hunt honey bees, paralyse them with a sting and carry them home to feed their larvae.","It was a great rarity in Britain until the 1980s, then spread fast.","Mothers smear the nest with helpful bacteria that protect their cocoons from mould."],"wasp"],
+ ["ivy-bee","Ivy Bee","Colletes hederae","Colletidae","Uncommon","10–13 mm",11,"Ivy pollen and nectar","September–November","A newcomer, spreading north",
+  ["It was first found in Britain in 2001, in Dorset.","It times its flight to match ivy flowering in autumn.","It nests in big groups in sandy banks and lawns."],"bee"],
+ ["buff-tailed-bumblebee","Buff-tailed Bumblebee","Bombus terrestris","Apidae","Common","11–22 mm",18,"Pollen and nectar","February–October; some colonies through winter","Very common",
+  ["Queens are among the first bees out in spring.","In southern towns some colonies now keep going all winter, feeding on winter-flowering garden plants.","Queens have a buff tail, but workers' tails look white."],"bee"],
+ ["hairy-footed-flower-bee","Hairy-footed Flower Bee","Anthophora plumipes","Apidae","Common","14–16 mm",14,"Pollen and nectar","February–June","Common in England and Wales",
+  ["Females are all black with orange pollen brushes, while males are gingery brown.","Males have long fringes of hair on their middle legs.","It hovers in front of flowers like lungwort before darting in."],"bee"],
+ ["heath-bumblebee","Heath Bumblebee","Bombus jonellus","Apidae","Uncommon","10–16 mm",14,"Pollen and nectar, often from heather","April–September","Widespread on heaths and moors",
+  ["It looks like a small Garden Bumblebee with a shorter face.","In the south it can fit two colony cycles into one year.","It's at home on heaths, moors and coasts."],"bee"],
+ ["tree-bumblebee","Tree Bumblebee","Bombus hypnorum","Apidae","Common","10–16 mm",14,"Pollen and nectar","March–July","Common; spread across Britain since 2001",
+  ["It arrived in Britain in 2001 and has spread to almost the whole country.","It has a ginger thorax, black abdomen and white tail.","It often nests in bird boxes and roof spaces."],"bee"],
+ ["early-bumblebee","Early Bumblebee","Bombus pratorum","Apidae","Common","9–14 mm",12,"Pollen and nectar","March–July","Very common",
+  ["It's one of the first bumblebees of spring, and its colonies finish by early summer.","It's small, with an orange-red tail.","It sometimes manages two colony cycles in one year."],"bee"],
+ ["garden-bumblebee","Garden Bumblebee","Bombus hortorum","Apidae","Common","11–22 mm",18,"Pollen and nectar, often from deep flowers","March–September","Common",
+  ["It has the longest tongue of any British bumblebee.","That long tongue lets it feed on deep flowers like foxgloves and honeysuckle.","It has a long face, three yellow bands and a white tail."],"bee"],
+ ["shrill-carder-bee","Shrill Carder Bee","Bombus sylvarum","Apidae","Rare","10–17 mm",14,"Pollen and nectar","April–September","One of Britain's rarest bumblebees",
+  ["It's named after its high-pitched buzz.","It survives in only a few areas, such as the Thames Estuary and South Wales.","It's pale grey-green with a dark band and an orange tail."],"bee"],
+ ["giant-horntail","Giant Horntail","Urocerus gigas","Siricidae","Uncommon","10–40 mm",35,"Wood of pines and other conifers","May–October","Widespread in conifer woods",
+  ["It looks fearsome, but it's harmless. The 'sting' is a tube for laying eggs.","Females drill into conifer wood to lay their eggs.","Its larvae tunnel through wood for two or three years."],"woodwasp"],
+ ["white-tailed-bumblebee","White-tailed Bumblebee","Bombus lucorum","Apidae","Common","11–22 mm",18,"Pollen and nectar","March–October","Very common",
+  ["It has lemon-yellow bands and a clean white tail.","It's really a group of near-identical species that need DNA tests to tell apart.","It's one of the first bumblebees to wake in spring."],"bee"],
+ ["red-tailed-bumblebee","Red-tailed Bumblebee","Bombus lapidarius","Apidae","Common","11–20 mm",16,"Pollen and nectar","March–October","Very common",
+  ["Queens and workers are black with a red tail. Males also have yellow faces.","It loves yellow flowers such as bird's-foot-trefoil.","It often nests under stones and in old walls."],"bee"],
+ ["common-carder-bee","Common Carder Bee","Bombus pascuorum","Apidae","Common","10–18 mm",15,"Pollen and nectar","March–November","Very common",
+  ["It's gingery-brown all over.","It's named for 'carding', combing moss and grass together to cover its nest.","It has one of the longest flying seasons of any bumblebee."],"bee"],
+ ["honey-bee","Honey Bee","Apis mellifera","Apidae","Common","12–20 mm",16,"Bee bread and royal jelly from nurse bees","All year (as a colony)","Common; mostly kept in hives",
+  ["A colony can hold tens of thousands of bees in summer.","Workers do a 'waggle dance' to tell others where to find flowers.","A larva fed only on royal jelly grows into a queen."],"bee"],
+ ["patchwork-leaf-cutter-bee","Patchwork Leaf-cutter Bee","Megachile centuncularis","Megachilidae","Common","10–12 mm",11,"Pollen and nectar","June–August","Common",
+  ["It cuts neat circles from rose leaves to build its nest cells.","It nests in holes in wood, walls and even plant pots.","It carries pollen on a brush of hairs under its belly, not on its legs."],"bee"],
+ ["red-mason-bee","Red Mason Bee","Osmia bicornis","Megachilidae","Common","8–12 mm",11,"Pollen and nectar","March–June","Common",
+  ["It builds a row of cells in hollow stems, sealing each one with a mud wall.","It's one of the most common visitors to bee hotels.","Females have two tiny horns on the face."],"bee"],
+ ["tawny-mining-bee","Tawny Mining Bee","Andrena fulva","Andrenidae","Common","10–12 mm",10,"Pollen and nectar","March–May","Common",
+  ["Females are covered in bright fox-red hair.","It digs nests in lawns, leaving little volcano-shaped mounds of soil.","It's a solitary bee and does no harm to lawns."],"bee"],
+ ["hornet","Hornet","Vespa crabro","Vespidae","Uncommon","25–35 mm",30,"Chewed-up insects brought by workers","April–November","Widespread in the south and spreading north",
+  ["It's Britain's largest social wasp.","It's usually less aggressive than the Common Wasp.","It builds a papery nest from chewed wood, often in hollow trees."],"wasp"],
+ ["common-wasp","Common Wasp","Vespula vulgaris","Vespidae","Common","12–17 mm",20,"Chewed-up insects brought by workers","April–October","Very common",
+  ["Workers feed the larvae insects, and the larvae give back sugary droplets in return.","Its nest is made of chewed wood pulp and can hold thousands of wasps.","Only newly mated queens survive the winter."],"wasp"],
+ ["ruby-tailed-wasp","Ruby-tailed Wasp","Chrysis ignita","Chrysididae","Uncommon","7–10 mm",8,"The larva of another bee or wasp","April–September","Widespread",
+  ["It has a metallic blue-green head and a ruby-red abdomen.","It lays eggs in other bees' and wasps' nests, and its larva eats the owner's larva.","If attacked, it rolls into a tight armoured ball."],"wasp"]
+];
+const BEETLE_ROWS = [
+ ["pea-leaf-weevil","Pea-leaf Weevil","Sitona lineatus","Curculionidae","Common","4–5 mm",6,"Root nodules of peas, beans and clovers","March–October","Common",
+  ["Adults nibble neat U-shaped notches in the edges of pea and bean leaves.","Its larvae feed underground on root nodules.","It's striped grey and brown."],"weevil"],
+ ["black-oil-beetle","Black Oil Beetle","Meloe proscarabaeus","Meloidae","Uncommon","10–30 mm",20,"Eggs and food stores in solitary bees' nests","March–June","Declined; now local",
+  ["Its tiny larvae climb flowers and hitch a ride on solitary bees to reach their nests.","When threatened, it oozes a toxic oil from its leg joints.","It can't fly, and the female's abdomen is swollen with eggs."],"beetle"],
+ ["acorn-weevil","Acorn Weevil","Curculio glandium","Curculionidae","Common","4–8 mm",8,"The inside of an acorn","April–July","Common in oak woods",
+  ["The female uses her very long snout to drill into an acorn and lay an egg.","The larva grows inside the acorn, then chews its way out.","Its snout can be as long as its body."],"weevil"],
+ ["king-diving-beetle","King Diving Beetle","Dytiscus dimidiatus","Dytiscidae","Rare","32–39 mm",60,"Aquatic insects and tadpoles","All year","Rare; fens and ditches, mostly in East Anglia",
+  ["It's one of Britain's largest water beetles.","It lives in a few fens and ditches, mostly in East Anglia.","Its larvae are fierce hunters that inject digestive juices into their prey."],"beetle"],
+ ["great-silver-water-beetle","Great Silver Water Beetle","Hydrophilus piceus","Hydrophilidae","Rare","34–48 mm",70,"Water snails","All year","Rare; grazing marsh ditches in the south",
+  ["It's one of Britain's largest beetles.","It carries a silvery bubble of air under its body to breathe underwater.","Adults eat water plants, but the larvae hunt snails."],"beetle"],
+ ["golden-bloomed-grey-longhorn","Golden-bloomed Grey Longhorn","Agapanthia villosoviridescens","Cerambycidae","Uncommon","10–22 mm",20,"The inside of thistle and hogweed stems","May–July","Local in southern England",
+  ["Its antennae are longer than its body and banded grey and black.","Its larvae bore inside the stems of thistles and hogweed.","Fine golden hairs give it a shimmering bloom."],"beetle"],
+ ["soldier-beetle","Soldier Beetle","Cantharis rustica","Cantharidae","Common","11–14 mm",20,"Small creatures in soil and leaf litter","May–July","Common",
+  ["Soldier beetles are named after their bright 'uniforms', like old soldiers' coats.","Adults hunt small insects on flowers.","The velvety larvae hunt in leaf litter and soil."],"beetle"],
+ ["red-breasted-carrion-beetle","Red-breasted Carrion Beetle","Oiceoptoma thoracicum","Silphidae","Uncommon","12–16 mm",18,"Dead animals and fly maggots","April–July","Widespread in woodland",
+  ["Its bright orange-red thorax stands out against its black wing cases.","It feeds on dead animals, fungi and the maggots it finds there.","It's one of nature's recyclers."],"beetle"],
+ ["black-snail-beetle","Black Snail Beetle","Phosphuga atrata","Silphidae","Common","10–15 mm",15,"Snails","April–October","Common",
+  ["Its narrow head lets it reach right inside snail shells.","Both the larvae and adults hunt snails.","It's often found under logs and stones."],"beetle"],
+ ["rosemary-beetle","Rosemary Beetle","Chrysolina americana","Chrysomelidae","Common","7–8 mm",8,"Rosemary, lavender and thyme","All year","Common in the south; spreading",
+  ["It has metallic green and purple stripes.","It became established in Britain in the 1990s, starting in London.","Despite its scientific name, it comes from southern Europe, not America."],"beetle"],
+ ["black-spotted-longhorn","Black-spotted Longhorn","Rhagium mordax","Cerambycidae","Common","13–22 mm",30,"Dead wood under the bark of broadleaved trees","May–July","Common in woodland",
+  ["Its larvae spend about two years under the bark of dead trees.","It pupates in an oval chamber made of wood fibres.","Adults visit flowers like hawthorn."],"beetle"],
+ ["black-and-yellow-longhorn","Black-and-yellow Longhorn","Rutpela maculata","Cerambycidae","Common","13–20 mm",25,"Rotting wood in stumps and logs","June–August","Common",
+  ["Its black and yellow pattern makes it look like a wasp.","It's often seen on bramble and umbellifer flowers.","Its larvae grow in rotting stumps for two or three years."],"beetle"],
+ ["swollen-thighed-beetle","Swollen-thighed Beetle","Oedemera nobilis","Oedemeridae","Common","8–10 mm",12,"The inside of plant stems","April–September","Common in the south",
+  ["Only males have the hugely swollen back legs.","It's metallic green and feeds on pollen.","Its wing cases don't meet at the tips."],"beetle"],
+ ["tansy-beetle","Tansy Beetle","Chrysolina graminis","Chrysomelidae","Rare","7–11 mm",10,"Tansy","April–September","Rare; mainly along the River Ouse near York",
+  ["It's known as the 'jewel of York' for its shining green colour.","In Britain it lives mainly on a short stretch of the River Ouse.","It rarely flies, so it struggles to reach new patches of tansy."],"beetle"],
+ ["noble-chafer","Noble Chafer","Gnorimus nobilis","Scarabaeidae","Rare","15–20 mm",35,"Decaying heartwood of old fruit trees","June–August","Rare; old orchards",
+  ["It lives in old traditional orchards.","Its larvae grow in the rotting heartwood of old plum, apple and cherry trees.","The metallic green adults feed on elderflower."],"beetle"],
+ ["violet-click-beetle","Violet Click Beetle","Limoniscus violaceus","Elateridae","Rare","10–12 mm",20,"Wood mould in hollow ancient trees","May–June","Very rare; protected by law",
+  ["It's one of Britain's rarest beetles, known from just a few sites.","Its larvae live in wood mould at the base of ancient hollow beech and ash trees.","It's protected by law."],"beetle"],
+ ["whirligig-beetle","Whirligig Beetle","Gyrinus substriatus","Gyrinidae","Common","5–7 mm",12,"Small creatures underwater","All year","Common on ponds and slow rivers",
+  ["It spins around on the water's surface in groups.","Each eye is split in two: one half sees above the water and the other half below.","It senses prey from the ripples they make."],"beetle"],
+ ["great-diving-beetle","Great Diving Beetle","Dytiscus marginalis","Dytiscidae","Common","27–35 mm",60,"Tadpoles, insects and small fish","All year","Common in ponds",
+  ["It carries a bubble of air under its wing cases to breathe underwater.","Its larvae are ferocious hunters with hollow jaws that inject digestive juices.","Adults fly between ponds at night."],"beetle"],
+ ["green-tortoise-beetle","Green Tortoise Beetle","Cassida viridis","Chrysomelidae","Uncommon","7–10 mm",8,"Mints and woundworts","April–September","Widespread in damp places",
+  ["Its flattened shell hides its legs and head like a tortoise.","Its larvae carry a shield of their own droppings and shed skins on a tail fork.","When threatened, it clamps flat onto a leaf."],"beetle"],
+ ["bloody-nosed-beetle","Bloody-nosed Beetle","Timarcha tenebricosa","Chrysomelidae","Common","11–18 mm",15,"Bedstraws","March–October","Widespread in the south",
+  ["When threatened, it releases a drop of bright red, foul-tasting fluid from its mouth.","It can't fly because its wing cases are fused together.","It's Britain's largest leaf beetle."],"beetle"],
+ ["wasp-beetle","Wasp Beetle","Clytus arietis","Cerambycidae","Common","7–15 mm",15,"Dead wood","May–July","Common",
+  ["It copies a wasp, with black and yellow bands and jerky movements.","It's completely harmless.","Its larvae bore into dead branches and fence posts."],"beetle"],
+ ["musk-beetle","Musk Beetle","Aromia moschata","Cerambycidae","Uncommon","13–34 mm",35,"Living willow wood","June–August","Local in damp places",
+  ["It gives off a sweet musky smell from a special gland.","It's metallic green-blue with very long antennae.","Its larvae bore into willows for about three years."],"beetle"],
+ ["deathwatch-beetle","Deathwatch Beetle","Xestobium rufovillosum","Ptinidae","Uncommon","6–9 mm",11,"Old oak wood, often in buildings","March–June","Local in old woods and buildings",
+  ["It taps its head on wood to call for a mate, a sound once taken as an omen of death.","Its larvae can tunnel through old timbers for up to ten years.","It has damaged the roofs of famous old buildings, including Westminster Hall."],"beetle"],
+ ["22-spot-ladybird","22-spot Ladybird","Psyllobora vigintiduopunctata","Coccinellidae","Common","3–4 mm",6,"Mildew on leaves","April–September","Common",
+  ["It eats mildew, not aphids.","It's bright lemon yellow with 22 black spots.","It's one of the smallest British ladybirds."],"ladybird"],
+ ["14-spot-ladybird","14-spot Ladybird","Propylea quatuordecimpunctata","Coccinellidae","Common","3.5–4.5 mm",7,"Aphids","April–September","Common",
+  ["Its black spots often join up into a squarish chequered pattern.","It eats aphids.","It's yellow, not red."],"ladybird"],
+ ["harlequin-ladybird","Harlequin Ladybird","Harmonia axyridis","Coccinellidae","Common","5–8 mm",11,"Aphids, and other ladybirds' eggs and larvae","All year","Very common; an invasive species",
+  ["It arrived in Britain in 2004 and spread faster than almost any invasive insect.","It comes in many colours, with anything from no spots to 21.","It outcompetes native ladybirds and even eats their young."],"ladybird"],
+ ["orange-ladybird","Orange Ladybird","Halyzia sedecimguttata","Coccinellidae","Uncommon","4.5–6 mm",9,"Mildew on sycamore and ash leaves","April–October","Widespread and increasing",
+  ["It's orange with white spots.","It eats mildew on sycamore and ash leaves.","It's often attracted to lights at night."],"ladybird"],
+ ["7-spot-ladybird","7-spot Ladybird","Coccinella septempunctata","Coccinellidae","Common","5–8 mm",10,"Aphids","March–October","Very common",
+  ["One larva can eat hundreds of aphids before it pupates.","Adults hibernate together in groups.","It's Britain's most familiar ladybird."],"ladybird"],
+ ["eyed-ladybird","Eyed Ladybird","Anatis ocellata","Coccinellidae","Uncommon","8–9 mm",14,"Aphids on conifers","April–September","Widespread in conifer woods",
+  ["It's Britain's largest ladybird.","Each black spot is ringed with cream, like an eye.","It lives on conifers and eats aphids."],"ladybird"],
+ ["2-spot-ladybird","2-spot Ladybird","Adalia bipunctata","Coccinellidae","Common","4–5 mm",8,"Aphids","March–October","Common but declining",
+  ["It comes in red with two black spots, or black with red spots.","It has declined since the Harlequin Ladybird arrived.","It often hibernates inside houses."],"ladybird"],
+ ["red-headed-cardinal-beetle","Red-headed Cardinal Beetle","Pyrochroa serraticornis","Pyrochroidae","Common","14–18 mm",25,"Small insects under the bark of dead trees","May–July","Common in England and Wales",
+  ["It's bright red all over, including its head.","Its flat larvae live under the bark of dead trees for two or three years, hunting other insects.","It's named after the red robes of cardinals."],"beetle"],
+ ["glow-worm","Glow-worm","Lampyris noctiluca","Lampyridae","Uncommon","15–25 mm (female)",20,"Snails and slugs","June–August","Local; declining",
+  ["Wingless females glow green at night to attract flying males.","Its larvae eat snails, injecting them with digestive juice first.","The larvae can glow too."],"beetle"],
+ ["common-red-soldier-beetle","Common Red Soldier Beetle","Rhagonycha fulva","Cantharidae","Common","8–10 mm",15,"Small creatures in soil","June–August","Very common",
+  ["It's often seen in pairs on hogweed and other umbellifer flowers in summer.","Adults hunt small insects on flowers.","Its larvae live in soil and eat small slugs and snails."],"beetle"],
+ ["coppery-click-beetle","Coppery Click Beetle","Ctenicera cuprea","Elateridae","Uncommon","11–16 mm",25,"Roots in grassland soil","May–July","Widespread in upland grassland",
+  ["Flipped onto its back, it springs into the air with a loud click.","It has a metallic coppery sheen.","Its larvae are 'wireworms' that live in grassland soil."],"beetle"],
+ ["rose-chafer","Rose Chafer","Cetonia aurata","Scarabaeidae","Uncommon","14–20 mm",40,"Rotting wood and compost","May–September","Widespread in the south",
+  ["It's metallic green and flies with its wing cases closed.","Its larvae often live in compost heaps, where they help break things down.","Adults eat flowers, especially roses."],"beetle"],
+ ["common-cockchafer","Common Cockchafer","Melolontha melolontha","Scarabaeidae","Common","20–30 mm",45,"Plant roots underground","May–June","Common",
+  ["It's also called the maybug, and swarms around lights in May.","Its larvae live underground for three or four years.","Males have bigger fan-shaped antennae than females."],"beetle"],
+ ["minotaur-beetle","Minotaur Beetle","Typhaeus typhoeus","Geotrupidae","Uncommon","12–20 mm",30,"Rabbit and sheep dung stored by its parents","All year; mostly autumn to spring","Widespread on sandy heaths",
+  ["Males have three forward-pointing horns.","Pairs dig burrows over a metre deep and stock them with dung for their young.","Both parents work together on the nest."],"beetle"],
+ ["rhinoceros-beetle","Rhinoceros Beetle","Sinodendron cylindricum","Lucanidae","Uncommon","12–16 mm",30,"Rotting wood","May–August","Widespread in old woods",
+  ["Males have a single curved horn on the head.","It's related to the Stag Beetle.","Its larvae spend two or three years in rotting wood."],"beetle"],
+ ["lesser-stag-beetle","Lesser Stag Beetle","Dorcus parallelipipedus","Lucanidae","Common","18–32 mm",40,"Rotting wood","May–September","Common in the south",
+  ["It's matt black and lacks the big antlers of the Stag Beetle.","Adults can live for two or three years.","Its larvae grow in decaying stumps and logs."],"beetle"],
+ ["stag-beetle","Stag Beetle","Lucanus cervus","Lucanidae","Rare","25–75 mm",110,"Rotting wood underground","May–August","Local in the south; protected",
+  ["It's Britain's largest land beetle. The male's 'antlers' are giant jaws.","Its larvae live underground in rotting wood for up to six years.","Adults live for only a few weeks in summer."],"beetle"],
+ ["common-sexton-beetle","Common Sexton Beetle","Nicrophorus vespilloides","Silphidae","Common","10–18 mm",20,"Dead animals, fed to it by its parents","April–October","Common",
+  ["It buries dead mice and birds to feed its young.","Parents feed the larvae themselves, which is rare among insects.","It can smell a dead animal from a long way off."],"beetle"],
+ ["violet-ground-beetle","Violet Ground Beetle","Carabus violaceus","Carabidae","Common","20–30 mm",35,"Slugs, snails and other small creatures","All year; most active in summer","Very common",
+  ["It hunts slugs and snails at night, so gardeners love it.","Its black body has violet edges that shine in the light.","It can't fly, but it runs fast."],"beetle"],
+ ["devils-coach-horse","Devil's Coach Horse","Ocypus olens","Staphylinidae","Common","20–32 mm",30,"Small creatures in soil and leaf litter","All year; most active in autumn","Common",
+  ["When threatened, it raises its tail like a scorpion.","It can release a foul smell from glands in its tail.","Old folklore linked it with the devil."],"beetle"],
+ ["green-tiger-beetle","Green Tiger Beetle","Cicindela campestris","Carabidae","Uncommon","12–15 mm",25,"Insects grabbed from its burrow","April–July","Widespread on heaths and dunes",
+  ["It's one of the fastest-running insects in Britain.","Its larva waits at the top of a burrow, with its head plugging the entrance, to grab passing insects.","It's metallic green with cream spots."],"beetle"]
+];
+const ANT_ROWS = [
+ ["narrow-headed-ant","Narrow-headed Ant","Formica exsecta","Formicidae","Rare","4–7 mm",6,"Insects and honeydew, fed to it by workers","April–September","Very rare; Devon and the Scottish Highlands",
+  ["It's one of Britain's rarest ants.","It has a notch in the back of its head.","It builds small mounds of grass and plant debris."],"ant"],
+ ["southern-wood-ant","Southern Wood Ant","Formica rufa","Formicidae","Uncommon","6–10 mm",8,"Insects and honeydew, fed to it by workers","March–October","Local in woods",
+  ["It builds huge mound nests of pine needles that can hold hundreds of thousands of ants.","It sprays formic acid to defend itself.","It 'farms' aphids for their sugary honeydew."],"ant"],
+ ["red-ant","Red Ant","Myrmica rubra","Formicidae","Common","4–5 mm",5,"Insects and honeydew, fed to it by workers","April–October","Very common",
+  ["Unlike the Black Garden Ant, it can sting.","Its colonies can have many queens.","It nests under stones and in soil in damp places."],"ant"],
+ ["yellow-meadow-ant","Yellow Meadow Ant","Lasius flavus","Formicidae","Common","2–4 mm",4,"Honeydew from root aphids, fed to it by workers","April–October","Very common in old grassland",
+  ["Its grassy anthills in old meadows can be centuries old.","It spends almost all its life underground, farming aphids on grass roots.","Green woodpeckers love to eat it."],"ant"],
+ ["black-garden-ant","Black Garden Ant","Lasius niger","Formicidae","Common","3–5 mm",5,"Insects and honeydew, fed to it by workers","April–October","Very common",
+  ["On warm, humid summer days, winged queens and males swarm out together on 'flying ant day'.","Queens can live for over 20 years in captivity.","It farms aphids for their honeydew."],"ant"]
+];
+[[BEEWASP_ROWS,"beewasp"],[BEETLE_ROWS,"beetle"],[ANT_ROWS,"ant"]].forEach(([rows,kind])=>rows.forEach(([id,name,sci,family,rarity,wing,len,food,season,status,facts,noun])=>SPECIES.push({id,name,sci,family,rarity,wing,len,food,season,status,facts,kind,noun})));
+
+const FLY_ROWS = [
+ ["bat-winged-phasia","Bat-winged Phasia","Phasia hemiptera","Tachinidae","Uncommon","7–12 mm",10,"The inside of a living shieldbug","July–September","Local in southern England",
+  ["Males have broad, patterned wings a bit like a bat's.","Its larva grows inside a shieldbug, eating it from the inside.","It's often seen on hogweed and other umbellifer flowers."],"fly"],
+ ["ferruginous-bee-grabber","Ferruginous Bee-grabber","Sicus ferrugineus","Conopidae","Common","8–13 mm",10,"The inside of a living bumblebee","June–September","Common",
+  ["It grabs bumblebees in mid-air and lays an egg inside them.","Its larva eats the bee from the inside, then pupates in the bee's empty body.","It's rusty-orange, with an abdomen curled under like a hook."],"fly"],
+ ["the-footballer","The Footballer","Helophilus pendulus","Syrphidae","Common","10–11 mm",15,"Rotting matter in muddy water","April–October","Very common",
+  ["Its striped thorax looks like a football shirt.","Its larvae live in muddy water and breathe through a long tail tube, like a snorkel.","It often basks on leaves in gardens."],"hoverfly"],
+ ["bumblebee-mimic-hoverfly","Bumblebee Mimic Hoverfly","Volucella bombylans","Syrphidae","Common","11–15 mm",18,"Debris and dead bees in bumblebee nests","May–August","Common",
+  ["It comes in different colour forms, each copying a different bumblebee.","It lays eggs in bumblebee nests, where its larvae clean up debris and dead bees.","Like all hoverflies, it can't sting."],"hoverfly"],
+ ["batman-hoverfly","Batman Hoverfly","Myathropa florea","Syrphidae","Common","10–14 mm",18,"Rotting matter in water-filled tree holes","May–October","Very common",
+  ["The black marking on its thorax looks like the Batman logo.","Its larvae live in water-filled rot holes in trees, breathing through a tail snorkel.","It's a common visitor to garden flowers."],"hoverfly"],
+ ["narcissus-bulb-fly","Narcissus Bulb Fly","Merodon equestris","Syrphidae","Common","11–13 mm",18,"Daffodil and other bulbs","April–July","Common, especially in gardens",
+  ["Its larvae eat daffodil bulbs from the inside.","It mimics bumblebees, and comes in several colour forms.","It arrived from continental Europe in the 1800s, carried in imported bulbs."],"hoverfly"],
+ ["drone-fly","Drone-fly","Eristalis tenax","Syrphidae","Common","13–15 mm",20,"Rotting matter in stagnant water","All year; most often March–November","Very common",
+  ["It looks just like a male honey bee, called a drone.","Its 'rat-tailed maggot' larvae live in foul water and breathe through a telescopic tail.","An ancient myth said bees were born from dead oxen. The 'bees' were probably drone-flies."],"hoverfly"],
+ ["hornet-mimic-hoverfly","Hornet Mimic Hoverfly","Volucella zonaria","Syrphidae","Uncommon","16–22 mm",22,"Debris in wasp nests","May–October","Local in the south; spreading",
+  ["It's Britain's largest hoverfly.","It arrived from Europe in the 1940s and has been spreading north.","Its larvae live in wasp nests, eating debris and dead wasps."],"hoverfly"],
+ ["common-banded-hoverfly","Common Banded Hoverfly","Syrphus ribesii","Syrphidae","Common","9–12 mm",12,"Aphids","April–November","Very common",
+  ["Its larvae eat huge numbers of aphids.","Males hover in sunny spots and give off a high-pitched whine.","It has bold black and yellow bands."],"hoverfly"],
+ ["heineken-fly","Heineken Fly","Rhingia campestris","Syrphidae","Common","7–11 mm",12,"Cow dung","April–October","Common",
+  ["Its long snout reaches nectar deep in flowers, which earned it a nickname from an old Heineken advert.","Its larvae grow up in cowpats.","It has a bright orange abdomen."],"hoverfly"],
+ ["marmalade-fly","Marmalade Fly","Episyrphus balteatus","Syrphidae","Common","9–12 mm",12,"Aphids","All year; most in summer","Britain's commonest hoverfly",
+  ["It's the commonest hoverfly in Britain.","Radar studies suggest billions of hoverflies, mostly this species, migrate over southern Britain each year.","It can crush pollen grains to eat them, which few flies can do."],"hoverfly"],
+ ["hornet-robberfly","Hornet Robberfly","Asilus crabroniformis","Asilidae","Rare","18–28 mm",30,"Beetle larvae in soil under dung","July–October","Rare; grazed grassland in the south",
+  ["It's Britain's largest robberfly.","It catches insects in mid-air and stabs them with its mouthparts.","Its larvae live in soil under dung, probably hunting dung beetle larvae."],"robberfly"],
+ ["dark-edged-bee-fly","Dark-edged Bee-fly","Bombylius major","Bombyliidae","Common","8–12 mm",10,"Solitary bee larvae and their food","March–June","Common in the south",
+  ["It's furry, with a long beak-like proboscis, and hovers at spring flowers.","The female flicks her eggs towards the entrances of solitary bee nests.","Its larvae eat the bee larvae and their food stores."],"bee-fly"],
+ ["twin-lobed-deer-fly","Twin-lobed Deer-fly","Chrysops relictus","Tabanidae","Uncommon","8–11 mm",20,"Small creatures in wet mud","June–September","Widespread near wetlands",
+  ["It has brilliant iridescent green and gold eyes.","Females bite to take blood.","Its larvae live in mud at the edges of ponds and bogs."],"horsefly"],
+ ["notch-horned-cleg","Notch-horned Cleg","Haematopota pluvialis","Tabanidae","Common","8–11 mm",20,"Small creatures in damp soil","May–September","Very common",
+  ["Females land silently and give a painful bite.","It's most active in warm, humid, thundery weather.","Its eyes are patterned with zigzag bands."],"horsefly"],
+ ["downlooker-snipefly","Downlooker Snipefly","Rhagio scolopaceus","Rhagionidae","Common","10–15 mm",15,"Small creatures in soil and leaf litter","May–August","Common",
+  ["It rests head-down on tree trunks and fence posts.","It hunts small insects.","Its larvae hunt in soil and leaf litter."],"fly"],
+ ["broad-centurion","Broad Centurion","Chloromyia formosa","Stratiomyidae","Common","7–9 mm",12,"Compost, dung and rotting matter","May–August","Common",
+  ["It's metallic green, and females have a violet-blue abdomen.","It's a soldierfly.","Its larvae live in compost heaps and help recycle waste."],"soldierfly"],
+ ["st-marks-fly","St Mark's Fly","Bibio marci","Bibionidae","Common","10–12 mm",15,"Roots and rotting matter in soil","April–May","Very common",
+  ["It appears around St Mark's Day, 25 April.","Males fly slowly with their legs dangling.","Its larvae live in groups in the soil."],"fly"],
+ ["daddy-longlegs","Daddy Longlegs","Tipula paludosa","Tipulidae","Common","15–25 mm",35,"Grass roots","August–October","Very common",
+  ["Its larvae are 'leatherjackets', which eat grass roots.","Adults hardly feed at all.","It's harmless. The idea that it's venomous is a myth."],"cranefly"]
+];
+const OTHER_ROWS = [
+ ["snow-flea","Snow Flea","Boreus hyemalis","Boreidae","Uncommon","3–5 mm",6,"Moss","October–March","Widespread but easily missed",
+  ["It isn't a flea at all. It's a wingless relative of scorpionflies.","It's active in winter, and can even be seen walking on snow.","It moves around by jumping."],"snow flea"],
+ ["land-caddis","Land Caddis","Enoicyla pusilla","Limnephilidae","Rare","5–8 mm",8,"Dead leaves","October–November","Rare; a few woods in the West Midlands",
+  ["It's Britain's only caddisfly whose larvae live on land, not in water.","Its larvae build portable cases from sand grains and live in leaf litter.","Females are wingless."],"caddisfly"],
+ ["caddisfly","Caddisfly","Trichoptera","Trichoptera","Common","5–30 mm",25,"Plants and small creatures underwater","Spring to autumn","Very common near water",
+  ["Its larvae build portable cases from sand, stones, twigs or shells, glued together with silk.","The larva pupates inside its sealed-up case.","Britain has nearly 200 species of caddisfly."],"caddisfly"],
+ ["scorpionfly","Scorpionfly","Panorpa communis","Panorpidae","Common","about 15 mm",20,"Dead insects in leaf litter","May–August","Common",
+  ["The male's tail curls up like a scorpion's, but it's harmless.","It steals dead insects from spiders' webs.","Males offer females drops of saliva as a gift."],"scorpionfly"],
+ ["alder-fly","Alder Fly","Sialis lutaria","Sialidae","Common","14–20 mm",25,"Small creatures in pond mud","April–June","Common near water",
+  ["Its larvae hunt in the mud of ponds and rivers for up to two years.","The larva leaves the water to pupate in soil on the bank.","Adults rest on waterside plants with their wings folded like a roof."],"alderfly"],
+ ["common-green-lacewing","Common Green Lacewing","Chrysoperla carnea","Chrysopidae","Common","about 10 mm",8,"Aphids","All year; adults hibernate","Very common",
+  ["Its larvae are fierce 'aphid lions' that eat aphids by the hundred.","Adults turn pinkish-brown in winter and often hibernate inside houses.","Its eggs sit on top of thin silk stalks."],"lacewing"],
+ ["cat-flea","Cat Flea","Ctenocephalides felis","Pulicidae","Common","1–3 mm",5,"Dried blood in adult flea droppings, and other debris","All year","Very common",
+  ["Most fleas found on cats and dogs in Britain are cat fleas.","It can jump well over a hundred times its own body length.","Its pupa can wait for months in its cocoon until vibrations tell it a host is near."],"flea"]
+];
+[[FLY_ROWS,"fly"],[OTHER_ROWS,"other"]].forEach(([rows,kind])=>rows.forEach(([id,name,sci,family,rarity,wing,len,food,season,status,facts,noun])=>SPECIES.push({id,name,sci,family,rarity,wing,len,food,season,status,facts,kind,noun})));
+
+/* Categories. Each has equal odds when an egg is chosen. young/pupa words, size label and larva facts differ by group. */
+const LARVA_FACTS = [
+  null,
+  "Insects that go from egg to larva to pupa to adult are said to have complete metamorphosis. Most insect species grow up this way.",
+  "A larva's skin can't stretch. To grow, it sheds the old one and wriggles out bigger. This is called moulting.",
+  "Each stage between moults is called an instar. Many larvae go through three to five.",
+  "Larvae and adults often eat completely different food, so they never compete with each other.",
+  "Like all insects, larvae breathe through tiny holes along their sides called spiracles.",
+  "Many larvae have no legs or eyes at all, because they grow up surrounded by their food.",
+  "Some larvae take years to grow. A Stag Beetle larva can live in rotting wood for up to six years.",
+  "When it's fully grown, a larva stops eating and gets ready to pupate.",
+  "Inside the pupa, the larva's body is rebuilt into an adult, with legs, wings and new mouthparts."
+];
+const KINDS = {
+  butterfly:{label:"Butterflies",young:"caterpillar",youngs:"caterpillars",pupa:"chrysalis",pupaVerb:"make a chrysalis",size:"Wingspan",food:"Caterpillar food",facts:STAGE_FACTS,pupaFact:null},
+  moth:{label:"Moths",young:"caterpillar",youngs:"caterpillars",pupa:"pupa",pupaVerb:"pupate",size:"Wingspan",food:"Caterpillar food",facts:STAGE_FACTS,pupaFact:MOTH_PUPA_FACT},
+  beewasp:{label:"Bees & wasps",young:"larva",youngs:"larvae",pupa:"pupa",pupaVerb:"pupate",size:"Body length",food:"Larva food",facts:LARVA_FACTS,pupaFact:null},
+  beetle:{label:"Beetles",young:"larva",youngs:"larvae",pupa:"pupa",pupaVerb:"pupate",size:"Body length",food:"Larva food",facts:LARVA_FACTS,pupaFact:null},
+  ant:{label:"Ants",young:"larva",youngs:"larvae",pupa:"pupa",pupaVerb:"pupate",size:"Body length",food:"Larva food",facts:LARVA_FACTS,pupaFact:null},
+  fly:{label:"Flies",young:"larva",youngs:"larvae",pupa:"pupa",pupaVerb:"pupate",size:"Body length",food:"Larva food",facts:LARVA_FACTS,pupaFact:"Many flies pupate inside their own last larval skin, which hardens into a protective case called a puparium."},
+  other:{label:"Other insects",young:"larva",youngs:"larvae",pupa:"pupa",pupaVerb:"pupate",size:"Body length",food:"Larva food",facts:LARVA_FACTS,pupaFact:null}
+};
+SPECIES.forEach(s=>{ if(!s.noun) s.noun=s.kind; });
+/* ---------- seasons ---------- */
+/* Turns each species' "when to see it" text into a set of months (0 = January). Month ranges like
+   "March–May" can wrap the year ("October–February"); "All year" means every month; with no month
+   names, season words are used (spring = Mar–May, summer = Jun–Aug, autumn = Sep–Nov, winter = Dec–Feb). */
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const SEASONS={spring:[2,3,4],summer:[5,6,7],autumn:[8,9,10],winter:[11,0,1]};
+function parseMonths(text){
+  const t=text.toLowerCase(), set=new Set();
+  if(/all year|every month/.test(t)){ for(let m=0;m<12;m++) set.add(m); return set; }
+  const mi=w=>MONTHS.findIndex(m=>m.toLowerCase()===w);
+  const re=/(january|february|march|april|may|june|july|august|september|october|november|december)(?:\s*–\s*(january|february|march|april|may|june|july|august|september|october|november|december))?/g;
+  let r; while((r=re.exec(t))){ const a=mi(r[1]), b=r[2]?mi(r[2]):a; for(let m=a;;m=(m+1)%12){ set.add(m); if(m===b) break; } }
+  if(set.size) return set;
+  const span=t.match(/(spring|summer|autumn|winter) to (spring|summer|autumn|winter)/);
+  if(span){ const order=["winter","spring","summer","autumn"]; let i=order.indexOf(span[1]); const j=order.indexOf(span[2]);
+    for(;;i=(i+1)%4){ SEASONS[order[i]].forEach(m=>set.add(m)); if(i===j) break; } return set; }
+  Object.keys(SEASONS).forEach(k=>{ if(t.includes(k)) SEASONS[k].forEach(m=>set.add(m)); });
+  if(t.includes("late summer")){ set.delete(5); set.delete(6); }
+  return set;
+}
+SPECIES.forEach(s=>{ s.months=parseMonths(s.season); });
+const currentMonth=()=> (state.monthOverride!=null ? state.monthOverride : new Date(now()).getMonth());
+const inSeason=sp=>sp.months.has(currentMonth());
+const IN_SEASON_WEIGHT=3;   /* an in-season species is 3x as likely to be picked as an out-of-season one */
+const LEAF_ICON='<svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><path d="M2 14C2 7 7 2 14 2c0 7-5 12-12 12Z" fill="currentColor"/><path d="M3 13 10 6" stroke="var(--surface)" stroke-width="1.3"/></svg>';
+const seasonChip=sp=> inSeason(sp) ? `<span class="chip season">${LEAF_ICON}In season now!</span>` : "";
+function weightedPick(list){
+  const w=list.map(s=>inSeason(s)?IN_SEASON_WEIGHT:1), total=w.reduce((a,b)=>a+b,0);
+  let r=Math.random()*total; for(let i=0;i<list.length;i++){ r-=w[i]; if(r<0) return list[i]; } return list[list.length-1];
+}
+
+
+const SP = Object.fromEntries(SPECIES.map(s=>[s.id,s]));
+const RARITY_CHIP = {Common:"ok",Uncommon:"accent",Rare:"rare"};
+/* Pick a category (butterfly, moth, and any added later) with equal odds, then a species of the book's tier
+   that hasn't been collected yet, with species in season this month 3x as likely (see weightedPick). If that category has none left in this tier, try the other categories;
+   only once every category's tier is complete can a repeat hatch. */
+const pickOne=a=>a[Math.floor(Math.random()*a.length)];
+function pickSpecies(tier){
+  const have=new Set(state.collection.map(c=>c.species));
+  state.books.forEach(b=>have.add(b.species)); state.waiting.forEach(w=>have.add(w.species));
+  const kinds=[...new Set(SPECIES.map(s=>s.kind))];
+  for(let i=kinds.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[kinds[i],kinds[j]]=[kinds[j],kinds[i]];} /* fair shuffle */
+  for(const k of kinds){
+    const fresh=SPECIES.filter(s=>s.kind===k && s.rarity===tier && !have.has(s.id));
+    if(fresh.length) return weightedPick(fresh).id;
+  }
+  return weightedPick(SPECIES.filter(s=>s.rarity===tier)).id;
+}
+
+/* ---------- state ---------- */
+const KEY = "bookworm-proto-v1";
+/* Saved data: books[] (status "reading" or "frozen"), waiting[] larvae from abandoned books, collection[] of raised adults. */
+function freshState(){ return {books:[],waiting:[],collection:[],seen:{},achievements:{},offset:0}; }
+let state = load() || freshState();
+if(state.book){ if(!state.book.species) state.book.species="monarch"; state.books=[{...state.book,id:"b1",status:"reading"}]; }
+delete state.book;
+state.books=state.books||[]; state.waiting=state.waiting||[]; state.collection=state.collection||[]; state.seen=state.seen||{}; state.achievements=state.achievements||{};
+function load(){try{const s=localStorage.getItem(KEY);return s?JSON.parse(s):null}catch(e){return null}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+const now = ()=>Date.now()+(state.offset||0);
+const $ = id=>document.getElementById(id);
+const esc = s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function tierFor(p){ if(p>=800) return "Rare"; if(p>=450) return "Uncommon"; return "Common"; }
+function pct(b){ return b.mode==="pages" ? Math.min(100,b.progress/b.pages*100) : Math.min(100,b.progress); }
+function stageFor(p){ if(p>=100) return 10; return Math.min(9,Math.floor(p/10)); }
+function lengthMm(stage,sp){ const max=(SP[sp]||SP.monarch).len; return Math.round(2+Math.min(stage,8)*(max-2)/8); }
+function moodFor(b){
+  if(b.status==="frozen") return {k:"content",label:"Frozen",cls:"frozen"};
+  const d=(now()-b.lastFed)/DAY;
+  if(d>=5) return {k:"xhungry",label:"Extremely hungry",cls:"danger"};
+  if(d>=2) return {k:"hungry",label:"Hungry",cls:"warn"};
+  return {k:"content",label:"Well fed",cls:"ok"};
+}
+
+/* ---------- art ---------- */
+let uid=0;
+function caterpillarSVG(stage,mood){
+  const id="c"+(++uid);
+  const L=70+stage*24, H=22+stage*3.6, cx=160, gy=150;
+  const x0=cx-L/2, y0=gy-H;
+  const P=Math.max(12,H*0.78);
+  let stripes="";
+  const pat=[["#f2c230",.24],["#1b1b1b",.16],["#fbfbf4",.44],["#1b1b1b",.16]];
+  for(let x=x0;x<x0+L;x+=P){let xx=x;for(const [c,w] of pat){stripes+=`<rect x="${xx.toFixed(1)}" y="${y0}" width="${(P*w+.4).toFixed(1)}" height="${H}" fill="${c}"/>`;xx+=P*w;}}
+  const r=H*0.5, hx=x0+L-r*0.55, hy=y0+H*0.48;
+  let legs="";
+  for(let i=0;i<6;i++){const lx=x0+H*0.55+i*(L-H*1.6)/5;legs+=`<ellipse cx="${lx.toFixed(1)}" cy="${gy+1}" rx="${(H*.13).toFixed(1)}" ry="${(H*.1).toFixed(1)}" fill="#1b1b1b"/>`;}
+  const ft=`M${hx-r*0.35} ${y0+2} Q${hx-r*0.2} ${y0-H*0.7} ${hx-r*1.1} ${y0-H*0.95}`;
+  const ft2=`M${hx-r*0.75} ${y0+2} Q${hx-r*0.7} ${y0-H*0.6} ${hx-r*1.5} ${y0-H*0.8}`;
+  const bt=`M${x0+H*0.45} ${y0+2} Q${x0+H*0.3} ${y0-H*0.35} ${x0-H*0.05} ${y0-H*0.4}`;
+  const sw=Math.max(1.4,H*0.07);
+  const ex=hx+r*0.15, ey=hy-r*0.12, er=r*0.2;
+  let face;
+  if(mood==="content") face=`<circle cx="${ex}" cy="${ey}" r="${er}" fill="#fff"/><circle cx="${ex+er*.25}" cy="${ey}" r="${er*.5}" fill="#1b1b1b"/><path d="M${hx-r*0.05} ${hy+r*0.35} Q${hx+r*0.3} ${hy+r*0.6} ${hx+r*0.6} ${hy+r*0.3}" stroke="#f2c230" stroke-width="${sw*.8}" fill="none" stroke-linecap="round"/>`;
+  else if(mood==="hungry") face=`<circle cx="${ex}" cy="${ey}" r="${er}" fill="#fff"/><circle cx="${ex+er*.2}" cy="${ey+er*.2}" r="${er*.5}" fill="#1b1b1b"/><ellipse cx="${hx+r*0.3}" cy="${hy+r*0.45}" rx="${r*0.12}" ry="${r*0.15}" fill="#f2c230"/>`;
+  else face=`<circle cx="${ex}" cy="${ey}" r="${er}" fill="#fff"/><path d="M${ex-er} ${ey-er*0.1} L${ex+er} ${ey-er*0.1}" stroke="#1b1b1b" stroke-width="${er*0.9}"/><circle cx="${ex+er*.2}" cy="${ey+er*.35}" r="${er*.4}" fill="#1b1b1b"/><ellipse cx="${hx+r*0.3}" cy="${hy+r*0.5}" rx="${r*0.2}" ry="${r*0.25}" fill="#f2c230"/>`;
+  const bubble = mood==="content" ? "" :
+    `<g opacity=".95"><circle cx="${Math.min(hx+r*1.2,280)}" cy="${y0-H*0.5}" r="3" fill="var(--surface-2)" stroke="var(--line)"/><ellipse cx="${Math.min(hx+r*1.8,272)+14}" cy="${y0-H*0.5-22}" rx="26" ry="18" fill="var(--surface-2)" stroke="var(--line)"/><path d="M${Math.min(hx+r*1.8,272)+2} ${y0-H*0.5-20} Q${Math.min(hx+r*1.8,272)+14} ${y0-H*0.5-34} ${Math.min(hx+r*1.8,272)+28} ${y0-H*0.5-22} Q${Math.min(hx+r*1.8,272)+14} ${y0-H*0.5-14} ${Math.min(hx+r*1.8,272)+2} ${y0-H*0.5-20}Z" fill="var(--leaf)"/></g>`;
+  return `<svg class="art" viewBox="0 0 320 200" role="img" aria-label="Caterpillar, growth stage ${stage}">
+    <defs><clipPath id="${id}"><rect x="${x0}" y="${y0}" width="${L}" height="${H}" rx="${H/2}"/></clipPath></defs>
+    <path d="M6 172 Q160 120 314 172 Q160 206 6 172Z" fill="var(--leaf)"/>
+    <path d="M14 172 Q160 156 306 172" stroke="var(--leaf-dark)" stroke-width="2" fill="none"/>
+    <g class="body-g">
+      <g fill="none" stroke="#1b1b1b" stroke-width="${sw}" stroke-linecap="round"><path d="${ft}"/><path d="${ft2}"/><path d="${bt}"/></g>
+      ${legs}
+      <g clip-path="url(#${id})">${stripes}</g>
+      <rect x="${x0}" y="${y0}" width="${L}" height="${H}" rx="${H/2}" fill="none" stroke="#1b1b1b" stroke-width="${sw*.6}"/>
+      <circle cx="${hx}" cy="${hy}" r="${r}" fill="#1b1b1b"/>
+      <path d="M${hx-r*0.7} ${hy-r*0.5} A${r} ${r} 0 0 1 ${hx+r*0.5} ${hy-r*0.85}" stroke="#f2c230" stroke-width="${sw*.8}" fill="none"/>
+      ${face}
+    </g>
+    ${bubble}
+  </svg>`;
+}
+function chrysalisSVG(){
+  const dots=[...Array(9)].map((_,i)=>{const t=i/8;const x=128+t*64;const y=96+Math.sin(t*Math.PI)*-4;return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.6" fill="#e3b53a"/>`}).join("");
+  return `<svg class="art" viewBox="0 0 320 200" role="img" aria-label="Chrysalis">
+    <path d="M60 22 Q160 12 270 26" stroke="var(--leaf-dark)" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="M220 24 Q246 6 268 14 Q250 30 220 24Z" fill="var(--leaf)"/>
+    <g class="sway">
+      <ellipse cx="160" cy="24" rx="7" ry="3" fill="#ece8dc"/>
+      <path d="M160 24 L160 40" stroke="#1b1b1b" stroke-width="2.5"/>
+      <path d="M160 40 C186 42 200 72 198 108 C196 146 180 176 160 182 C140 176 124 146 122 108 C120 72 134 42 160 40Z" fill="#5fb88a" stroke="#3d8a62" stroke-width="2"/>
+      <path d="M126 96 Q160 88 194 96" stroke="#1b1b1b" stroke-width="3" fill="none"/>
+      ${dots}
+      <circle cx="140" cy="150" r="2.2" fill="#e3b53a"/><circle cx="180" cy="150" r="2.2" fill="#e3b53a"/>
+      <circle cx="148" cy="62" r="2" fill="#e3b53a"/><circle cx="172" cy="62" r="2" fill="#e3b53a"/>
+      <ellipse cx="146" cy="120" rx="8" ry="22" fill="#fff" opacity=".22"/>
+    </g>
+  </svg>`;
+}
+function butterflySVG(cls){
+  const spots=[[284,50],[290,62],[278,88],[264,104],[246,176],[226,184],[204,182],[256,158]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.6" fill="#fff"/>`).join("")
+    +`<circle cx="262" cy="56" r="3.2" fill="#fff"/><circle cx="252" cy="50" r="2.6" fill="#f6c27a"/>`;
+  const wing=`
+    <path d="M160 96 C182 52 246 28 292 44 C304 62 288 96 266 112 C232 116 192 112 160 104Z" fill="#e8741c" stroke="#1b1b1b" stroke-width="7" stroke-linejoin="round"/>
+    <path d="M160 108 C196 112 246 120 258 152 C254 182 218 194 192 184 C176 172 166 142 160 114Z" fill="#e8741c" stroke="#1b1b1b" stroke-width="7" stroke-linejoin="round"/>
+    <g stroke="#1b1b1b" stroke-width="2.6" fill="none" stroke-linecap="round">
+      <path d="M164 100 L270 50"/><path d="M166 102 L272 84"/><path d="M168 104 L250 108"/><path d="M200 70 L232 62"/>
+      <path d="M164 112 L246 140"/><path d="M164 114 L232 172"/><path d="M164 116 L204 178"/><path d="M200 126 L220 150"/>
+    </g>
+    <path d="M250 38 C270 34 290 40 296 50 C290 52 276 50 262 54Z" fill="#1b1b1b"/>
+    ${spots}`;
+  return `<svg class="art ${cls||""}" viewBox="0 0 320 210" role="img" aria-label="Butterfly">
+    <g class="wing-r">${wing}</g>
+    <g class="wing-l"><g transform="translate(320,0) scale(-1,1)">${wing}</g></g>
+    <path d="M160 92 Q150 60 136 44 M160 92 Q170 60 184 44" stroke="#1b1b1b" stroke-width="2" fill="none"/>
+    <circle cx="136" cy="44" r="3" fill="#1b1b1b"/><circle cx="184" cy="44" r="3" fill="#1b1b1b"/>
+    <ellipse cx="160" cy="124" rx="6" ry="38" fill="#1b1b1b"/>
+    <circle cx="160" cy="92" r="7.5" fill="#1b1b1b"/>
+    <circle cx="157" cy="104" r="1.4" fill="#fff"/><circle cx="163" cy="112" r="1.4" fill="#fff"/><circle cx="157" cy="120" r="1.4" fill="#fff"/>
+  </svg>`;
+}
+function artFor(stage,mood){
+  if(stage>=10) return butterflySVG("flutter");
+  if(stage===9) return chrysalisSVG();
+  return caterpillarSVG(stage,mood);
+}
+
+/* ---------- navigation ---------- */
+const MAX_CURRENT=5, MAX_FROZEN=5, MAX_WAITING=5;
+let tab="read", view="shelf", curId=null;
+const reading=()=>state.books.filter(b=>b.status==="reading");
+const frozen=()=>state.books.filter(b=>b.status==="frozen");
+const bookById=id=>state.books.find(b=>b.id===id);
+const cap1=w=>w.charAt(0).toUpperCase()+w.slice(1);
+const fmtPct=p=>(Math.floor(p*10)/10).toFixed(p%1?1:0)+"%";
+const youngOf=b=>{const K=KINDS[SP[b.species].kind];return b.stage>=9?K.pupa:K.young;};
+function show(){
+  $("tab-read").setAttribute("aria-current",tab==="read"?"page":"false");
+  $("tab-coll").setAttribute("aria-current",tab==="coll"?"page":"false");
+  $("tab-ach").setAttribute("aria-current",tab==="ach"?"page":"false");
+  $("screen-ach").hidden = tab!=="ach";
+  if(view==="book" && !bookById(curId)) view="shelf";
+  $("screen-shelf").hidden = !(tab==="read" && view==="shelf");
+  $("screen-add").hidden   = !(tab==="read" && view==="add");
+  $("screen-read").hidden  = !(tab==="read" && view==="book");
+  $("screen-coll").hidden  = tab!=="coll";
+  if(tab==="ach") renderAch();
+  else if(tab==="coll") renderColl();
+  else if(view==="shelf") renderShelf();
+  else if(view==="add") renderAdd();
+  else renderRead();
+}
+function go(v,id){ tab="read"; view=v; if(id!==undefined) curId=id; show(); window.scrollTo(0,0); }
+$("tab-read").onclick=()=>{tab="read";show()};
+$("tab-coll").onclick=()=>{tab="coll";show()};
+$("tab-ach").onclick=()=>{tab="ach";show();window.scrollTo(0,0)};
+$("add-back").onclick=()=>go("shelf");
+$("read-back").onclick=()=>go("shelf");
+
+/* ---------- shelf ---------- */
+function bookCard(b){
+  const sp=SP[b.species], m=moodFor(b), p=pct(b);
+  return `<button type="button" class="bk${b.status==="frozen"?" is-frozen":""}" data-id="${b.id}">
+    <span class="bk-art">${artFor(b.stage,m.k)}</span>
+    <span class="bk-meta"><b>${esc(b.title)}</b>
+      <span class="small muted">${esc(sp.name)} ${youngOf(b)}</span>
+      <span class="bar" aria-hidden="true"><i style="width:${p}%"></i></span>
+      <span class="bk-foot"><span class="mono small">${fmtPct(p)}</span><span class="chip ${m.cls}"><span class="dot"></span>${m.label}</span></span>
+    </span></button>`;
+}
+function renderShelf(){
+  const r=reading(), f=frozen(), w=state.waiting;
+  $("cur-count").textContent=`${r.length} of ${MAX_CURRENT}`;
+  $("cur-list").innerHTML = r.length ? r.map(bookCard).join("")
+    : `<div class="empty"><svg viewBox="0 0 120 60" width="120" aria-hidden="true"><path d="M8 48 Q60 20 112 48 Q60 62 8 48Z" fill="var(--leaf)"/><ellipse cx="60" cy="38" rx="5" ry="6.5" fill="#f4efd8" stroke="#c9bf8f"/></svg><p class="small muted">No books on the go. Add the book you're reading to hatch an egg.</p></div>`;
+  $("add-note").hidden = r.length<MAX_CURRENT;
+  $("frz-count").textContent=`${f.length} of ${MAX_FROZEN}`;
+  $("frz-list").innerHTML = f.length ? f.map(bookCard).join("")
+    : `<p class="small muted">No frozen books. Freezing a book pauses its larva's growth and hunger until you come back to it.</p>`;
+  $("wait-card").hidden = !w.length;
+  $("wait-count").textContent=`${w.length} of ${MAX_WAITING}`;
+  $("wait-list").innerHTML = w.map((x,i)=>{const sp=SP[x.species],K=KINDS[sp.kind];return `<button type="button" class="bk wait" data-i="${i}">
+      <span class="bk-art">${caterpillarSVG(0,"content")}</span>
+      <span class="bk-meta"><b>${esc(sp.name)} ${K.young}</b><span class="small muted">From ${esc(x.from)}</span>
+      <span class="small">Waiting for: <span class="chip ${RARITY_CHIP[sp.rarity]}">${sp.rarity} book</span></span></span></button>`}).join("");
+  document.querySelectorAll("#wait-list .bk").forEach(el=>el.onclick=()=>openWaiting(+el.dataset.i));
+  document.querySelectorAll("#cur-list .bk,#frz-list .bk").forEach(el=>el.onclick=()=>go("book",el.dataset.id));
+}
+$("add-book").onclick=()=>{
+  if(reading().length>=MAX_CURRENT){ $("add-note").hidden=false; toast(`You're reading ${MAX_CURRENT} books. Finish, freeze or abandon one first.`); return; }
+  go("add");
+};
+
+/* ---------- add book ---------- */
+let selected=null;
+/* ---------- book search ----------
+   Live search uses Open Library's free API (no key). A query that looks like an ISBN asks for that exact
+   edition (/isbn/<isbn>.json), which gives that edition's own page count; author names then come from
+   /authors/<id>.json. Anything else uses /search.json, which returns one result per work (all editions
+   merged) with the median page count across editions. If Open Library can't be reached (offline, or inside
+   the claude.ai sandbox, which blocks other websites), the small sample list is searched instead. */
+const OL="https://openlibrary.org";
+const OL_FIELDS="key,title,author_name,isbn,number_of_pages_median,cover_i,first_publish_year,edition_count";
+let searchMode="sample", searchSeq=0;
+const isbnOf=q=>{ const d=q.replace(/[^0-9Xx]/g,""); return (d.length===13||d.length===10) && /^\d{9,12}[\dXx]$/.test(d) ? d.toUpperCase() : null; };
+const coverUrl=id=> id ? `https://covers.openlibrary.org/b/id/${id}-S.jpg` : "";
+function authorsText(list){ if(!list||!list.length) return ""; return list.length<=2 ? list.join(" & ") : `${list[0]} and ${list.length-1} others`; }
+function pickIsbn(list){ if(!list||!list.length) return ""; return list.find(x=>/^97[89]\d{10}$/.test(x)) || list[0]; }
+async function getJSON(url,signal){ const r=await fetch(url,{signal,headers:{Accept:"application/json"}}); if(!r.ok){ const e=new Error("http "+r.status); e.status=r.status; throw e; } return r.json(); }
+async function searchOpenLibrary(q,signal){
+  const isbn=isbnOf(q);
+  if(isbn){
+    try{
+      const ed=await getJSON(`${OL}/isbn/${isbn}.json`,signal);
+      const names=await Promise.all((ed.authors||[]).slice(0,3).map(a=>getJSON(`${OL}${a.key}.json`,signal).then(x=>x.name).catch(()=>null)));
+      return [{title:ed.title||"Untitled",author:authorsText(names.filter(Boolean)),isbn,pages:ed.number_of_pages||null,
+        cover:coverUrl((ed.covers||[]).find(c=>c>0)),year:(ed.publish_date||"").match(/\d{4}/)?.[0]||"",edition:true}];
+    }catch(e){ if(e.name==="AbortError") throw e; if(e.status!==404) throw e; /* not found as an edition: fall through to a general search */ }
+  }
+  const data=await getJSON(`${OL}/search.json?q=${encodeURIComponent(q)}&fields=${OL_FIELDS}&limit=10`,signal);
+  return (data.docs||[]).map(d=>({title:d.title||"Untitled",author:authorsText(d.author_name),isbn:isbn||pickIsbn(d.isbn),
+    pages:d.number_of_pages_median||null,cover:coverUrl(d.cover_i),year:d.first_publish_year||"",editions:d.edition_count||0}));
+}
+function sampleSearch(q){
+  const n=q.toLowerCase().replace(/[-\s.]/g,"");
+  return (n ? CATALOGUE.filter(b=>(b.title+b.author+b.isbn).toLowerCase().replace(/[-\s.]/g,"").includes(n)) : CATALOGUE.slice())
+    .map(b=>({title:b.title,author:b.author,isbn:b.isbn,pages:b.pages,c:b.c}));
+}
+function renderResults(list){
+  const note=$("search-note");
+  note.textContent = searchMode==="live" ? "Results from Open Library. Page counts can differ between editions, so check yours."
+    : searchMode==="offline" ? "Couldn't reach Open Library, so these are from the small sample list. You can still type your book's details below."
+    : "Search Open Library by title, author or ISBN.";
+  note.className = "note"+(searchMode==="offline"?" warn":"");
+  if(!list.length){ $("results").innerHTML=`<p class="small muted">No books found. Try fewer words, or enter the details by hand below.</p>`; return; }
+  $("results").innerHTML = list.map((b,i)=>`
+    <button type="button" class="result${selected===b?" selected":""}" data-i="${i}">
+      ${b.cover?`<img class="cover" src="${b.cover}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'spine'}))">`:`<span class="spine"${b.c?` style="background:${b.c}"`:""}></span>`}
+      <span class="meta"><b>${esc(b.title)}</b>
+        <span class="small muted">${esc(b.author||"Unknown author")}${b.year?` · ${esc(b.year)}`:""}</span>
+        <span class="small mono">${b.pages?`${b.pages} pp${b.edition?"":" (typical)"}`:"Page count unknown"}${b.editions>1?` · ${b.editions} editions`:""}</span>
+        ${b.isbn?`<span class="isbn mono">ISBN ${esc(b.isbn)}</span>`:""}</span>
+    </button>`).join("");
+  $("results").querySelectorAll(".result").forEach(btn=>btn.onclick=()=>{
+    selected=list[+btn.dataset.i];
+    $("f-title").value=selected.title; $("f-author").value=selected.author||""; $("f-isbn").value=selected.isbn||""; $("f-pages").value=selected.pages||"";
+    updateTierHint(); renderResults(list);
+    if(!selected.pages){ $("f-pages").focus(); toast("Open Library doesn't know this book's page count. Please type it in."); }
+    else $("book-form").scrollIntoView({behavior:"smooth",block:"start"});
+  });
+}
+let lastResults=[];
+function renderAdd(){ renderResults(lastResults); updateTierHint(); }
+let searchCtl=null;
+$("search-form").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const q=$("q").value.trim(); if(!q){ $("q").focus(); return; }
+  const seq=++searchSeq; if(searchCtl) searchCtl.abort(); searchCtl=new AbortController();
+  const timer=setTimeout(()=>searchCtl.abort(),12000);
+  $("search-btn").disabled=true; $("search-btn").textContent="Searching…";
+  $("results").innerHTML=`<p class="small muted">Searching Open Library…</p>`;
+  try{ const r=await searchOpenLibrary(q,searchCtl.signal); if(seq!==searchSeq) return; searchMode="live"; lastResults=r; }
+  catch(err){ if(seq!==searchSeq) return; searchMode="offline"; lastResults=sampleSearch(q); }
+  finally{ clearTimeout(timer); if(seq===searchSeq){ $("search-btn").disabled=false; $("search-btn").textContent="Search"; } }
+  selected=null; renderResults(lastResults);
+});
+function updateTierHint(){
+  const p=+$("f-pages").value;
+  if(!(p>0)){ $("tier-hint").textContent="Page count is needed for every book. It sets the rarity of the species that hatches: under 450 pages Common, 450–799 Uncommon, 800+ Rare."; return; }
+  const t=tierFor(p), n=SPECIES.filter(s=>s.rarity===t).length;
+  const waiting=state.waiting.filter(w=>SP[w.species].rarity===t).length;
+  $("tier-hint").textContent=`${p} pages is a ${t} length book, so one of ${n} ${t.toLowerCase()} species will hatch.`+
+    (waiting?` You also have ${waiting} ${t.toLowerCase()} larva${waiting>1?"e":""} waiting that could move in.`:"")+` Under 450 pages is Common, 450–799 Uncommon, 800+ Rare. It's ${MONTHS[currentMonth()]}, so species in season now are ${IN_SEASON_WEIGHT} times as likely to hatch.`;
+}
+$("f-pages").addEventListener("input",updateTierHint);
+
+let pending=null, mode="pages", who=null;   /* who: index into state.waiting, or -1 for a new egg */
+$("book-form").addEventListener("submit",e=>{
+  e.preventDefault();
+  if(reading().length>=MAX_CURRENT){ toast(`You're reading ${MAX_CURRENT} books. Finish, freeze or abandon one first.`); go("shelf"); return; }
+  const pages=Math.round(+$("f-pages").value);
+  if(!$("f-title").value.trim() || !(pages>0)){ toast("Add a title and the number of pages to continue"); return; }
+  pending={title:$("f-title").value.trim(),author:$("f-author").value.trim(),isbn:$("f-isbn").value.trim(),pages};
+  $("mt-sub").textContent=`${pending.title} · ${pages} pages · ${tierFor(pages)} length`;
+  setMode("pages"); who=null; renderWho(); $("m-track").hidden=false;
+});
+/* Waiting larvae can only move into a book of exactly their own tier. One eligible larva is picked at random
+   and pre-selected; the reader can switch to another, or to a new egg. */
+function renderWho(){
+  const t=tierFor(pending.pages);
+  const eligible=state.waiting.map((w,i)=>({w,i})).filter(x=>SP[x.w.species].rarity===t);
+  $("mt-who").hidden=!eligible.length;
+  if(!eligible.length){ who=-1; return; }
+  if(who===null) who=pickOne(eligible).i;
+  $("mt-who-list").innerHTML = eligible.map(({w,i})=>{const sp=SP[w.species];return `<button type="button" class="opt" data-i="${i}" aria-pressed="${who===i}"><b>${esc(sp.name)} ${KINDS[sp.kind].young}</b><span class="small muted">Waiting, from ${esc(w.from)}. Growth starts again from zero.</span></button>`}).join("")
+    + `<button type="button" class="opt" data-i="-1" aria-pressed="${who===-1}"><b>A new egg</b><span class="small muted">A random ${t.toLowerCase()} species you haven't raised yet.</span></button>`;
+  $("mt-who-list").querySelectorAll(".opt").forEach(b=>b.onclick=()=>{who=+b.dataset.i;renderWho()});
+}
+function setMode(m){mode=m;$("mode-pages").setAttribute("aria-pressed",m==="pages");$("mode-pct").setAttribute("aria-pressed",m==="percent");}
+$("mode-pages").onclick=()=>setMode("pages");
+$("mode-pct").onclick=()=>setMode("percent");
+$("mt-cancel").onclick=()=>{$("m-track").hidden=true};
+$("mt-go").onclick=()=>{
+  let species, moved=false;
+  if(who!==null && who>=0 && state.waiting[who]){ species=state.waiting[who].species; state.waiting.splice(who,1); moved=true; }
+  else species=pickSpecies(tierFor(pending.pages));
+  const b={id:"b"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),...pending,mode,progress:0,stage:0,lastFed:now(),started:now(),species,status:"reading"};
+  state.books.push(b); save(); $("m-track").hidden=true;
+  ["f-title","f-author","f-isbn","f-pages","q"].forEach(i=>$(i).value=""); selected=null;
+  go("book",b.id);
+  celebrate(b,0,moved);
+};
+
+/* ---------- one book ---------- */
+function renderRead(){
+  const b=bookById(curId), p=pct(b), st=b.stage, m=moodFor(b), sp=SP[b.species], isFrozen=b.status==="frozen";
+  $("art").innerHTML=artFor(st,m.k);
+  $("art").className="art-wrap"+(st<9&&!isFrozen?" crawl":"");
+  $("habitat").classList.toggle("is-frozen",isFrozen);
+  $("mood").className="chip mood "+m.cls; $("mood").innerHTML=`<span class="dot"></span>${m.label}`;
+  const K=KINDS[sp.kind], pupa=K.pupa;
+  $("len").textContent = st<9 ? `≈ ${lengthMm(st,b.species)} mm` : cap1(pupa);
+  $("lbl-pupa").textContent=cap1(pupa)+" 90%"; $("lbl-adult").textContent=cap1(sp.noun)+" 100%";
+  $("hab-cap").innerHTML = `${esc(sp.name)} ${st<9?K.young:pupa} <span class="chip ${RARITY_CHIP[sp.rarity]}">${sp.rarity} ${sp.noun}</span>${seasonChip(sp)}`;
+  $("b-eyebrow").textContent = isFrozen ? "Frozen" : "Currently reading";
+  $("b-title").textContent=b.title;
+  $("b-author").textContent=[b.author,b.isbn?("ISBN "+b.isbn):""].filter(Boolean).join(" · ");
+  $("b-tier").textContent=tierFor(b.pages)+" length";
+  $("b-pct").textContent=fmtPct(p);
+  $("b-pages").textContent = b.mode==="pages" ? `Page ${b.progress} of ${b.pages}` : `Tracking by % · ${b.pages} pp`;
+  $("stem-fill").style.width=p+"%";
+  $("stem-nodes").innerHTML=[...Array(10)].map((_,i)=>{const at=(i+1)*10;return `<div class="node${p>=at?" done":""}${at===90?" chrys":""}${at===100?" fly":""}"><span></span></div>`}).join("");
+  const nextAt=st>=9?100:(st+1)*10;
+  const lbl=nextAt===100?`the ${sp.noun} emerges`:nextAt===90?(sp.kind==="butterfly"?"it forms a chrysalis":"it pupates"):`your ${K.young} grows`;
+  const where=b.mode==="pages"?` (page ${Math.ceil(b.pages*nextAt/100)})`:"";
+  const days=Math.floor((now()-b.lastFed)/DAY);
+  $("next-stage").innerHTML = isFrozen ? `At <b>${nextAt}%</b>${where} ${lbl}.`
+    : `At <b>${nextAt}%</b>${where} ${lbl}. <span class="muted">Last fed ${days===0?"today":days===1?"yesterday":days+" days ago"}.</span>`;
+  $("log-form").hidden=isFrozen;
+  $("frozen-note").hidden=!isFrozen;
+  $("frozen-note").textContent=`This book is frozen. Its ${st<9?K.young:pupa} is dormant: it won't grow or get hungry until you unfreeze it. Many real insects do the same thing to wait out winter. It's called diapause.`;
+  $("btn-freeze").textContent = isFrozen ? "Unfreeze book" : "Freeze book";
+  $("act-note").hidden=true;
+  if(!isFrozen){
+    const isP=b.mode==="pages";
+    $("log-label").firstChild.textContent = isP ? "I'm now on page " : "I'm now at percent ";
+    const inp=$("log-val"); inp.max=isP?b.pages:100; inp.min=b.progress; inp.placeholder=String(b.progress); inp.step=isP?"1":"0.1";
+    const steps=isP?[5,10,25,50]:[1,5,10,25];
+    $("quick").innerHTML=steps.map(s=>`<button type="button" data-s="${s}">+${s}${isP?" pp":"%"}</button>`).join("");
+    $("quick").querySelectorAll("button").forEach(btn=>btn.onclick=()=>feed(b.progress+(+btn.dataset.s)));
+  }
+}
+$("log-form").addEventListener("submit",e=>{
+  e.preventDefault();
+  const b=bookById(curId), v=parseFloat($("log-val").value);
+  if(isNaN(v)){toast(b.mode==="pages"?"Enter the page you're on":"Enter how far through you are");return;}
+  feed(v); $("log-val").value="";
+});
+function feed(v){
+  const b=bookById(curId); if(!b||b.status!=="reading") return;
+  const max=b.mode==="pages"?b.pages:100;
+  v=Math.min(max,b.mode==="pages"?Math.round(v):Math.round(v*10)/10);
+  if(v<=b.progress){toast(`That's not past where you are (${b.mode==="pages"?"page "+b.progress:b.progress+"%"})`);return;}
+  const gained=Math.round((v-b.progress)*10)/10;
+  b.progress=v; b.lastFed=now();
+  const ns=stageFor(pct(b)); const grew=ns>b.stage; b.stage=ns;
+  save(); renderRead();
+  const art=$("art"); art.classList.remove("munch"); void art.offsetWidth; art.classList.add("munch");
+  const f=document.createElement("div"); f.className="floater"; f.textContent=`Munch! +${gained}${b.mode==="pages"?" pp":"%"}`; $("habitat").appendChild(f); setTimeout(()=>f.remove(),1200);
+  if(grew) setTimeout(()=>celebrate(b,ns),650);
+}
+function blockNote(msg){ $("act-note").textContent=msg; $("act-note").hidden=false; }
+
+/* Freezing records the time; unfreezing moves lastFed forward by the frozen time, so the hunger clock carries on where it stopped. */
+$("btn-freeze").onclick=()=>{
+  const b=bookById(curId);
+  if(b.status==="reading"){
+    if(frozen().length>=MAX_FROZEN){ blockNote(`You already have ${MAX_FROZEN} frozen books. Unfreeze or abandon one of them first.`); return; }
+    b.status="frozen"; b.frozenAt=now(); save(); renderRead(); toast("Frozen. Growth and hunger are paused.");
+  } else {
+    if(reading().length>=MAX_CURRENT){ blockNote(`You're already reading ${MAX_CURRENT} books. Finish, freeze or abandon one of them first.`); return; }
+    b.lastFed += now()-b.frozenAt; delete b.frozenAt; b.status="reading"; save(); renderRead(); toast("Unfrozen. Your larva is awake again.");
+  }
+};
+
+/* ---------- edit book ---------- */
+/* Edits are corrections, not reading: they don't feed the larva or show growth screens. The growth stage is
+   recalculated from the corrected progress (so it can go down), and the species never changes, even if the
+   new page count puts the book in a different length tier. Reaching 100% by an edit still finishes the book. */
+$("btn-edit").onclick=()=>{
+  const b=bookById(curId), sp=SP[b.species], isP=b.mode==="pages";
+  $("e-title").value=b.title; $("e-author").value=b.author||""; $("e-pages").value=b.pages; $("e-prog").value=b.progress;
+  $("e-prog-label").textContent = isP ? "Current page" : "Current %";
+  $("e-prog").step = isP ? "1" : "0.1";
+  $("e-hint").textContent=`Use this to fix a mistyped page or a different edition's page count. Changes don't count as feeding, and your ${sp.name} stays the same species even if the book's length tier changes. Lowering your progress moves the ${KINDS[sp.kind].young} back to the matching growth stage.`;
+  $("m-edit").hidden=false;
+};
+$("e-cancel").onclick=()=>{$("m-edit").hidden=true};
+$("edit-form").addEventListener("submit",e=>{
+  e.preventDefault();
+  const b=bookById(curId), isP=b.mode==="pages";
+  const title=$("e-title").value.trim(), pages=Math.round(+$("e-pages").value);
+  let prog=isP?Math.round(+$("e-prog").value):Math.round(+$("e-prog").value*10)/10;
+  if(!title || !(pages>0)){ toast("Add a title and the number of pages"); return; }
+  if(isNaN(prog)||prog<0){ toast(isP?"Enter the page you're on":"Enter how far through you are"); return; }
+  const max=isP?pages:100;
+  if(prog>max){ toast(isP?`The book only has ${pages} pages`:"Progress can't be more than 100%"); return; }
+  const before=b.stage;
+  b.title=title; b.author=$("e-author").value.trim(); b.pages=pages; b.progress=prog;
+  b.stage=stageFor(pct(b)); save(); $("m-edit").hidden=true; renderRead();
+  if(b.stage===10) { celebrate(b,10); return; }
+  toast(b.stage===before ? "Book updated." : `Book updated. Your larva is now at growth stage ${Math.min(b.stage,9)}.`);
+});
+
+/* ---------- waiting larva ---------- */
+let waitIdx=null, waitArmed=false;
+function openWaiting(i){
+  const w=state.waiting[i]; if(!w) return;
+  const sp=SP[w.species], K=KINDS[sp.kind];
+  waitIdx=i; waitArmed=false;
+  $("mw-h").textContent=`${sp.name} ${K.young}`;
+  $("mw-cat").className="chip "+RARITY_CHIP[sp.rarity]; $("mw-cat").textContent=`${sp.rarity} ${sp.noun}`; $("mw-season").innerHTML=seasonChip(sp);
+  $("mw-art").innerHTML=caterpillarSVG(3,"content");
+  $("mw-kv").innerHTML=[["Category",KINDS[sp.kind].label],["Species",`${sp.name} (${sp.sci})`],["From",w.from],
+    ["Waiting since",new Date(w.since).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"})],
+    ["Moves into",`Your next ${sp.rarity}-length book (${sp.rarity==="Common"?"under 450":sp.rarity==="Uncommon"?"450–799":"800+"} pages)`]]
+    .map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("");
+  $("mw-release").textContent="Release";
+  $("mw-confirm").hidden=true;
+  $("m-wait").hidden=false;
+}
+$("mw-close").onclick=()=>{$("m-wait").hidden=true};
+/* Release is permanent, so the first tap asks for confirmation. */
+$("mw-release").onclick=()=>{
+  const w=state.waiting[waitIdx]; if(!w) return;
+  const sp=SP[w.species];
+  if(!waitArmed){ waitArmed=true; $("mw-confirm").hidden=false; $("mw-confirm").textContent=`Your ${sp.name} will go back to the wild and won't join your collection. This can't be undone.`; $("mw-release").textContent="Yes, release it"; return; }
+  state.waiting.splice(waitIdx,1); save(); $("m-wait").hidden=true; renderShelf();
+  toast(`You released your ${sp.name} back into the wild.`);
+};
+
+/* ---------- abandon ---------- */
+$("btn-abandon").onclick=()=>{
+  const b=bookById(curId), sp=SP[b.species], K=KINDS[sp.kind], young=b.stage>=9?K.pupa:K.young;
+  $("ab-h").textContent=`Abandon ${b.title}?`;
+  $("ab-sub").textContent=`What should happen to your ${sp.name} ${young}?`;
+  $("ab-release-t").textContent="Let it go back to the wild. It won't join your collection.";
+  const full=state.waiting.length>=MAX_WAITING;
+  $("ab-transfer").disabled=full;
+  $("ab-transfer-t").textContent=`It waits for your next ${sp.rarity}-length book and starts growing again from zero.`;
+  $("ab-note").hidden=!full;
+  $("ab-note").textContent=`Transfer isn't available: you already have ${MAX_WAITING} larvae waiting for a book.`;
+  $("m-ab").hidden=false;
+};
+$("ab-cancel").onclick=()=>{$("m-ab").hidden=true};
+$("ab-release").onclick=()=>{
+  const b=bookById(curId), sp=SP[b.species];
+  state.books=state.books.filter(x=>x.id!==b.id); save(); $("m-ab").hidden=true;
+  go("shelf"); toast(`You released your ${sp.name} back into the wild.`);
+};
+$("ab-transfer").onclick=()=>{
+  if(state.waiting.length>=MAX_WAITING) return;
+  const b=bookById(curId), sp=SP[b.species];
+  state.waiting.push({species:b.species,from:b.title,since:now()});
+  state.books=state.books.filter(x=>x.id!==b.id); save(); $("m-ab").hidden=true;
+  go("shelf"); toast(`Your ${sp.name} is waiting for your next ${sp.rarity}-length book.`);
+};
+
+/* ---------- celebration ---------- */
+function confetti(){
+  const c=$("confetti"); c.innerHTML="";
+  const cols=["#e8741c","#f2c230","#1b1b1b","#77a24f","#fbfbf4"];
+  for(let i=0;i<36;i++){const s=document.createElement("i");s.style.left=Math.random()*100+"%";s.style.background=cols[i%cols.length];s.style.animationDelay=(Math.random()*.6)+"s";s.style.transform=`rotate(${Math.random()*180}deg)`;c.appendChild(s);}
+}
+function celebrate(b,stage,moved){
+  const sp=SP[b.species];
+  $("mc-art").innerHTML=artFor(stage,"content");
+  $("mc-art").className="artbox"+(stage<9?" crawl":"");
+  const K=KINDS[sp.kind];
+  $("mc-fact-h").textContent = (stage===0||stage===10) ? `${sp.name} fact` : `${cap1(K.young)} fact`;
+  $("mc-fact").textContent = stage===0 ? `${sp.name} ${K.youngs} feed on: ${sp.food.charAt(0).toLowerCase()+sp.food.slice(1)}.` : stage===10 ? sp.facts[0] : (stage===9&&K.pupaFact) ? K.pupaFact : K.facts[stage];
+  $("mc-season").innerHTML = (stage===0||stage===10) ? seasonChip(sp) : "";
+  $("mc-ach").hidden=true;
+  const acts=$("mc-actions"); let done=()=>{$("m-cel").hidden=true;show();};
+  if(stage===0 && moved){
+    $("mc-eyebrow").textContent=`New book started · ${sp.rarity} ${sp.noun}`;
+    $("mc-h").textContent=`Your ${sp.name} ${K.young} moved in!`;
+    $("mc-sub").textContent=`It starts again at about 2 mm long, hungry for ${b.title}.`;
+    acts.innerHTML=`<button class="primary" type="button" id="mc-ok">Start reading</button>`;
+  } else if(stage===0){
+    $("mc-eyebrow").textContent=`New book started · ${sp.rarity} ${sp.noun}`;
+    $("mc-h").textContent=`A ${sp.name} hatched!`;
+    $("mc-sub").textContent=`It's about 2 mm long and hungry for ${b.title}. Log your reading to feed it.`;
+    acts.innerHTML=`<button class="primary" type="button" id="mc-ok">Start reading</button>`;
+  } else if(stage<9){
+    $("mc-eyebrow").textContent=`${stage*10}% read · Growth stage ${stage} of 8`;
+    $("mc-h").textContent= stage===8 ? `Your ${sp.name} is fully grown!` : `Your ${sp.name} ${K.young} grew!`;
+    $("mc-sub").textContent= stage===8 ? `It's about ${lengthMm(stage,b.species)} mm long now. One more stretch and it'll ${K.pupaVerb}.` : `It's now about ${lengthMm(stage,b.species)} mm long.`;
+    acts.innerHTML=`<button class="primary" type="button" id="mc-ok">Keep reading</button>`;
+  } else if(stage===9){
+    $("mc-eyebrow").textContent="90% read";
+    $("mc-h").textContent= sp.kind==="butterfly" ? "It made a chrysalis!" : "It's pupating!";
+    $("mc-sub").textContent=`Finish the book and your ${sp.name} will emerge.`;
+    acts.innerHTML=`<button class="primary" type="button" id="mc-ok">Nearly there</button>`;
+  } else {
+    const isNew=!state.collection.some(c=>c.species===sp.id);
+    const entry={species:sp.id,title:b.title,author:b.author,pages:b.pages,date:new Date(now()).toISOString()};
+    state.collection.push(entry); state.books=state.books.filter(x=>x.id!==b.id); save();
+    const unlocked=checkAchievements();
+    if(unlocked.length){ $("mc-ach").innerHTML=unlocked.map(a=>`<span class="ach-medal">${MEDAL}</span><span><b>Achievement unlocked: ${esc(a.name)}</b><span class="small">${esc(a.desc)}. Every one of the ${a.total} raised!</span></span>`).join(""); $("mc-ach").hidden=false; }
+    $("mc-eyebrow").textContent=`Book finished · ${isNew?"New species!":"Added to collection"}`;
+    $("mc-h").textContent=`A ${sp.name} emerged!`;
+    $("mc-sub").textContent=`Raised on ${entry.title}. ${isNew?"It's a new species for your collection.":"You now have "+state.collection.filter(c=>c.species===sp.id).length+" of these."}`;
+    acts.innerHTML=`<button type="button" id="mc-ok">Back to my books</button><button class="primary" type="button" id="mc-coll">See collection</button>`;
+    $("mc-coll").onclick=()=>{$("m-cel").hidden=true;view="shelf";tab="coll";collKind=sp.kind;show();openSpecies(sp.id);};
+    done=()=>{$("m-cel").hidden=true;go("shelf");};
+  }
+  $("mc-ok").onclick=done;
+  $("m-cel").hidden=false; confetti();
+}
+
+/* ---------- achievements ---------- */
+/* One "raise them all" achievement per category, built from KINDS so new categories get one automatically.
+   state.achievements[id] holds the date it was first completed; it stays unlocked once earned. */
+const ACH_NAMES={butterfly:["Butterfly House","Raise every butterfly"],moth:["Moth Trap","Raise every moth"],beewasp:["The Hive","Raise every bee and wasp"],
+  beetle:["Beetlemania","Raise every beetle"],ant:["Colony Complete","Raise every ant"],fly:["Lord of the Flies","Raise every fly"],other:["Cabinet of Curiosities","Raise every one of the other insects"]};
+const ACHIEVEMENTS=Object.keys(KINDS).map(k=>({id:"all-"+k,kind:k,name:(ACH_NAMES[k]||[`All ${KINDS[k].label}`])[0],desc:(ACH_NAMES[k]||[0,`Raise every species in ${KINDS[k].label}`])[1],
+  total:SPECIES.filter(s=>s.kind===k).length}));
+function achProgress(a){ const got=new Set(state.collection.map(c=>c.species)); return SPECIES.filter(s=>s.kind===a.kind && got.has(s.id)).length; }
+function checkAchievements(){
+  const fresh=[];
+  ACHIEVEMENTS.forEach(a=>{ if(!state.achievements[a.id] && achProgress(a)>=a.total){ state.achievements[a.id]=new Date(now()).toISOString(); fresh.push(a); } });
+  if(fresh.length) save();
+  return fresh;
+}
+const MEDAL='<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M16 4h7l-4 12h-7z" fill="currentColor" opacity=".55"/><path d="M32 4h-7l4 12h7z" fill="currentColor" opacity=".55"/><circle cx="24" cy="28" r="14" fill="currentColor"/><circle cx="24" cy="28" r="9.5" fill="none" stroke="var(--surface)" stroke-width="2"/><path d="m24 21.5 2 4.2 4.6.6-3.4 3.1.9 4.6-4.1-2.3-4.1 2.3.9-4.6-3.4-3.1 4.6-.6z" fill="var(--surface)"/></svg>';
+function renderAch(){
+  const done=ACHIEVEMENTS.filter(a=>state.achievements[a.id]).length;
+  $("ach-count").textContent=`${done} of ${ACHIEVEMENTS.length}`;
+  const list=[...ACHIEVEMENTS].sort((a,b)=>(!!state.achievements[b.id])-(!!state.achievements[a.id]) || achProgress(b)/b.total-achProgress(a)/a.total);
+  $("ach-list").innerHTML=list.map(a=>{
+    const n=achProgress(a), at=state.achievements[a.id], p=Math.round(n/a.total*100);
+    return `<div class="ach${at?" done":""}">
+      <span class="ach-medal">${MEDAL}</span>
+      <span class="ach-meta"><b>${esc(a.name)}</b><span class="small muted">${esc(a.desc)} (${a.total} species)</span>
+        <span class="bar" aria-hidden="true"><i style="width:${p}%"></i></span>
+        <span class="ach-foot"><span class="mono small">${n} of ${a.total}</span>${at?`<span class="chip ok">Unlocked ${new Date(at).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"})}</span>`:""}</span>
+      </span></div>`;}).join("");
+}
+checkAchievements();
+
+/* ---------- collection ---------- */
+const ORDER={Common:0,Uncommon:1,Rare:2};
+let collKind="butterfly";
+function renderColl(){
+  const counts={}; state.collection.forEach(c=>counts[c.species]=(counts[c.species]||0)+1);
+  const found=SPECIES.filter(s=>counts[s.id]).length;
+  const seenN=Object.keys(state.seen).length;
+  $("coll-count").textContent=`${found} of ${SPECIES.length} species · ${state.collection.length} raised · ${seenN} seen`;
+  const of=k=>{const all=SPECIES.filter(s=>s.kind===k);return `${all.filter(s=>counts[s.id]).length}/${all.length}`};
+  $("seg").innerHTML=Object.keys(KINDS).map(k=>`<button type="button" data-k="${k}" aria-pressed="${collKind===k}">${KINDS[k].label} <span class="mono">${of(k)}</span></button>`).join("");
+  $("seg").querySelectorAll("button").forEach(btn=>btn.onclick=()=>{collKind=btn.dataset.k;renderColl()});
+  const list=SPECIES.filter(s=>s.kind===collKind).sort((a,b)=>ORDER[a.rarity]-ORDER[b.rarity] || a.name.localeCompare(b.name));
+  const badge=s=>inSeason(s)?`<span class="slot-season" title="In season now">${LEAF_ICON}</span>`:"";
+  $("coll-grid").innerHTML=list.map(s=> counts[s.id]
+    ? `<button type="button" class="slot got" data-sp="${s.id}">${butterflySVG("")}<span class="nm">${esc(s.name)}</span><span class="small muted mono">×${counts[s.id]}</span>${seenNote(s)}${badge(s)}</button>`
+    : `<button type="button" class="slot locked" data-sp="${s.id}"><span class="q">?</span><span class="nm">${esc(s.name)}</span><span class="chip ${RARITY_CHIP[s.rarity]}">${s.rarity}</span>${seenNote(s)}${badge(s)}</button>`).join("");
+  $("coll-grid").querySelectorAll(".slot").forEach(el=>el.onclick=()=>openSpecies(el.dataset.sp));
+}
+const FAMILY={Nymphalidae:"Nymphalidae (brush-footed butterflies)",Pieridae:"Pieridae (whites and yellows)",Lycaenidae:"Lycaenidae (blues, coppers and hairstreaks)",Hesperiidae:"Hesperiidae (skippers)",Riodinidae:"Riodinidae (metalmarks)",Papilionidae:"Papilionidae (swallowtails)",Crambidae:"Crambidae (grass moths and relatives)",Geometridae:"Geometridae (geometers, whose caterpillars are loopers)",Noctuidae:"Noctuidae (owlet moths)",Erebidae:"Erebidae (tigers, tussocks and relatives)",Lasiocampidae:"Lasiocampidae (eggars and lappets)",Sphingidae:"Sphingidae (hawk-moths)",Notodontidae:"Notodontidae (prominents)",Saturniidae:"Saturniidae (emperor and silk moths)",Zygaenidae:"Zygaenidae (burnets and foresters)",Megachilidae:"Megachilidae (mason and leaf-cutter bees)",Apidae:"Apidae (bumblebees, honey bees and relatives)",Andrenidae:"Andrenidae (mining bees)",Colletidae:"Colletidae (plasterer bees)",Crabronidae:"Crabronidae (digger wasps)",Siricidae:"Siricidae (horntails)",Vespidae:"Vespidae (social wasps and hornets)",Chrysididae:"Chrysididae (cuckoo wasps)",Curculionidae:"Curculionidae (weevils)",Meloidae:"Meloidae (oil and blister beetles)",Dytiscidae:"Dytiscidae (diving beetles)",Hydrophilidae:"Hydrophilidae (water scavenger beetles)",Cerambycidae:"Cerambycidae (longhorn beetles)",Cantharidae:"Cantharidae (soldier beetles)",Silphidae:"Silphidae (carrion and burying beetles)",Chrysomelidae:"Chrysomelidae (leaf beetles)",Scarabaeidae:"Scarabaeidae (chafers and scarabs)",Elateridae:"Elateridae (click beetles)",Gyrinidae:"Gyrinidae (whirligig beetles)",Oedemeridae:"Oedemeridae (false blister beetles)",Ptinidae:"Ptinidae (deathwatch and spider beetles)",Coccinellidae:"Coccinellidae (ladybirds)",Pyrochroidae:"Pyrochroidae (cardinal beetles)",Lampyridae:"Lampyridae (glow-worms and fireflies)",Geotrupidae:"Geotrupidae (dor beetles)",Lucanidae:"Lucanidae (stag beetles)",Carabidae:"Carabidae (ground beetles)",Staphylinidae:"Staphylinidae (rove beetles)",Formicidae:"Formicidae (ants)",Tachinidae:"Tachinidae (parasitic flies)",Conopidae:"Conopidae (thick-headed flies)",Syrphidae:"Syrphidae (hoverflies)",Asilidae:"Asilidae (robberflies)",Bombyliidae:"Bombyliidae (bee-flies)",Tabanidae:"Tabanidae (horseflies)",Rhagionidae:"Rhagionidae (snipeflies)",Stratiomyidae:"Stratiomyidae (soldierflies)",Bibionidae:"Bibionidae (St Mark's flies)",Tipulidae:"Tipulidae (craneflies)",Boreidae:"Boreidae (snow fleas)",Limnephilidae:"Limnephilidae (caddisflies)",Trichoptera:"Trichoptera (the caddisfly order, with many families)",Panorpidae:"Panorpidae (scorpionflies)",Sialidae:"Sialidae (alderflies)",Chrysopidae:"Chrysopidae (green lacewings)",Pulicidae:"Pulicidae (fleas)"};
+/* ---------- seen in the wild ---------- */
+/* state.seen[speciesId] = list of stage keys ("young", "pupa", "adult"). Eggs aren't included. A species
+   counts as Seen while at least one stage is ticked; unticking them all removes it. */
+const EYE_ICON='<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5Z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="8" r="2.2" fill="currentColor"/></svg>';
+const STAGE_KEYS=["young","pupa","adult"];
+function stageLabel(sp,key){ const K=KINDS[sp.kind]; return key==="young"?cap1(K.young):key==="pupa"?cap1(K.pupa):`Adult ${sp.noun}`; }
+function seenList(sp){ return STAGE_KEYS.filter(k=>(state.seen[sp.id]||[]).includes(k)); }
+function seenNote(sp){
+  const l=seenList(sp); if(!l.length) return "";
+  const K=KINDS[sp.kind], words=l.map(k=>k==="young"?K.young:k==="pupa"?K.pupa:"adult");
+  return `<span class="seen-note">${EYE_ICON}Seen: ${words.join(", ")}</span>`;
+}
+let seenId=null, seenBefore=false;
+function openSeen(id){
+  const sp=SP[id]; seenId=id; seenBefore=seenList(sp).length>0;
+  $("sn-h").textContent=`Where have you seen a ${sp.name}?`;
+  $("sn-list").innerHTML=STAGE_KEYS.map(k=>`<label class="check"><input type="checkbox" value="${k}"${seenList(sp).includes(k)?" checked":""}><span>${esc(stageLabel(sp,k))}</span></label>`).join("");
+  $("sn-list").querySelectorAll("input").forEach(cb=>cb.onchange=()=>{
+    const ticked=[...$("sn-list").querySelectorAll("input:checked")].map(x=>x.value);
+    if(ticked.length) state.seen[id]=ticked; else delete state.seen[id];
+    save();
+  });
+  $("m-seen").hidden=false;
+}
+function closeSeen(){
+  $("m-seen").hidden=true;
+  const sp=SP[seenId], now=seenList(sp).length>0;
+  if(now && !seenBefore) toast(`${sp.name} marked as seen.`);
+  else if(!now && seenBefore) toast(`${sp.name} is no longer marked as seen.`);
+  if(!$("m-sp").hidden) openSpecies(seenId);
+  renderColl();
+}
+$("sn-done").onclick=closeSeen;
+$("m-seen").addEventListener("click",e=>{ if(e.target===$("m-seen")) closeSeen(); });
+
+function openSpecies(id){
+  const s=SP[id], raised=state.collection.some(c=>c.species===id);
+  $("ms-h").textContent=s.name; $("ms-sci").textContent=s.sci; $("ms-kind").textContent=s.noun.charAt(0).toUpperCase()+s.noun.slice(1);
+  $("ms-rarity").className="chip "+RARITY_CHIP[s.rarity]; $("ms-rarity").textContent=s.rarity; $("ms-season").innerHTML=seasonChip(s);
+  $("ms-art").innerHTML=butterflySVG(raised?"flutter":"");
+  $("ms-art").classList.toggle("silhouette",!raised);
+  const sl=seenList(s);
+  $("ms-seen-note").innerHTML = sl.length ? `${EYE_ICON}You've seen: ${sl.map(k=>stageLabel(s,k).toLowerCase()).join(", ")}` : "You haven't marked this species as seen yet.";
+  $("ms-seen-note").classList.toggle("is-seen",sl.length>0);
+  $("ms-seen").textContent = sl.length ? "Edit what I've seen" : "I've seen it!";
+  $("ms-locked").hidden=raised; $("ms-facts-wrap").hidden=!raised; $("ms-raised-wrap").hidden=!raised;
+  $("ms-kv").innerHTML=[["Family",FAMILY[s.family]||s.family],[KINDS[s.kind].size,s.wing],[KINDS[s.kind].food,s.food],["When to see it",s.season],["In Britain",s.status]]
+    .map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("");
+  $("ms-facts").innerHTML=s.facts.map(f=>`<li>${esc(f)}</li>`).join("");
+  $("ms-list").innerHTML=state.collection.filter(c=>c.species===id).map((c,i)=>`
+    <div class="result" style="border:1px solid var(--line);border-radius:12px"><span class="spine" style="background:#e8741c"></span>
+    <span class="meta"><b>#${i+1} · ${esc(c.title)}</b><span class="small muted">${esc(c.author||"Unknown author")} · <span class="mono">${c.pages} pp</span> · ${new Date(c.date).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"})}</span></span></div>`).join("");
+  $("ms-seen").dataset.id=id;
+  $("m-sp").hidden=false;
+}
+$("ms-close").onclick=()=>{$("m-sp").hidden=true};
+$("ms-seen").onclick=()=>openSeen($("ms-seen").dataset.id);
+
+/* ---------- tools ---------- */
+$("skip-day").onclick=()=>{state.offset=(state.offset||0)+DAY;save();show();toast("Skipped ahead one day");};
+function renderMonthPick(){
+  const real=new Date(now()).getMonth();
+  $("month-pick").innerHTML=`<option value="">Real month (${MONTHS[real]})</option>`+MONTHS.map((m,i)=>`<option value="${i}"${state.monthOverride===i?" selected":""}>${m}</option>`).join("");
+}
+$("month-pick").onchange=e=>{ state.monthOverride = e.target.value==="" ? null : +e.target.value; save(); show(); toast(`Seasons now follow ${MONTHS[currentMonth()]}.`); };
+renderMonthPick();
+let resetArmed=false;
+$("reset").onclick=()=>{
+  if(!resetArmed){resetArmed=true;$("reset").textContent="Tap again to confirm";setTimeout(()=>{resetArmed=false;$("reset").textContent="Reset everything"},3000);return;}
+  state=freshState();save();resetArmed=false;$("reset").textContent="Reset everything";go("shelf");toast("Prototype reset");
+};
+let tt;
+function toast(msg){const t=$("toast");t.textContent=msg;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,2200+msg.length*25);}
+document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o&&o.id!=="m-cel")o.hidden=true}));
+
+show();
+})();
+</script>
+
+</body>
+</html>
