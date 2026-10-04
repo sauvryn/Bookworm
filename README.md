@@ -64,7 +64,7 @@ Progress is lost or hidden in these cases:
   - **Winter field note:** each species has a field note saying which stage spends the winter.
   - **Durations:** 100 species have species-level figures, 37 genus-level and 87 family-level estimates. They're in `DUR`.
 - **Pupae don't feed.** Once it pupates:
-  - the Feed button reads **Grow**, and logging reading shows "Growing!" instead of "Munch!";
+  - the Feed button reads **Morph** (for metamorphosis), and logging reading shows "Morphing!" instead of "Munch!". The mood label stays "Pupating", the scientific word;
   - the hunger status shows **Pupating**, and a pupa never gets hungry;
   - queen or worker is decided by feeding during the larval stage only.
 - **Correcting progress.** If you enter the wrong page, the page-number editor lets you fix it.
@@ -246,7 +246,7 @@ Old saves are migrated automatically through the `MERGED` alias map.
     - **Achievement and unlock:** the achievement is "Stars, Stripes & Stingers", and the category unlocks after 4 butterflies.
   - **Moth forms and unlocks:** six moths have male and female forms (Promethea, Io, Salt Marsh, Spongy, White-marked Tussock and Bagworm). In the US, moths unlock after 2 butterflies, as elsewhere. Their achievement is "Porch-Light Parade".
   - **How it was written:** the American species notes, rarity, sizes, seasons, life cycles, habitats, gardening tips and male/female forms were first **written from general knowledge**. They're being fact-checked one category at a time, smallest first, against US sources (see [Fact-checking American species](#fact-checking-american-species)). Cards that haven't been checked yet say so.
-  - **Fact-check progress:** Ants ✅ and Other insects ✅ (October 2026). Still to check: Flies, Bees & Wasps, Beetles, Moths, Butterflies. Larva and pupa durations and habitats (`US_DUR`, `US_HAB`) haven't been checked yet; they could get their own pass at the end. The Monarch card has two migration distances (4,800 km in the American note, 4,500 km in the original fact); settle that in the Butterflies check.
+  - **Fact-check progress:** Ants ✅, Other insects ✅, Flies ✅, Bees & Wasps ✅, Beetles ✅ and Moths ✅ (October 2026). Still to check: Butterflies. Larva and pupa durations and habitats (`US_DUR`, `US_HAB`) haven't been checked yet; they could get their own pass at the end. The Monarch card has two migration distances (4,800 km in the American note, 4,500 km in the original fact); settle that in the Butterflies check.
   - **Language:** British or American English can be chosen separately from the country. See [Language and units](#language-and-units).
   - **Look-alikes:** these are folded in the same way as for the UK and Ireland, e.g. Canadian into Eastern Tiger Swallowtail, Eastern Comma into Question Mark, Northern into Pearl Crescent, Five-spotted Hawk Moth into Carolina Sphinx, Snowberry into Hummingbird Clearwing, and Forest into Eastern Tent Caterpillar Moth.
   - **What it has:** category achievements ("Star-Spangled Wings" for butterflies, "Porch-Light Parade" for moths) and a meta achievement, "Collect All American Species".
@@ -371,6 +371,100 @@ The raw fact-check results are in `fc/result*.json`. For every claim they record
     - Snow Flea → *Boreus* species.
   - **Snow Scorpionfly:** in the US, "snow flea" means a springtail, so the Snow Flea is called the **Snow Scorpionfly** there. Its family label is "Boreidae (snow scorpionflies)".
   - **BugGuide searches:** these now skip words like "species" and "and relatives", so they search for the genus or family.
+- **Flies (October 2026):** 155 fields: 87 ok, 53 corrected, 4 replaced, 11 unverified.
+  - **Unverified:**
+    - seven seasons;
+    - the sizes of the Greenhead, Long-legged Fly and Rabbit Bot Fly;
+    - the Transverse Flower Fly's larval food. Its larva has never been described.
+  - **Rabbit Bot Fly:** the card is now *Cuterebra* species, "found across most of North America" (BugGuide). *Cuterebra cuniculi* itself lives only in Georgia and Florida.
+  - **Larval food:** two cards had it wrong. Deer Fly larvae eat rotting plant matter, not small animals. The Long-legged Fly's food line described the adults.
+  - **Replaced facts:**
+    - The American Hover Fly's hovering fact is now its fall migration south from Canada.
+    - The Black Horse Fly's "one of the largest" claim is now "black all over, even its wings".
+    - The Golden-backed Snipe Fly's head-down resting pose is now that adults visit elderberry flowers.
+    - The Transverse Flower Fly's rat-tailed maggot fact is now its range.
+  - **Corrections worth knowing:**
+    - The Transverse Flower Fly's yellow is a patch at the back of the thorax, not a band.
+    - Black Soldier Fly adults "eat little, if anything".
+    - Fruit fly eyes are brick-red.
+    - The Asian Tiger Mosquito is 2–10 mm.
+  - **Shared species:** all four (Drone-fly, Crane Fly, Narcissus Bulb Fly and Dark-edged Bee-fly) really live in the US, so none needed a `us_sci`.
+    - The Crane Fly's American status is now "Introduced; a lawn pest in the Northwest and Northeast".
+    - Its note now says North America has more than 1,600 kinds.
+    - Its American "daddy longlegs" sentence now says the name "is also used for" harvestmen and cellar spiders. No source said that use is more common in the US.
+  - **Sentences shown only in the US:** these (`COUNTRY_TEXT`) are now fact-checked too. Their sources are stored as `extra` on the species' `US_CHECKED.notes` entry.
+  - **Overrides:** the overrides file can now set `sci` and add `src`, used here for the Rabbit Bot Fly.
+- **Bees & Wasps (October 2026):** 260 fields: 194 ok, 47 corrected, 1 replaced, 18 unverified. Most of the unverified ones are seasons, plus three sizes.
+  - **Bicolored Striped Sweat Bee:** the female isn't green all over. She has a green head and thorax and a black-and-white striped abdomen.
+  - **Black-and-yellow Mud Dauber:** the "organ pipe" nest belongs to a different wasp. This one builds a smooth lump of mud cells.
+  - **Rusty Patched Bumblebee:** it lives in 13 states and Ontario. It was the first bumblebee listed as endangered in the continental US.
+  - **Eastern Velvet Ant:** sources disagree on the larval food (bumblebee nests, or cicada killers and other ground-nesting wasps), so the card mentions both.
+  - **Squash Bee:** it collects *pollen* only from squash, pumpkins and gourds, early in the morning.
+  - **Sizes:** several were corrected, e.g. Common Eastern Bumblebee 8–23 mm, Cicada Killer 15–50 mm, Blue Orchard Bee 9–11 mm and Pigeon Tremex 20–30 mm.
+  - **Queen and worker descriptions:** checked and corrected where needed, e.g. sizes and paper wasp colours.
+  - **Shared species:** Honey Bee, European Hornet and Wool-carder Bee are the same species in the US, so none needed a `us_sci`.
+    - The European Hornet fact "the only true hornet established here" still holds. The Yellow-legged Hornet found in Georgia in 2023 isn't established and is being eradicated. **Recheck this one in future.**
+    - The British fact comparing the Hornet with the Common Wasp, which isn't on the US list, now reads "It's usually less defensive than yellowjackets or bald-faced hornets" in the US (Clemson HGIC).
+  - **Gardening tips:** these are now part of the American check, and five changed:
+    - American Bumblebee: "sunflowers and goldenrods". Red clover isn't native.
+    - Eastern Carpenter Bee: "salvias and passionflower (maypop)".
+    - Bicolored Striped Sweat Bee: "coneflowers and goldenrods".
+    - Alfalfa Leafcutter Bee: "alfalfa".
+    - Feather-legged Fly: "dill and native asters". Fennel is invasive in California.
+
+    The other two fly tips (American Hover Fly, Transverse Flower Fly) were confirmed.
+  - **Bug fixed:** the first American checks had dropped the Gardening Tip from three flies. Checked American cards now keep their draft tip unless the check changes it (`merge_us.py` stores `garden`).
+  - **Bug fixed:** the British-to-American name swap could double a name ("European European Hornet"). American names already in the text are now protected first.
+- **Beetles (October 2026):** 315 fields: 219 ok, 79 corrected, 5 replaced, 12 unverified. Most of the unverified ones are seasons.
+  - **Sizes:** many were too narrow. Big Dipper Firefly 9–19 mm, Synchronous Firefly 11–15 mm, American Burying Beetle 25–45 mm.
+  - **Overstated facts, now toned down:**
+    - The Emerald Ash Borer has killed "tens of millions" of ash trees, not hundreds of millions.
+    - The Hercules Beetle is one of the heaviest *beetles*, not insects.
+    - The Boll Weevil has been wiped out everywhere except a small part of South Texas.
+  - **Male/female forms:** female Hercules Beetles have no horns at all.
+  - **Replaced facts:**
+    - the tiger beetle stopping to see its prey again;
+    - the bombardier beetle aiming its spray (that was shown for African species);
+    - the Dogbane Leaf Beetle playing dead;
+    - two Pleasing Fungus Beetle facts.
+  - **Bess Beetle season:** April–August, when adults are out and about (BugGuide: they come to lights in spring and summer). A new field note says they can be found in rotting logs all year round.
+  - **Season rule:** "When to see it" means when adults are **out and about**. If they can also be found hiding all year, that goes in a field note. `US_INSTRUCTIONS.md` now says so. Extra facts can be appended with an overrides file (`"facts": {"3": "..."}`).
+  - **Shared species:** all five are the same species in the US, so none needed a `us_sci`. The Devil's Coach Horse is established on the West Coast.
+    - The Harlequin Ladybird's American name is now **Multicolored Asian Lady Beetle** (University of Maine Extension, BugGuide), set with `fc/us_over_beetle.json`.
+    - The 7-spot note now says that aphid-control releases failed and that the wild population probably arrived by accident in the 1970s.
+    - The 14-spot arrived by accident near Quebec in the 1960s and is widespread in the East.
+  - **Gardening tips:** all three confirmed (native milkweeds, goldenrod, dill and yarrow).
+- **Moths (October 2026):** checked in two halves at the same time. 463 fields: 290 ok, 162 corrected, 7 replaced, 4 unverified. Most corrections bring wingspans and flight seasons into line with Butterflies and Moths of North America. Southern broods often make the season longer.
+  - **Wrong claims fixed:**
+    - Milkweed Tussock Moth caterpillars use older milkweed, which Monarchs avoid; they don't feed "alongside" them.
+    - The Hag Moth's monkey slug has nine pairs of arms, not six.
+    - In Mexican folklore the Black Witch is an omen of death. The "money moth" belief comes from the Bahamas.
+    - The Fall Webworm's spread is confirmed for Europe only.
+    - "Like a sweet" is now "like a piece of candy" (Rosy Maple Moth).
+  - **Replaced facts** (claims that couldn't be confirmed):
+    - Carolina Sphinx tongue length;
+    - catalpa planting by anglers;
+    - Big Poplar Sphinx size ranking;
+    - Tersa Sphinx body shape;
+    - Achemon Sphinx losing its horn;
+    - Sheep Moth spines stinging;
+    - Faithful Beauty "flies slowly". It now oozes yellow foam to put off predators.
+  - **Scientific name:** the Squash Vine Borer is now *Eichlinia cucurbitae*. Its Butterflies and Moths of North America page is still under *Melittia cucurbitae*, so `BAMONA_SLUG` points there. The Eichlinia address gives a 404.
+  - **Links checked:** the Fall Webworm and Virginian Tiger Moth pages on Butterflies and Moths of North America both exist.
+  - **Shared species:** all eight are the same species in the US, so none needed a `us_sci`.
+    - The Garden Tiger is called the **Great Tiger Moth** in the US (BugGuide), set with `fc/us_over_moth2.json`.
+    - The Peppered Moth keeps its name, because it's the name used in American textbooks. Its American note now mentions its other US name, Pepper-and-salt Geometer.
+    - The Cinnabar was first released in California in 1959, to control tansy ragwort.
+    - The Box-tree Moth was first found in New York in 2021 and has since spread to many eastern and Great Lakes states (APHIS).
+    - The Large Yellow Underwing arrived in Nova Scotia in 1979.
+  - **Gardening tips:**
+    - Hummingbird Clearwing: "native coral honeysuckle and bee balm". The old honeysuckle and viburnum hosts on record include invasive species.
+    - Yucca Moth: "native yuccas such as Adam's needle".
+    - Clymene Moth's larval food is now bonesets, white snakeroot, oaks and willows.
+  - **Could be added later:** the official US spelling "Indianmeal Moth".
+- **Wording:**
+  - In American English, true flies are two words, as in American field guides: "crane flies", "horse flies", "robber flies", "snipe flies", "soldier flies". Caddisflies and alderflies stay one word.
+  - The "best guess" note now says "season" instead of "when to see it".
 - **Instructions update:** for shared species, checkers now also confirm that the British species really lives in the US. If not, they give a `us_sci`, and the overrides file can rename the species for the US (`name`).
 
 ## Language and units
