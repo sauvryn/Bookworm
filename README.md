@@ -449,3 +449,11 @@ The Playwright scripts run with `NODE_PATH=$(npm root -g) node <script>.js`. Out
 - **Unlock order:** after Bees & Wasps, the order is Beetles, Flies, Ants, then Other insects, two butterflies apart each time. Change `UNLOCKS` to adjust.
 - **Male and female forms:** only one larva of a species can be raised at a time, even when the other form is still missing.
 - **Queens and workers:** caste follows feeding rather than chance, which rewards steady reading and mirrors the real biology. The Common Wasp and Hornet have forms too, even though few people will ever tell their queens from workers in the wild, because collecting is the fun.
+
+---
+
+## Copyright
+
+Copyright © 2026 Tara Carter. All rights reserved.
+
+This repository is not currently released under an open-source license. You're welcome to view the code and try the app. Please don't copy, modify or redistribute it, or its text, data or artwork, without permission.
