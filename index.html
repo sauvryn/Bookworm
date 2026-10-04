@@ -16,7 +16,7 @@
 /* Layout: a single phone-width app column, milkweed-leaf greens with monarch orange as the one accent; bottom tab bar. */
 :root{
   --bg:#eaf0e1; --surface:#fbfcf7; --surface-2:#f2f6ea; --ink:#1f2a1c; --muted:#5a6852;
-  --line:#d3dbc6; --leaf:#77a24f; --leaf-dark:#4d7631; --link:#3b6620; --accent:#d4621a; --accent-soft:#fbe3cf;
+  --line:#d3dbc6; --leaf:#77a24f; --leaf-dark:#4d7631; --link:#3b6620; --accent-ink:#b0500f; --accent:#d4621a; --accent-soft:#fbe3cf;
   --on-accent:#ffffff; --warn:#b5651d; --warn-soft:#f8e6d2; --danger-soft:#f6dcd6; --danger:#a63d2a;
   --ok:#3f7a3a; --ok-soft:#dcebd2; --rare:#6a3fa0; --rare-soft:#ece2f7; --ice:#2b6a8c; --ice-soft:#dcecf5; --shadow:0 6px 24px rgba(40,60,30,.10);
   --f-display:"Grandstander","Comic Neue","Trebuchet MS",system-ui,sans-serif;
@@ -25,12 +25,12 @@
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#111710; --surface:#1a2218; --surface-2:#212b1e; --ink:#e5ecd9; --muted:#9dab92;
-  --line:#2e3a2a; --leaf:#5f8c3c; --leaf-dark:#3f6427; --link:#a9d47e; --accent:#f08a3c; --accent-soft:#3a2516;
+  --line:#2e3a2a; --leaf:#5f8c3c; --leaf-dark:#3f6427; --link:#a9d47e; --accent-ink:#f5a05c; --accent:#f08a3c; --accent-soft:#3a2516;
   --on-accent:#1a0e04; --warn:#e9a35c; --warn-soft:#38291a; --danger-soft:#3b1f19; --danger:#f0937f;
   --ok:#8fcf7f; --ok-soft:#1f3320; --rare:#c9a8f0; --rare-soft:#2c2040; --ice:#8fcbea; --ice-soft:#1b2c37; --shadow:0 6px 24px rgba(0,0,0,.35); color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#111710; --surface:#1a2218; --surface-2:#212b1e; --ink:#e5ecd9; --muted:#9dab92;
-  --line:#2e3a2a; --leaf:#5f8c3c; --leaf-dark:#3f6427; --link:#a9d47e; --accent:#f08a3c; --accent-soft:#3a2516;
+  --line:#2e3a2a; --leaf:#5f8c3c; --leaf-dark:#3f6427; --link:#a9d47e; --accent-ink:#f5a05c; --accent:#f08a3c; --accent-soft:#3a2516;
   --on-accent:#1a0e04; --warn:#e9a35c; --warn-soft:#38291a; --danger-soft:#3b1f19; --danger:#f0937f;
   --ok:#8fcf7f; --ok-soft:#1f3320; --rare:#c9a8f0; --rare-soft:#2c2040; --ice:#8fcbea; --ice-soft:#1b2c37; --shadow:0 6px 24px rgba(0,0,0,.35); color-scheme:dark}
 
@@ -156,6 +156,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .hab-card.shut{border-style:dashed;background:transparent;color:var(--muted)}
 .hab-species{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:15px}
 .hab-species .got{font-weight:700}
+.hab-species li:not(.got) .sp-link{color:var(--accent-ink)}
 .sp-link{background:none;border:0;padding:0;font:inherit;font-weight:inherit;color:var(--link);text-decoration:underline;text-underline-offset:2px;cursor:pointer;text-align:left}
 #m-sp{z-index:22}
 .field-label{font-size:14px;font-weight:700}
@@ -2284,6 +2285,100 @@ const US_BEETLE_DIMORPH={"eastern-hercules-beetle":["Two long horns, one on the 
   "giant-stag-beetle":["Huge, branched, antler-like jaws","Short, strong jaws"],"reddish-brown-stag-beetle":["Large, curved jaws","Small jaws"],
   "rainbow-scarab":["A long, curved horn on the head","No horn, just a small bump"],"ten-lined-june-beetle":["Big, fan-shaped antennae","Small, slim antennae"]};
 US_BEETLES.forEach(s=>{ s.usOnly=true; s.kind="beetle"; s.noun="beetle"; s.months=parseMonths(s.season); SPECIES.push(s); });
+/* United States bees and wasps (final batch). From general knowledge, October 2026, NOT yet fact-checked. */
+const BW=(id,name,sci,family,rarity,wing,len,food,season,status,facts,garden)=>({id,name,sci,family,rarity,wing,len,food,season,status,facts,...(garden?{garden}:{})});
+const US_BEES=[
+ BW("common-eastern-bumblebee","Common Eastern Bumblebee","Bombus impatiens","Apidae","Common","8–21 mm",15,"Pollen and nectar, fed by workers","March–October","Very common in the East",
+  ["It's the commonest bumblebee in the eastern US, and it's spreading west.","It's raised commercially to pollinate tomatoes in greenhouses.","The similar Two-spotted Bumblebee counts here as the same collectible."],"bee balm and native asters"),
+ BW("american-bumblebee","American Bumblebee","Bombus pensylvanicus","Apidae","Uncommon","10–26 mm",15,"Pollen and nectar, fed by workers","April–October","Widespread but declining fast",
+  ["It's one of the largest bumblebees in North America.","It has vanished from much of its northern range in the last 20 years.","It nests on the surface among long grass rather than underground."],"red clover and wild bergamot"),
+ BW("rusty-patched-bumblebee","Rusty Patched Bumblebee","Bombus affinis","Apidae","Rare","10–22 mm",15,"Pollen and nectar, fed by workers","April–October","Endangered; a few areas in the Upper Midwest",
+  ["In 2017 it became the first bumblebee listed as endangered in the US.","Workers and males have a small rusty-brown patch on their abdomen.","It has disappeared from almost 90% of its former range."],"wild bergamot and native asters"),
+ BW("yellow-faced-bumblebee","Yellow-faced Bumblebee","Bombus vosnesenskii","Apidae","Common","9–19 mm",15,"Pollen and nectar, fed by workers","February–October","Very common on the West Coast",
+  ["It's the commonest bumblebee in California and along the West Coast.","It has a bright yellow face and a yellow band near its tail.","Its colonies can grow very large, with hundreds of workers."],"California lilac and native sages"),
+ BW("brown-belted-bumblebee","Brown-belted Bumblebee","Bombus griseocollis","Apidae","Common","10–22 mm",15,"Pollen and nectar, fed by workers","May–October","Common across much of the US",
+  ["It has a brown band across its abdomen.","It nests on or just below the ground.","It often feeds on milkweed flowers."],"milkweeds and clovers"),
+ BW("eastern-carpenter-bee","Eastern Carpenter Bee","Xylocopa virginica","Apidae","Common","19–23 mm",20,"Pollen and nectar, stored in the nest","April–September","Very common in the East",
+  ["It chews perfectly round holes in wooden decks and fences to nest.","Males can't sting; they hover and chase intruders as a bluff.","Its shiny black abdomen has almost no hair, unlike a bumblebee's."],"salvias and bee balm"),
+ BW("southeastern-blueberry-bee","Southeastern Blueberry Bee","Habropoda laboriosa","Apidae","Uncommon","12–15 mm",12,"Pollen and nectar, stored in the nest","March–April","Local in the Southeast",
+  ["It's active for only a few weeks while blueberries bloom.","It buzzes flowers to shake the pollen loose, called buzz pollination.","One female can help produce thousands of blueberries."],"blueberries"),
+ BW("blue-orchard-mason-bee","Blue Orchard Mason Bee","Osmia lignaria","Megachilidae","Common","10–14 mm",10,"Pollen and nectar, stored in the nest","March–June","Common",
+  ["It's metallic dark blue and builds nests in hollow stems and holes.","It walls off each egg with mud, like a mason.","Orchard growers use it to pollinate fruit trees."],"fruit trees and redbud"),
+ BW("squash-bee","Squash Bee","Xenoglossa pruinosa","Apidae","Uncommon","11–14 mm",12,"Squash and pumpkin pollen, stored in the nest","June–August","Common where squash grows",
+  ["It visits only squash and pumpkin flowers.","It starts work before sunrise, when squash flowers open.","Males often sleep inside closed squash flowers."],"squash and pumpkins"),
+ BW("bicolored-striped-sweat-bee","Bicolored Striped Sweat Bee","Agapostemon virescens","Halictidae","Common","10–13 mm",8,"Pollen and nectar, stored in the nest","May–October","Common",
+  ["It's bright metallic green.","Several females share one nest entrance, taking turns to guard it.","Sweat bees sometimes land on people to lick salty sweat."],"coneflowers and black-eyed Susans"),
+ BW("alfalfa-leafcutter-bee","Alfalfa Leafcutter Bee","Megachile rotundata","Megachilidae","Common","7–9 mm",8,"Pollen and nectar, stored in leaf cells","June–August","Common; introduced",
+  ["It cuts neat circles from leaves to build its nest cells.","Farmers keep it in nest boards to pollinate alfalfa.","It came from Europe and Asia in the 1930s."],"native roses"),
+ BW("long-horned-bee","Long-horned Bee","Melissodes species","Apidae","Uncommon","10–15 mm",10,"Pollen and nectar, stored in the nest","July–September","Common in late summer",
+  ["Males have very long antennae, almost as long as their body.","Males sleep clinging to plant stems by their jaws, often in groups.","Many near-identical long-horned bees count here as one collectible."],"sunflowers and asters"),
+ BW("eastern-yellowjacket","Eastern Yellowjacket","Vespula maculifrons","Vespidae","Common","10–16 mm",15,"Insects chewed up by workers","April–October","Very common in the East",
+  ["It nests underground, often in old rodent burrows.","Late-summer colonies can hold thousands of workers.","Workers scavenge sweet drinks and meat at picnics in late summer.","The similar Southern and German yellowjackets count here as the same collectible."]),
+ BW("bald-faced-hornet","Bald-faced Hornet","Dolichovespula maculata","Vespidae","Common","12–20 mm",15,"Insects chewed up by workers","May–October","Common",
+  ["Despite its name, it's really a yellowjacket, not a true hornet.","It builds big, grey, football-shaped paper nests in trees.","It's black with a white face."]),
+ BW("european-paper-wasp","European Paper Wasp","Polistes dominula","Vespidae","Common","13–18 mm",15,"Caterpillars chewed up by workers","April–October","Very common; introduced",
+  ["It builds open, umbrella-shaped paper nests under eaves.","It arrived from Europe in the 1970s and has spread widely.","It looks like a yellowjacket but has longer, dangling legs."]),
+ BW("northern-paper-wasp","Northern Paper Wasp","Polistes fuscatus","Vespidae","Common","15–21 mm",15,"Caterpillars chewed up by workers","April–October","Common",
+  ["Its workers recognise each other by their face markings.","It hunts caterpillars and is a useful garden predator.","Its open nest hangs from a single stalk."]),
+ BW("great-golden-digger-wasp","Great Golden Digger Wasp","Sphex ichneumoneus","Sphecidae","Uncommon","15–25 mm",20,"Katydids and crickets, stung and stored by the mother","June–September","Common",
+  ["It has a golden-haired body and an orange abdomen.","Females dig burrows and stock them with paralysed katydids.","It's harmless to people unless handled."],"mountain mint"),
+ BW("great-black-wasp","Great Black Wasp","Sphex pensylvanicus","Sphecidae","Uncommon","20–35 mm",25,"Katydids, stung and stored by the mother","July–September","Common",
+  ["It's large and all black with smoky blue wings.","It carries paralysed katydids back to its burrow, flying or dragging them.","Despite its size, it rarely stings people."],"mountain mint"),
+ BW("eastern-cicada-killer","Eastern Cicada Killer","Sphecius speciosus","Crabronidae","Uncommon","25–50 mm",30,"Cicadas, stung and stored by the mother","July–August","Common in the East",
+  ["It's one of the largest wasps in North America.","Females catch cicadas and fly them back to their burrows.","Males are territorial but have no sting."]),
+ BW("tarantula-hawk","Tarantula Hawk","Pepsis species","Pompilidae","Uncommon","25–50 mm",30,"A tarantula, stung and buried by the mother","May–September","Common in the Southwest",
+  ["It hunts tarantulas to feed its young.","Its sting is one of the most painful of any insect, though it rarely stings people.","It's New Mexico's state insect."]),
+ BW("black-and-yellow-mud-dauber","Black-and-yellow Mud Dauber","Sceliphron caementarium","Sphecidae","Common","24–28 mm",20,"Spiders, stung and stored by the mother","May–September","Very common",
+  ["It builds mud nests shaped like organ pipes under eaves and in sheds.","It fills each cell with paralysed spiders for its larva.","It has a very long, thin waist."]),
+ BW("blue-mud-dauber","Blue Mud Dauber","Chalybion californicum","Sphecidae","Uncommon","10–23 mm",20,"Spiders, especially black widows","June–September","Common",
+  ["It shines metallic blue.","It often takes over old nests of other mud daubers.","It's one of the few predators of black widow spiders."]),
+ BW("fraternal-potter-wasp","Fraternal Potter Wasp","Eumenes fraternus","Vespidae","Uncommon","12–15 mm",12,"Caterpillars, stung and stored by the mother","June–September","Common in the East",
+  ["It builds tiny mud pots, like little vases, on twigs.","Each pot holds one egg and several paralysed caterpillars.","It has a very thin waist and a yellow-and-black body."]),
+ BW("eastern-velvet-ant","Eastern Velvet Ant","Dasymutilla occidentalis","Mutillidae","Uncommon","15–25 mm",15,"Bumblebee larvae in their nests","June–September","Local in the East",
+  ["It's actually a wasp: wingless females run across the ground like ants.","Its painful sting earned it the nickname 'cow killer'.","Its bright red fuzz warns predators away."]),
+ BW("giant-ichneumon-wasp","Giant Ichneumon Wasp","Megarhyssa macrurus","Ichneumonidae","Uncommon","35–50 mm",30,"Horntail larvae inside dead wood","May–August","Local in eastern woods",
+  ["Females have an egg-laying tube up to 10 cm long.","They drill into dead wood to lay eggs on horntail larvae hidden inside.","Despite their scary look, they can't sting people."]),
+ BW("pigeon-tremex","Pigeon Tremex","Tremex columba","Siricidae","Uncommon","20–40 mm",40,"Dead and dying hardwood trees","July–October","Widespread",
+  ["It's a wood wasp, a primitive relative of bees and wasps.","Its larvae tunnel through dying maple, beech and elm wood.","It's the main host of the Giant Ichneumon Wasp."])
+];
+const US_BEE_NOTES={
+  "honey-bee":["Common","Very common; introduced","Honey bees aren't native to the Americas: European settlers brought them in the 1600s.",null],
+  "hornet":["Uncommon","Local in the East; introduced","In the US it's called the European Hornet. It arrived in New York in the 1800s and is the only true hornet established here.","European Hornet"],
+  "wool-carder-bee":["Uncommon","Common; introduced","It arrived in the US in the 1960s and has spread across the country.","European Wool Carder Bee"]
+};
+const US_BEE_CASTE={
+  "common-eastern-bumblebee":{q:"Large, up to 21 mm; seen alone in early spring",w:"Smaller; yellow thorax and a black abdomen with one yellow band"},
+  "american-bumblebee":{q:"Very large, up to 26 mm",w:"Smaller; lots of yellow on the abdomen"},
+  "rusty-patched-bumblebee":{q:"Large, without the rusty patch",w:"Smaller, with a rusty-brown patch on the abdomen"},
+  "yellow-faced-bumblebee":{q:"Large; out from late winter in mild areas",w:"Smaller; yellow face and one yellow band near the tail"},
+  "brown-belted-bumblebee":{q:"Large; out in late spring",w:"Smaller, with a brown band across the abdomen"},
+  "eastern-yellowjacket":{q:"About 16 mm; seen alone in spring",w:"10–13 mm, yellow and black, busy around picnics"},
+  "bald-faced-hornet":{q:"About 20 mm; starts the nest alone in spring",w:"12–15 mm, black with a white face"},
+  "european-paper-wasp":{q:"Slightly larger; seen alone in spring",w:"About 13–15 mm, with orange antennae"},
+  "northern-paper-wasp":{q:"Slightly larger; seen alone in spring",w:"About 15–18 mm, brown with thin yellow bands"}};
+const US_BEE_DIMORPH={"eastern-carpenter-bee":["A pale yellow-white patch on the face","An all-black face"],
+  "bicolored-striped-sweat-bee":["Metallic green head and thorax, black-and-yellow striped abdomen","Metallic green all over"],
+  "eastern-velvet-ant":["Winged and black-and-red","Wingless and bright red and black, like a fuzzy ant"],
+  "giant-ichneumon-wasp":["No long tail","An egg-laying tube up to 10 cm long"],
+  "pigeon-tremex":["No spike at the tail","A strong drilling spike at the tail"]};
+const US_BEE_DUR={"common-eastern-bumblebee":[17,14],"american-bumblebee":[17,14],"rusty-patched-bumblebee":[17,14],"yellow-faced-bumblebee":[17,14],"brown-belted-bumblebee":[17,14],
+  "eastern-carpenter-bee":[25,14],"southeastern-blueberry-bee":[30,21],"blue-orchard-mason-bee":[30,30],"squash-bee":[30,21],"bicolored-striped-sweat-bee":[14,14],
+  "alfalfa-leafcutter-bee":[20,14],"long-horned-bee":[30,21],"eastern-yellowjacket":[10,10],"bald-faced-hornet":[10,10],"european-paper-wasp":[12,10],"northern-paper-wasp":[12,10],
+  "great-golden-digger-wasp":[10,21],"great-black-wasp":[10,21],"eastern-cicada-killer":[10,25],"tarantula-hawk":[20,21],"black-and-yellow-mud-dauber":[10,14],
+  "blue-mud-dauber":[10,14],"fraternal-potter-wasp":[10,14],"eastern-velvet-ant":[20,21],"giant-ichneumon-wasp":[300,14],"pigeon-tremex":[400,21]};
+const US_BEE_WINTER={"default":"It spends the winter as a resting larva in its nest.","eastern-carpenter-bee":"Adults spend the winter in their wooden tunnels.",
+  "blue-orchard-mason-bee":"It spends the winter as an adult inside its cocoon.","bicolored-striped-sweat-bee":"Mated females spend the winter underground.",
+  "giant-ichneumon-wasp":"It spends the winter as a larva inside the wood.","pigeon-tremex":"It spends the winter as a larva inside the wood."};
+["common-eastern-bumblebee","american-bumblebee","rusty-patched-bumblebee","yellow-faced-bumblebee","brown-belted-bumblebee","eastern-yellowjacket","bald-faced-hornet","european-paper-wasp","northern-paper-wasp"].forEach(id=>{ US_BEE_WINTER[id]="Only new queens survive the winter, hidden away; the rest of the colony dies in autumn."; });
+const US_BEE_HAB={"common-eastern-bumblebee":["towns","grassland","farmland"],"american-bumblebee":["grassland","farmland"],"rusty-patched-bumblebee":["grassland","woodland","towns"],
+  "yellow-faced-bumblebee":["towns","grassland","coast"],"brown-belted-bumblebee":["grassland","towns","farmland"],"eastern-carpenter-bee":["towns","woodland"],
+  "southeastern-blueberry-bee":["farmland","woodland"],"blue-orchard-mason-bee":["farmland","towns","woodland"],"squash-bee":["farmland","towns"],
+  "bicolored-striped-sweat-bee":["grassland","towns","farmland"],"alfalfa-leafcutter-bee":["farmland","towns"],"long-horned-bee":["grassland","farmland","towns"],
+  "eastern-yellowjacket":["towns","woodland","grassland"],"bald-faced-hornet":["woodland","towns"],"european-paper-wasp":["towns","farmland"],
+  "northern-paper-wasp":["towns","woodland","grassland"],"great-golden-digger-wasp":["grassland","towns"],"great-black-wasp":["grassland","towns"],
+  "eastern-cicada-killer":["grassland","towns"],"tarantula-hawk":["grassland"],"black-and-yellow-mud-dauber":["towns","farmland"],"blue-mud-dauber":["towns"],
+  "fraternal-potter-wasp":["woodland","grassland","towns"],"eastern-velvet-ant":["grassland","coast"],"giant-ichneumon-wasp":["woodland"],"pigeon-tremex":["woodland"]};
+US_BEES.forEach(s=>{ s.usOnly=true; s.kind="beewasp"; s.noun=/wasp|hornet|yellowjacket|dauber|tremex|tarantula|cicada-killer|velvet-ant/.test(s.id)?(s.id==="eastern-velvet-ant"?"wasp":"wasp"):"bee"; s.months=parseMonths(s.season); SPECIES.push(s); });
 /* American rarity tiers for shared species, and American names, status lines and facts */
 const US_NOTES={
   "monarch":["Common","Common; numbers have fallen sharply","Eastern Monarchs fly up to 4,800 km (3,000 miles) to spend the winter in the mountains of central Mexico.",null],
@@ -2292,8 +2387,8 @@ const US_NOTES={
   "small-white":["Common","Very common; introduced","In the United States it's called the Cabbage White.","Cabbage White"],
   "small-copper":["Common","Common in the East","In the United States it's called the American Copper. It likes weedy fields with sheep sorrel.","American Copper"]
 };
-Object.assign(US_NOTES,US_MOTH_NOTES,US_OTHER_NOTES,US_ANT_NOTES,US_FLY_NOTES,US_BEETLE_NOTES);
-const US_RARITY=Object.fromEntries([...US_ONLY.map(s=>[s.id,s.rarity]),...US_MOTHS.map(s=>[s.id,s.rarity]),...US_OTHER.map(s=>[s.id,s.rarity]),...US_ANTS.map(s=>[s.id,s.rarity]),...US_FLIES.map(s=>[s.id,s.rarity]),...US_BEETLES.map(s=>[s.id,s.rarity]),...Object.entries(US_NOTES).map(([id,n])=>[id,n[0]])]);
+Object.assign(US_NOTES,US_MOTH_NOTES,US_OTHER_NOTES,US_ANT_NOTES,US_FLY_NOTES,US_BEETLE_NOTES,US_BEE_NOTES);
+const US_RARITY=Object.fromEntries([...US_ONLY.map(s=>[s.id,s.rarity]),...US_MOTHS.map(s=>[s.id,s.rarity]),...US_OTHER.map(s=>[s.id,s.rarity]),...US_ANTS.map(s=>[s.id,s.rarity]),...US_FLIES.map(s=>[s.id,s.rarity]),...US_BEETLES.map(s=>[s.id,s.rarity]),...US_BEES.map(s=>[s.id,s.rarity]),...Object.entries(US_NOTES).map(([id,n])=>[id,n[0]])]);
 /* life cycle (active days), habitats and male/female forms for the American species, in the same formats as DUR, HAB and DIMORPH */
 const US_DUR={"eastern-tiger-swallowtail":[30,12,"f","It spends the winter as a chrysalis."],"western-tiger-swallowtail":[30,14,"f","It spends the winter as a chrysalis."],
   "black-swallowtail":[25,12,"f","It spends the winter as a chrysalis."],"spicebush-swallowtail":[28,14,"f","It spends the winter as a chrysalis."],
@@ -2356,7 +2451,8 @@ const US_DIMORPH={"eastern-tiger-swallowtail":["Yellow with black tiger stripes"
   "fiery-skipper":["Bright orange with jagged black edges","Darker brown with orange patches"],
   "zabulon-skipper":["Bright yellow-orange with dark borders","Dark brown with a few pale spots"]};
 Object.entries(US_MOTH_DUR).forEach(([id,d])=>{ US_DUR[id]=[d[0],d[1],"f",d[2]]; });
-Object.assign(US_HAB,US_MOTH_HAB,US_OTHER_HAB,US_ANT_HAB,US_FLY_HAB,US_BEETLE_HAB); Object.assign(US_DIMORPH,US_BEETLE_DIMORPH);
+Object.assign(US_HAB,US_MOTH_HAB,US_OTHER_HAB,US_ANT_HAB,US_FLY_HAB,US_BEETLE_HAB,US_BEE_HAB); Object.assign(US_DIMORPH,US_BEETLE_DIMORPH,US_BEE_DIMORPH);
+Object.entries(US_BEE_DUR).forEach(([id,d])=>{ US_DUR[id]=[d[0],d[1],"f",US_BEE_WINTER[id]||US_BEE_WINTER.default]; });
 Object.entries(US_BEETLE_DUR).forEach(([id,d])=>{ US_DUR[id]=[d[0],d[1],"f",US_BEETLE_WINTER[id]||US_BEETLE_WINTER.default]; });
 Object.entries(US_FLY_DUR).forEach(([id,d])=>{ US_DUR[id]=[d[0],d[1],"f",d[2]]; });
 Object.keys(US_ANT_HAB).forEach(id=>{ US_DUR[id]=[21,21,"f","The colony spends the winter underground; queens and workers rest until spring."]; }); Object.assign(US_DIMORPH,US_MOTH_DIMORPH,US_OTHER_DIMORPH);
@@ -2380,18 +2476,20 @@ Object.entries(US_DIMORPH).forEach(([id,d])=>{ DIMORPH[id]=[d[0],d[1],[]]; });
    decided mostly by how well a larva is fed. why = the science for each group; spring = field notes on spring queens. */
 const CASTE={"species":{"narrow-headed-ant":{"q":"Winged at first; a few fly on July mornings, then lose their wings","w":"Wingless; notched head; builds small thatched mounds in grass tussocks","src":["https://www.buglife.org.uk/projects/narrow-headed-ant/","https://www.bwars.com/ant/formicidae/formicinae/formica-exsecta","https://en.wikipedia.org/wiki/Formica_exsecta","https://en.wikipedia.org/wiki/Ant"]},"wood-ant":{"q":"Winged until mating, then wing stubs; flies May to June; many per nest","w":"Red and brownish-black, 4.5 to 9 mm; sprays formic acid from big mounds","src":["https://www.bwars.com/ant/formicidae/formicinae/formica-rufa","https://en.wikipedia.org/wiki/Formica_rufa","https://en.wikipedia.org/wiki/Ant"]},"red-ant":{"q":"5.5 to 7 mm with a bulkier thorax; up to a hundred queens in one nest","w":"Smaller, 3.5 to 5.5 mm and wingless; can sting","src":["https://en.wikipedia.org/wiki/Myrmica_rubra","https://en.wikipedia.org/wiki/Ant"]},"yellow-meadow-ant":{"q":"7 to 9 mm and darker; winged on warm July and August evenings","w":"Tiny, 2 to 4 mm, yellow with small eyes; lives underground in lawns","src":["https://en.wikipedia.org/wiki/Lasius_flavus","https://en.wikipedia.org/wiki/Ant"]},"black-garden-ant":{"q":"About 9 mm; flies in summer, then removes her wings after mating","w":"Small, 3 to 5 mm, glossy black and wingless","src":["https://en.wikipedia.org/wiki/Black_garden_ant","https://en.wikipedia.org/wiki/Ant"]},"honey-bee":{"q":"Longer abdomen than the workers; stays in the hive laying eggs","w":"Much smaller; flies from the hive daily in warm weather for nectar","src":["https://en.wikipedia.org/wiki/Queen_bee","https://en.wikipedia.org/wiki/Worker_bee"]},"bilberry-bumblebee":{"q":"Large; out of hibernation in April on moors and mountains","w":"Smaller; big red tail over half the abdomen; at upland flowers","src":["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/bilberry-bumblebee/","https://en.wikipedia.org/wiki/Bumblebee"]},"buff-tailed-bumblebee":{"q":"Large with a buff tail; one of the first bumblebees out, from February","w":"Smaller; whitish tail, sometimes with a narrow buff border","src":["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/buff-tailed-bumblebee/","https://en.wikipedia.org/wiki/Bombus_terrestris"]},"heath-bumblebee":{"q":"Large; out of hibernation from February onwards","w":"Smaller; busy at flowers from spring into early autumn","src":["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/heath-bumblebee/","https://en.wikipedia.org/wiki/Bumblebee"]},"tree-bumblebee":{"q":"Large; out from February, seeking bird boxes or roof spaces to nest","w":"Smaller; ginger thorax, white tail; seen until the end of August","src":["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/tree-bumblebee/","https://en.wikipedia.org/wiki/Bumblebee"]},"early-bumblebee":{"q":"Large; out in March, with a yellow band on the abdomen","w":"Smaller; abdomen yellow band often reduced or missing","src":["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/early-bumblebee/","https://en.wikipedia.org/wiki/Bumblebee"]},"garden-bumblebee":{"q":"Large with a long face; out of hibernation from April","w":"Smaller; long tongue for deep flowers like foxgloves","src":["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/garden-bumblebee/","https://en.wikipedia.org/wiki/Bumblebee"]},"shrill-carder-bee":{"q":"Large; out late, from April or May, in a few flower-rich spots","w":"Smaller; busy at flowers in summer, up to the end of September","src":["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/shrill-carder-bee/","https://en.wikipedia.org/wiki/Bumblebee"]},"white-tailed-bumblebee":{"q":"Quite large; out of hibernation in March and April","w":"A smaller version of the queen, with the same bright white tail","src":["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/white-tailed-bumblebee/"]},"red-tailed-bumblebee":{"q":"Much larger than workers; black with a red tail, out from March","w":"Smaller; velvety black with a bright red tail","m":"Yellow face and yellow bands on the thorax, with a red tail","src":["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/red-tailed-bumblebee/","https://en.wikipedia.org/wiki/Bombus_lapidarius"]},"common-carder-bee":{"q":"Large and gingery; out of hibernation from March","w":"Smaller; busy at flowers from late spring, some into October","src":["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/common-carder-bee/","https://en.wikipedia.org/wiki/Bumblebee"]},"great-yellow-bumblebee":{"q":"Large; appears late in spring, from mid-May","w":"Smaller; feeds at vetches, clovers and bird’s-foot trefoil","src":["https://www.bumblebeeconservation.org/learn-about-bumblebees/species-guide/great-yellow-bumblebee/","https://en.wikipedia.org/wiki/Bumblebee"]},"common-wasp":{"q":"Bigger, about 20 mm; seen alone in spring looking for a nest site","w":"Smaller, 12 to 17 mm; the colony's foragers through the summer","src":["https://en.wikipedia.org/wiki/Vespula_vulgaris","https://en.wikipedia.org/wiki/Vespula_vulgaris","https://www.nhm.ac.uk/discover/why-do-wasps-build-nests.html"]},"hornet":{"q":"Up to 35 mm; out of hibernation from early April","w":"Around 25 mm; first workers appear from late June","src":["https://en.wikipedia.org/wiki/European_hornet","https://www.bwars.com/wasp/vespidae/vespinae/vespa-crabro"]}},"why":{"ant":{"text":"In many ants, a female larva that is fed well becomes a queen, while one given less food becomes a worker; when food is scarce, all become workers. Caste is not only about food: in some species genes, temperature and signals from the queen also play a part.","src":["https://en.wikipedia.org/wiki/Queen_ant","https://en.wikipedia.org/wiki/Ant","https://en.wikipedia.org/wiki/Polyphenism"]},"honeybee":{"text":"All honey bee larvae get royal jelly for their first few days, then workers switch to pollen and honey. A larva fed only royal jelly the whole way through grows into a queen.","src":["https://en.wikipedia.org/wiki/Queen_bee","https://en.wikipedia.org/wiki/Worker_bee"]},"bumblebee":{"text":"Bumblebee larvae that become queens are fed much more food, up to three times as much pollen, so they grow very big. They are reared later in the season, once the nest is large and workers bring in enough food.","src":["https://www.bumblebeeconservation.org/about-bees/lifecycle/","https://en.wikipedia.org/wiki/Bombus_terrestris"]},"wasp":{"text":"Late in summer, social wasps build special queen cells, and the workers bring most of their food to the larvae in them. Those well-fed larvae grow into the next year's queens.","src":["https://en.wikipedia.org/wiki/Vespula_vulgaris"]}},"spring":{"bumblebee":{"text":"The big bumblebees you see in early spring are queens just out of hibernation. They feed on spring flowers, then fly low in a slow zig-zag looking for a nest site.","src":["https://www.bumblebeeconservation.org/about-bees/lifecycle/","https://www.bumblebeeconservation.org/bumblebee-nests/","https://en.wikipedia.org/wiki/Bumblebee"]},"common-wasp":{"text":"Common wasps seen in spring are queens that spent the winter hidden in a sheltered hole. Each one looks for a nest site and builds the first paper cells and raises the first workers on her own.","src":["https://en.wikipedia.org/wiki/Vespula_vulgaris","https://www.nhm.ac.uk/discover/why-do-wasps-build-nests.html"]},"hornet":{"text":"Hornet queens come out of hibernation from early April and start a nest alone, often in a hollow tree. Her first eggs become workers, which appear from late June.","src":["https://www.bwars.com/wasp/vespidae/vespinae/vespa-crabro","https://www.buglife.org.uk/bugs/bug-directory/european-hornet/"]}}};
 Object.entries(US_ANT_CASTE).forEach(([id,c])=>{ CASTE.species[id]={...c,src:[]}; });
+Object.entries(US_BEE_CASTE).forEach(([id,c])=>{ CASTE.species[id]={...c,src:[]}; });
+CASTE.why.paperwasp={text:"Paper wasp larvae raised late in summer get more food and grow into next year's queens; those raised earlier in the year become workers.",src:[]};
 /* The Red-tailed Bumblebee moves from male/female to male/queen/worker; its male/female sources are kept */
 CASTE.species["red-tailed-bumblebee"].src=[...new Set([...CASTE.species["red-tailed-bumblebee"].src,...DIMORPH["red-tailed-bumblebee"][2]])];
 delete DIMORPH["red-tailed-bumblebee"];
 const isCaste=id=>!!CASTE.species[id];
-const casteGroup=id=>id==="honey-bee"?"honeybee":SP_KIND(id)==="ant"?"ant":(id==="common-wasp"||id==="hornet")?"wasp":"bumblebee";
+const casteGroup=id=>id==="honey-bee"?"honeybee":SP_KIND(id)==="ant"?"ant":/paper-wasp$/.test(id)?"paperwasp":["common-wasp","hornet","eastern-yellowjacket","bald-faced-hornet"].includes(id)?"wasp":"bumblebee";
 function SP_KIND(id){ const s=SPECIES.find(x=>x.id===id); return s&&s.kind; }
 /* Form keys: m male, f female, q queen, w worker. Larvae carry sex (m or f); a female of a social species becomes
    q or w when she emerges. */
 const FORM={m:{w:"Male",s:"♂"},f:{w:"Female",s:"♀"},q:{w:"Queen",s:"Q"},w:{w:"Worker",s:"W"}};
 const formsOf=id=>DIMORPH[id]?["m","f"]:isCaste(id)?(CASTE.species[id].m?["m","q","w"]:["q","w"]):[];
 const isDimorph=id=>formsOf(id).length>0;
-const formDesc=(id,k)=>DIMORPH[id]?DIMORPH[id][k==="m"?0:1]:CASTE.species[id][k];
+const formDesc=(id,k)=>withInches(DIMORPH[id]?DIMORPH[id][k==="m"?0:1]:CASTE.species[id][k]);
 const formSrc=id=>DIMORPH[id]?DIMORPH[id][2]:isCaste(id)?[...CASTE.species[id].src,...CASTE.why[casteGroup(id)].src]:[];
 const sexForForm=k=>k==="m"?"m":k?"f":null;
 const SEX_WORD={m:"Male",f:"Female",q:"Queen",w:"Worker"}, SEX_SYM={m:"♂",f:"♀",q:"Q",w:"W"};
@@ -2419,6 +2517,17 @@ const HABITATS=[
   {k:"coast",name:"Coast",desc:"Sand dunes, cliffs, shingle, saltmarsh and machair."},
   {k:"farmland",name:"Farmland & Hedgerows",desc:"Fields, crops, orchards, hedgerows and scrub."},
   {k:"towns",name:"Towns, Gardens & Homes",desc:"Gardens, parks, allotments, buildings and houses."}];
+/* American names and descriptions for the same eight habitats */
+const HABITATS_US={
+  woodland:{name:"Woodland & Forest",desc:"Hardwood and pine forests, woodland edges, old trees, logs and dead wood."},
+  grassland:{name:"Prairies, Meadows & Deserts",desc:"Prairie, meadows, pastures, roadsides, and dry grassland and desert."},
+  heath:{name:"Mountains & Shrublands",desc:"Mountain slopes, alpine meadows, chaparral and sagebrush."},
+  wetland:{name:"Wetlands & Swamps",desc:"Marshes, swamps, fens, bogs and wet meadows."},
+  freshwater:{name:"Rivers, Ponds & Lakes",desc:"In and beside streams, rivers, ponds and lakes."},
+  coast:{name:"Coasts & Beaches",desc:"Beaches, dunes, salt marshes, mangroves and coastal scrub."},
+  farmland:{name:"Farms & Orchards",desc:"Crop fields, orchards, pastures and field edges."},
+  towns:{name:"Backyards, Towns & Homes",desc:"Backyards, gardens, parks, buildings and houses."}};
+if(COUNTRY==="us") HABITATS.forEach(H=>Object.assign(H,HABITATS_US[H.k]));
 const habOf=id=>(HAB[id]&&HAB[id][0])||[];
 /* Spring-queen field notes for bumblebees, the Common Wasp and the Hornet */
 SPECIES.forEach(s=>{
@@ -2543,6 +2652,20 @@ if(COUNTRY==="ie"){
   });
   SPECIES.length=0; keep.forEach(s=>SPECIES.push(s));
 }
+/* ---------- units ----------
+   In the United States, sizes show in inches first with the metric measurement in brackets: "79–140 mm" becomes
+   "3.1–5.5 in (79–140 mm)". Other countries keep metric only. */
+const USE_INCHES=COUNTRY==="us";
+const inchStr=v=>{ const x=v/25.4; return x>=10?String(Math.round(x)):String(Math.max(0.1,Math.round(x*10)/10)); };
+function withInches(text){
+  if(!USE_INCHES || !text) return text;
+  return String(text).replace(/(\d+(?:\.\d+)?)(?:\s*[–-]\s*(\d+(?:\.\d+)?))?\s*(mm|cm)\b/g,(m,a,b,u)=>{
+    const f=u==="cm"?10:1, ia=inchStr(+a*f), ib=b?inchStr(+b*f):null;
+    return `${ia}${ib&&ib!==ia?"–"+ib:""} in (${m})`;
+  });
+}
+const lenText=mm=>USE_INCHES?`${inchStr(mm)} in (${mm} mm)`:`${mm} mm`;
+if(USE_INCHES) SPECIES.forEach(s=>{ s.wing=withInches(s.wing); s.facts=s.facts.map(withInches); });
 const COUNTRY_INFO=COUNTRIES[COUNTRY];
 let flagUid=0;
 function flagSVG(code){
@@ -2913,6 +3036,12 @@ function sampleSearch(q){
   return (n ? CATALOGUE.filter(b=>(b.title+b.author+b.isbn).toLowerCase().replace(/[-\s.]/g,"").includes(n)) : CATALOGUE.slice())
     .map(b=>({title:b.title,author:b.author,isbn:b.isbn,pages:b.pages,c:b.c}));
 }
+/* Book titles from Open Library are often lower-case. Capitalise the first letter of every word, including each part of
+   a hyphenated word ("right-wing" becomes "Right-Wing"). Only lower-case first letters change, so existing capitals
+   ("NASA", "McDonald") are kept, and letters after an apostrophe ("don't") are left alone. */
+function titleCase(t){
+  return String(t||"").split(/(\s+)/).map(word=>/\s/.test(word)?word:word.split("-").map(part=>part.replace(/^([^\p{L}\p{N}]*)(\p{Ll})/u,(m,pre,ch)=>pre+ch.toUpperCase())).join("-")).join("");
+}
 function renderResults(list){
   const note=$("search-note");
   note.textContent = searchMode==="live" ? "Results from Open Library. Page counts can differ between editions, so check yours."
@@ -2923,14 +3052,14 @@ function renderResults(list){
   $("results").innerHTML = list.map((b,i)=>`
     <button type="button" class="result${selected===b?" selected":""}" data-i="${i}">
       ${b.cover?`<img class="cover" src="${b.cover}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'spine'}))">`:`<span class="spine"${b.c?` style="background:${b.c}"`:""}></span>`}
-      <span class="meta"><b>${esc(b.title)}</b>
+      <span class="meta"><b>${esc(titleCase(b.title))}</b>
         <span class="small muted">${esc(b.author||"Unknown author")}${b.year?` · ${esc(b.year)}`:""}</span>
         <span class="small mono">${b.pages?`${b.pages} pp${b.edition?"":" (typical)"}`:"Page count unknown"}${b.editions>1?` · ${b.editions} editions`:""}</span>
         ${b.isbn?`<span class="isbn mono">ISBN ${esc(b.isbn)}</span>`:""}</span>
     </button>`).join("");
   $("results").querySelectorAll(".result").forEach(btn=>btn.onclick=()=>{
     selected=list[+btn.dataset.i];
-    $("f-title").value=selected.title; $("f-author").value=selected.author||""; $("f-isbn").value=selected.isbn||""; $("f-pages").value=selected.pages||"";
+    $("f-title").value=titleCase(selected.title); $("f-author").value=selected.author||""; $("f-isbn").value=selected.isbn||""; $("f-pages").value=selected.pages||"";
     updateTierHint(); renderResults(list);
     if(!selected.pages){ $("f-pages").focus(); toast("Open Library doesn't know this book's page count. Please type it in."); }
     else $("book-form").scrollIntoView({behavior:"smooth",block:"start"});
@@ -3049,7 +3178,7 @@ function renderRead(){
   $("habitat").classList.toggle("is-frozen",isFrozen);
   $("mood").className="chip mood "+m.cls; $("mood").innerHTML=`<span class="dot"></span>${m.label}`;
   const K=KINDS[sp.kind], pupa=K.pupa;
-  $("len").textContent = st<9 ? `≈ ${lengthMm(st,b.species)} mm` : cap1(pupa);
+  $("len").textContent = st<9 ? `≈ ${lenText(lengthMm(st,b.species))}` : cap1(pupa);
   if(markHungry(b)) save();
   $("sex").hidden=!b.sex; if(b.sex) $("sex").textContent=`${SEX_SYM[b.sex]} ${SEX_WORD[b.sex]}`;
   const cn=isCaste(b.species) && b.sex==="f";
@@ -3241,18 +3370,18 @@ function celebrate(b,stage,moved){
   if(stage===0 && moved){
     $("mc-eyebrow").textContent=`New book started · ${sp.rarity} ${sp.noun}`;
     $("mc-h").textContent=`Your ${sp.name} ${K.young} moved in!`;
-    $("mc-sub").textContent=`It starts again at about 2 mm long, hungry for ${b.title}.`;
+    $("mc-sub").textContent=`It starts again at about ${lenText(2)} long, hungry for ${b.title}.`;
     acts.innerHTML=`<button class="primary" type="button" id="mc-ok">Start reading</button>`;
   } else if(stage===0){
     $("mc-eyebrow").textContent=`New book started · ${sp.rarity} ${sp.noun}`;
     $("mc-h").textContent=`${cap1(article(sp.name))} ${sp.name} hatched!`;
-    $("mc-sub").textContent=`${b.sex?`It's ${b.sex==="f"?"a female":"a male"}. `:""}It's about 2 mm long and hungry for ${b.title}. Log your reading to feed it.`+
+    $("mc-sub").textContent=`${b.sex?`It's ${b.sex==="f"?"a female":"a male"}. `:""}It's about ${lenText(2)} long and hungry for ${b.title}. Log your reading to feed it.`+
       (isCaste(sp.id)&&b.sex==="f"?" Keep her well fed the whole way through and she'll become a queen.":"");
     acts.innerHTML=`<button class="primary" type="button" id="mc-ok">Start reading</button>`;
   } else if(stage<9){
     $("mc-eyebrow").textContent=`${Math.round(stageAt(stage,sp.id))}% read · Growth stage ${stage} of 8`;
     $("mc-h").textContent= stage===8 ? `Your ${sp.name} is fully grown!` : `Your ${sp.name} ${K.young} grew!`;
-    $("mc-sub").textContent= stage===8 ? `It's about ${lengthMm(stage,b.species)} mm long now. One more stretch and it'll ${K.pupaVerb}.` : `It's now about ${lengthMm(stage,b.species)} mm long.`;
+    $("mc-sub").textContent= stage===8 ? `It's about ${lenText(lengthMm(stage,b.species))} long now. One more stretch and it'll ${K.pupaVerb}.` : `It's now about ${lenText(lengthMm(stage,b.species))} long.`;
     acts.innerHTML=`<button class="primary" type="button" id="mc-ok">Keep reading</button>`;
   } else if(stage===9){
     $("mc-eyebrow").textContent=`${pupAt(sp.id)}% read`;
@@ -3299,7 +3428,7 @@ function celebrate(b,stage,moved){
    save when needed, and their unlock dates live in a shared key so they show on both. */
 const ACH_NAMES={
   gb:{butterfly:"Butterfly House",moth:"Moth Trap",beewasp:"The Hive",beetle:"Beetlemania",ant:"Colony Complete",fly:"Lord of the Flies",other:"Cabinet of Curiosities"},
-  us:{butterfly:"Star-Spangled Wings",moth:"Porch-Light Parade",other:"Backyard Curiosities",ant:"Anthill Americana",fly:"Fly-Over Country",beetle:"Lightning Bug Legion"},
+  us:{butterfly:"Star-Spangled Wings",moth:"Porch-Light Parade",other:"Backyard Curiosities",ant:"Anthill Americana",fly:"Fly-Over Country",beetle:"Lightning Bug Legion",beewasp:"Stars, Stripes & Stingers"},
   ie:{butterfly:"Emerald Wings",moth:"Bog Lanterns",beewasp:"The Bee-loud Glade",beetle:"Beetles of the Burren",ant:"The Little People",fly:"Flies of the Four Provinces",other:"The Book of Kells"}};
 const KIND_TITLE={butterfly:"Butterflies",moth:"Moths",beewasp:"Bees & Wasps",beetle:"Beetles",ant:"Ants",fly:"Flies",other:"Other Insects"};
 const ACHIEVEMENTS=Object.keys(KINDS).map(k=>({id:"all-"+k,kind:k,name:(ACH_NAMES[COUNTRY]||{})[k]||`All ${KIND_TITLE[k]||KINDS[k].label}`,
