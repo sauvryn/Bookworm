@@ -1267,8 +1267,8 @@ const KINDS = {
   moth:{label:"Moths",young:"caterpillar",youngs:"caterpillars",pupa:"pupa",pupaVerb:"pupate",size:"Wingspan",food:"Caterpillar food",facts:STAGE_FACTS,pupaFact:MOTH_PUPA_FACT},
   beewasp:{label:"Bees & wasps",young:"larva",youngs:"larvae",pupa:"pupa",pupaVerb:"pupate",size:"Body length",food:"Larva food",facts:LARVA_FACTS,pupaFact:null},
   beetle:{label:"Beetles",young:"larva",youngs:"larvae",pupa:"pupa",pupaVerb:"pupate",size:"Body length",food:"Larva food",facts:LARVA_FACTS,pupaFact:null},
-  ant:{label:"Ants",young:"larva",youngs:"larvae",pupa:"pupa",pupaVerb:"pupate",size:"Body length",food:"Larva food",facts:LARVA_FACTS,pupaFact:null},
   fly:{label:"Flies",young:"larva",youngs:"larvae",pupa:"pupa",pupaVerb:"pupate",size:"Body length",food:"Larva food",facts:LARVA_FACTS,pupaFact:"Many flies pupate inside their own last larval skin, which hardens into a protective case called a puparium."},
+  ant:{label:"Ants",young:"larva",youngs:"larvae",pupa:"pupa",pupaVerb:"pupate",size:"Body length",food:"Larva food",facts:LARVA_FACTS,pupaFact:null},
   other:{label:"Other insects",young:"larva",youngs:"larvae",pupa:"pupa",pupaVerb:"pupate",size:"Body length",food:"Larva food",facts:LARVA_FACTS,pupaFact:null}
 };
 SPECIES.forEach(s=>{ if(!s.noun) s.noun=s.kind; });
@@ -3404,7 +3404,8 @@ function renderHabitats(){
 /* Placeholder habitat screen: a plain title and the species that live there (raised ones first, in bold) */
 function openHabitat(H){
   const got=new Set(coll().map(c=>c.species));
-  const list=SPECIES.filter(s=>habOf(s.id).includes(H.k)).sort((a,b)=>(got.has(b.id)-got.has(a.id))||a.name.localeCompare(b.name));
+  /* in season first, then out of season; alphabetical within each */
+  const list=SPECIES.filter(s=>habOf(s.id).includes(H.k)).sort((a,b)=>(inSeason(b)-inSeason(a))||a.name.localeCompare(b.name));
   $("hb-h").textContent=H.name;
   $("hb-sub").textContent=`${list.filter(s=>got.has(s.id)).length} of ${list.length} species raised. ${H.desc}`;
   $("hb-list").innerHTML=list.map(s=>`<li class="${got.has(s.id)?"got":""}"><button type="button" class="sp-link" data-sp="${s.id}">${esc(s.name)}</button>${got.has(s.id)?" ✓":""}${inSeason(s)?` <span class="season-key" title="In season now">${LEAF_ICON}</span>`:""}</li>`).join("");
@@ -3448,11 +3449,25 @@ const FAMILY={Nymphalidae:"Nymphalidae (brush-footed butterflies)",Pieridae:"Pie
    counts as Seen while at least one stage is ticked; unticking them all removes it. */
 const EYE_ICON='<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5Z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="8" r="2.2" fill="currentColor"/></svg>';
 const STAGE_KEYS=["young","pupa","adult"];
-function stageLabel(sp,key){ const K=KINDS[sp.kind]; return key==="young"?cap1(K.young):key==="pupa"?cap1(K.pupa):`Adult ${sp.noun}`; }
-function seenList(sp){ return STAGE_KEYS.filter(k=>(state.seen[sp.id]||[]).includes(k)); }
+/* Species with male/female or queen/worker forms get one "seen" line per adult form ("adult-m", "adult-q" and so on).
+   A plain "adult" tick saved before forms existed is still shown, as "Adult (form not recorded)". */
+function stageKeys(sp){
+  const f=formsOf(sp.id); if(!f.length) return STAGE_KEYS;
+  const keys=["young","pupa",...f.map(x=>"adult-"+x)];
+  if((state.seen[sp.id]||[]).includes("adult")) keys.push("adult");
+  return keys;
+}
+function stageLabel(sp,key){
+  const K=KINDS[sp.kind];
+  if(key==="young") return cap1(K.young);
+  if(key==="pupa") return cap1(K.pupa);
+  if(key.startsWith("adult-")){ const f=key.slice(6); return f==="q"||f==="w" ? `${SEX_WORD[f]} ${sp.noun}` : `Adult ${SEX_WORD[f].toLowerCase()} ${sp.noun}`; }
+  return formsOf(sp.id).length ? `Adult ${sp.noun} (form not recorded)` : `Adult ${sp.noun}`;
+}
+function seenList(sp){ return stageKeys(sp).filter(k=>(state.seen[sp.id]||[]).includes(k)); }
 function seenNote(sp){
   const l=seenList(sp); if(!l.length) return "";
-  const K=KINDS[sp.kind], words=l.map(k=>k==="young"?K.young:k==="pupa"?K.pupa:"adult");
+  const K=KINDS[sp.kind], words=l.map(k=>k==="young"?K.young:k==="pupa"?K.pupa:k.startsWith("adult-")?SEX_WORD[k.slice(6)].toLowerCase():"adult");
   return `<span class="seen-note">${EYE_ICON}Seen: ${words.join(", ")}</span>`;
 }
 let seenId=null, seenBefore=false;
@@ -3463,7 +3478,7 @@ function openSeen(id){
   state.seenDates=state.seenDates||{};
   const dates=()=>state.seenDates[id]||(state.seenDates[id]={});
   const today=()=>{ const d=new Date(now()); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; };
-  $("sn-list").innerHTML=STAGE_KEYS.map(k=>{ const on=seenList(sp).includes(k); return `<div class="seen-stage">
+  $("sn-list").innerHTML=stageKeys(sp).map(k=>{ const on=seenList(sp).includes(k); return `<div class="seen-stage">
       <label class="check"><input type="checkbox" class="sn-cb" value="${k}"${on?" checked":""}><span>${esc(stageLabel(sp,k))}</span></label>
       <label class="seen-date" data-k="${k}"${on?"":" hidden"}>Date seen <input type="date" class="sn-date" data-k="${k}" max="${today()}" value="${esc((state.seenDates[id]||{})[k]||"")}"></label>
       <div class="block-note sn-confirm" data-k="${k}" hidden><span>Are you sure you want to remove this sighting?</span>
