@@ -14,7 +14,9 @@ It's meant to be educational and friendly for beginners in entomology. Every spe
 - [How the game works](#how-the-game-works)
 - [The species](#the-species)
 - [Countries: United Kingdom and Ireland](#countries-united-kingdom-and-ireland)
+- [EPUB Library and reader](#epub-library-and-reader)
 - [Species cards](#species-cards)
+- [Testing notes, October 2026](#testing-notes-october-2026)
 - [Fact-checking and sources](#fact-checking-and-sources)
 - [Language and units](#language-and-units)
 - [Book search](#book-search)
@@ -178,8 +180,21 @@ Species with male and female, or queen and worker, forms get a separate line for
 - **Storage:** titles are stored in `bookworm-titles`, and older saves were scored retroactively.
 
 ### Achievements
-- **Category achievements:** "Collect all British Butterflies", "Collect all Irish Moths" and so on, one per category per country.
-- **Meta achievements:** "Collect All British Species" and "Collect All Irish Species". These read both countries' saves, and they're stored separately in `bookworm-meta`.
+- **Medals:** every achievement is earned in stages: **Copper, Bronze, Silver, Gold, then Platinum**. The stages are spread evenly over the total: `medalSteps(total)` gives thresholds `ceil(k × total / 5)`.
+  - Platinum always means all of it.
+  - With fewer than 5 to collect, the lowest medals are skipped: 2 species give Gold at 1 and Platinum at 2; 3 give Silver, Gold, Platinum.
+  - Each card shows the current medal in its colour, a row of pips (one per stage), the date of the latest medal, and what the next one needs.
+  - Newly earned medals appear on the "emerged" screen, and as a toast when a sighting earns one.
+- **Collection Achievements** (each country's own save, `state.achievements`):
+  - one "collect them all" per category, with country names such as "Butterfly House";
+  - **By rarity:** every Common, Uncommon or Rare species in each category, plus in the whole country. These are grouped in three fold-out sections;
+  - **Sightings:**
+    - "Keen Spotter": mark 50 species as seen at any life stage.
+    - "Life Cycle Watcher": see the larva, the pupa and at least one adult form of 5 species.
+- **Meta achievements** (shared by all countries, `bookworm-meta`):
+  - each country's whole collection;
+  - "Common Ground", "Uncommonly Good" and "Rarities of the World": every Common, Uncommon or Rare species in every country, with each country's own rarity.
+- **How medals are saved:** saved records are `{m: medal index, dates: {medal: date}}`. Older saves that stored just a completion date are read as Platinum. `checkAchievements()` keeps saved medals in line with progress. Medals that no longer count, for example after unmerging, are taken away quietly, the next time that country is opened.
 
 ## The species
 
@@ -216,7 +231,7 @@ Old saves are migrated automatically through the `MERGED` alias map.
 - **Irish checks:** every British species was checked against Irish records, mainly National Biodiversity Data Centre maps, the Irish Red Lists, MothsIreland and the All-Ireland Pollinator Plan. Species with no Irish records, or only one-off strays, are left out of the Irish collection.
 - **The Monarch** is the app's original species. It stays in both collections as a rare vagrant.
 
-## Countries: United Kingdom, Ireland and the United States
+## Countries: United Kingdom, Ireland, the United States and Canada
 
 - **Switching country.** Tap the flag in the top-right corner to change country. The page reloads with that country's data.
 - **What's separate.** Each country has its own species list, rarity tiers, status lines, field notes, save and achievements. The saves are `bookworm-proto-v1`, `bookworm-proto-v1-ie` and `bookworm-proto-v1-us`, and the chosen country is stored in `bookworm-country`.
@@ -246,14 +261,18 @@ Old saves are migrated automatically through the `MERGED` alias map.
     - **Achievement and unlock:** the achievement is "Stars, Stripes & Stingers", and the category unlocks after 4 butterflies.
   - **Moth forms and unlocks:** six moths have male and female forms (Promethea, Io, Salt Marsh, Spongy, White-marked Tussock and Bagworm). In the US, moths unlock after 2 butterflies, as elsewhere. Their achievement is "Porch-Light Parade".
   - **How it was written:** the American species notes, rarity, sizes, seasons, life cycles, habitats, gardening tips and male/female forms were first **written from general knowledge**. They're being fact-checked one category at a time, smallest first, against US sources (see [Fact-checking American species](#fact-checking-american-species)). Cards that haven't been checked yet say so.
-  - **Fact-check progress:** Ants ✅, Other insects ✅, Flies ✅, Bees & Wasps ✅, Beetles ✅ and Moths ✅ (October 2026). Still to check: Butterflies. Larva and pupa durations and habitats (`US_DUR`, `US_HAB`) haven't been checked yet; they could get their own pass at the end. The Monarch card has two migration distances (4,800 km in the American note, 4,500 km in the original fact); settle that in the Butterflies check.
+  - **Fact-check progress:** every American category is checked ✅ (Ants, Other insects, Flies, Bees & Wasps, Beetles, Moths and Butterflies, October 2026). Larva and pupa durations and habitats (`US_DUR`, `US_HAB`) haven't been checked yet; they could get their own pass.
   - **Language:** British or American English can be chosen separately from the country. See [Language and units](#language-and-units).
   - **Look-alikes:** these are folded in the same way as for the UK and Ireland, e.g. Canadian into Eastern Tiger Swallowtail, Eastern Comma into Question Mark, Northern into Pearl Crescent, Five-spotted Hawk Moth into Carolina Sphinx, Snowberry into Hummingbird Clearwing, and Forest into Eastern Tent Caterpillar Moth.
   - **What it has:** category achievements ("Star-Spangled Wings" for butterflies, "Porch-Light Parade" for moths) and a meta achievement, "Collect All American Species".
   - **Learn More links:** Butterflies and Moths of North America (each species page was checked), the North American Butterfly Association and the Xerces Society.
   - **Habitats:** the same eight habitats have American names and descriptions (`HABITATS_US`): Woodland & Forest; Prairies, Meadows & Deserts; Mountains & Shrublands; Wetlands & Swamps; Rivers, Ponds & Lakes; Coasts & Beaches; Farms & Orchards; and Backyards, Towns & Homes.
   - **Inches:** every size shows in inches first, with metric in brackets, e.g. "3.1–5.5 in (79–140 mm)". That covers wingspans, body lengths, sizes in facts and form descriptions, the larva's length chip and the growth screens. The UK and Ireland show metric first with imperial in brackets. See [Language and units](#language-and-units).
-  - **Still to do:** fact-check the remaining American categories, and verify the BugGuide search links and the two unchecked Butterflies and Moths of North America pages (Fall Webworm and Virginian Tiger Moth).
+  - **Still to do:**
+    - verify the BugGuide search links;
+    - check American larva and pupa durations and habitats.
+
+    The Fall Webworm and Virginian Tiger Moth pages on Butterflies and Moths of North America were confirmed in the Moths check.
 - **Coverage.** The **United Kingdom collection includes Northern Ireland**. Both countries get the complete experience.
 - **Wording, chosen to respect cultural identity:**
   - The country picker reads **"United Kingdom"** and **"Ireland"**.
@@ -264,16 +283,74 @@ Old saves are migrated automatically through the `MERGED` alias map.
   - Irish status lines and an optional Irish fact come from `IE_NOTES`. The default status lines are in `IE_STATUS`.
   - Facts that mention British places are hidden automatically by `PLACE_RE`.
 
+
+### Canada (added October 2026)
+- **How it was written:** from general knowledge and **not yet fact-checked**. The plan is to check it after the American checks are finished. Cards say what has and hasn't been checked.
+- **195 species:**
+
+  | Category | Species |
+  |---|---|
+  | Butterflies | 44 |
+  | Moths | 48 |
+  | Bees & Wasps | 27 |
+  | Beetles | 35 |
+  | Flies | 21 |
+  | Ants | 6 |
+  | Other insects | 14 |
+
+- **Mostly shared:** nearly all are shared with the American list, and some with the British one. They keep their checked field notes, minus facts about American places (`CA_PLACE_RE`, all states except where a name like "Virginia creeper" is a plant), Britain or Ireland. Each one gets a Canadian rarity, status and note from `CA_NOTES`: `id: [C/U/R, status, note, {name, sci, food, season}]`.
+- **Shared British species:** these take their American names and the checked American rewrites of their notes, as in the US, unless Canada has its own name.
+  - **Canadian Tiger Swallowtail** (*Papilio canadensis*) is the same collectible as the Eastern Tiger Swallowtail, which reaches only southern Ontario.
+  - **White Admiral** is the banded form of *Limenitis arthemis*, the same collectible as the Red-spotted Purple. It's a different species from Britain's White Admiral.
+  - **Old World Swallowtail** is the British Swallowtail, found in the North and West, with its own food plants.
+  - **European Skipper** (*Thymelicus lineola*) uses the British Small Skipper collectible. It was introduced to Ontario around 1910.
+  - **Elephant Hawk-moth** is introduced in British Columbia.
+- **Canada-only species (`CA_ONLY`, 8):**
+  - Macoun's Arctic;
+  - Spruce Budworm;
+  - Arctic Woolly Bear Moth (up to seven winters as a caterpillar);
+  - Mountain Pine Beetle;
+  - Whitespotted Sawyer (male and female forms);
+  - Yellow-banded Bumblebee (queen and worker);
+  - Western Thatching Ant (queen and worker);
+  - Black Fly.
+- **Language: Canadian English** (`caSpell()`, `CA_WORDS`):
+  - British spellings ("colour", "centre", "grey", "metre", "travelled") but -ize endings ("recognize", "analyze");
+  - American spelling for a few words (aluminum, fetus, cozy, skeptic);
+  - North American words: fall, sidewalk, garbage, lady beetle, hover fly, and two-word true flies;
+  - gardening tips keep "garden".
+- **Language prompt:** switching to or from Canada asks about Canadian English.
+- **Units:** metric first, imperial in brackets, as in the UK and Ireland.
+- **Dates:** `en-CA` style.
+- **Habitats** (`HABITATS_CA`): Forests & Woodlands, Prairies & Meadows, Mountains & Tundra, Wetlands & Bogs, Lakes, Rivers & Ponds, Coasts & Beaches, Farms & Orchards, and Backyards, Towns & Cities.
+- **Achievements** (with medals):
+  - From Sea to Sea (butterflies);
+  - Cottage Porch Light (moths);
+  - The Maple Hive (bees and wasps);
+  - Boreal Beetles;
+  - Anthills of the Shield;
+  - Black Fly Season;
+  - Curiosities of the True North (other insects);
+  - the meta achievement "Collect All Canadian Species".
+- **Learn More links:** as in the US: Butterflies and Moths of North America, or a BugGuide search, plus NABA and Xerces.
+- **Flag:** red-white-red with a simplified maple leaf.
+- **To fact-check later:** every Canadian rarity, status and note, the Canada-only species, and Canadian seasons, which are often shorter than American ones.
+
 ## Settings
 
 Tap the gear under the flag to open Settings.
 
-- **About:** what the app does, its learning objectives, the version number (`APP_VERSION`, currently 0.9.0) and the GitHub Pages link. The wording is a first draft to edit.
+- **About:**
+  - what the app does and its learning objectives, worded for any country ("the selected country's common butterflies…"), with the list of countries built from `COUNTRIES`;
+  - **Privacy:** no information is collected, everything stays in this browser on this device, and no account is or ever will be needed for the GitHub-hosted version;
+  - **Donate:** Bookworm is free and made for public education; a Ko-fi link (https://ko-fi.com/sauvryn) for donations towards personal development costs;
+  - the version number (`APP_VERSION`, currently 0.10.0) and the GitHub Pages link.
 - **Merge Collections (Easy Mode):** shares everything you've collected, past and future, across every country.
   - **How it works:** each raised adult records the country it was collected in (`country`). Nothing is copied. While merged, the app reads every country's saves together (`coll()`). So species raised in the United Kingdom that also live in Ireland count as collected in Ireland, which leaves only the rest, including Ireland-only species. This works for any country added later.
   - **What changes on screen:** the collection shows an "Easy Mode" chip. Species cards and Completed Books show where each one was collected. Category unlocks also count butterflies from every country.
   - **Unmerge Collections:** the menu item changes to this once merged. Unmerging goes back to each country's own collection. It removes any category achievements, meta achievements and category unlocks that were only complete because of merging. Nothing else depends on them, so nothing breaks.
 - **Language:** British English or American English, independent of country. See [Language and units](#language-and-units). Reset App doesn't change it.
+- **Epub Reader:** explains the built-in reader and has the **automatic tracking** switch (on by default, stored in `bookworm-epub-auto`). See [EPUB Library and reader](#epub-library-and-reader).
 - **Export / Import Save:** **Export** saves every `bookworm…` storage key to a dated `.json` file: every country's progress, the country choice, merge setting, meta achievements and titles. **Import** loads one, after a warning that it replaces everything in this browser. A copy-and-paste option covers browsers that can't download or pick files. Use it to move a tester to a new device, or to load a tester's save and reproduce a bug.
 - **Reset App:** asks twice ("Are you sure? This cannot be undone."). In every country it then deletes:
   - collections and completed books;
@@ -282,6 +359,99 @@ Tap the gear under the flag to open Settings.
   - I've Seen It! ticks.
 
   It also switches Merge Collections off. A notice explains that the Want To Read list, frozen larvae and current books are kept and must be removed by hand.
+
+## Testing notes, October 2026
+
+Changes made from a batch of testing notes (21 items).
+
+### Reading screen and books
+- **Fed today:** a small orange heart appears before the mood chip on any book whose reading was logged today (`b.loggedAt`, `fedToday()`).
+- **Want To Read:**
+  - The buttons sit in a column on the right, so titles have room.
+  - ▲ and ▼ buttons reorder the list.
+- **Completed Books:**
+  - Each book shows the dates it was read, start to finish ("1 Sept 2026 - 3 Sept 2026"). Time spent frozen isn't taken off. Books finished before this change only show the finish date.
+  - A star marks favourites. Favourites are kept for every country in `bookworm-favs`.
+  - Tapping a book in the full list opens the species card for the insect it raised. Closing it goes back to the list.
+- **Dates:** these follow the selected country's standard (`DATE_LOCALE`): "8 Oct 2026" in the UK and Ireland, "Oct 8, 2026" in the US.
+
+### Taking books to another country
+- **When it asks:** switching country while reading asks first what to do with those larvae and pupae. This comes before the language question.
+- **The four choices:**
+  - **Freeze them:** only if there's room among the 5 frozen books.
+  - **Take them with me:** only if the other country has room among its 5 current books.
+  - **Leave them reading here:** they can still get hungry while you're away.
+  - **Cancel.**
+- **A larva that's taken along:**
+  - It keeps its **home country** (`b.origin`) and a snapshot of its species (`b.sp`): the text before conversion, plus its Learn More links and sources as shown at home. Its name and field notes are converted to the current language and units (`spOf(b)`).
+  - A small flag of its home country sits on the top left of its artwork, on the shelf, on its reading page and on the celebration screens.
+  - When it emerges, the adult and the completed book are credited to the **home** country's collection (`creditHome()`), even if this country has the same species. That may also open a habitat there.
+  - Released while away, it's "safely sent back to its home country to be responsibly released into the wild in its native environment". It can't be moved to the waiting list while away.
+  - Taken back home, it becomes an ordinary book again and the flag disappears.
+
+### Collection
+- **Collected tiles:** these show the rarity as a lettered badge on the top left (a light letter in a darker circle, in the rarity colours) and how many were raised at the top centre, level with the in-season leaf.
+- **Tile artwork:** the tile shows one adult form (`preferredForm()`). The art is placeholder for now, so it doesn't show yet.
+  - Male/female species: the more eye-catching form (male unless `PREFERRED_FORM` says otherwise) if raised, otherwise the other.
+  - Social insects: the worker if raised, otherwise the most recently raised form.
+- **Species cards:**
+  - Adult / Chrysalis (or Cocoon, Puparium, Pupa) / Caterpillar (or Larva) buttons switch the artwork. Adults still show every form at once.
+  - Additional Sources no longer repeats links already under Want To Learn More?, and the note says "checked against all of the above sources".
+- **Search:**
+  - **What it searches:** the box above the categories searches common and scientific names (or parts) in every country. This country's species come first. Others show their country's flag and name.
+  - **Tapping a result:** this country's results open the species card. Others explain which collection they're in.
+  - **The index:** other countries come from `SEARCH_INDEX`, generated by **`node build_index.js`**, which loads the page once per country with `?dump-index`. Run it after changing species data. `index_test.js` fails if it's out of date.
+
+### Achievements
+- "Achievements" is now **Collection Achievements**. Medal stages and the new rarity, sightings and meta achievements are described in [Achievements](#achievements).
+
+### Wording
+- Text that assumed only the UK and Ireland now works for any country, ready for Canada. For example: About, the Language setting note.
+
+### Splash page
+- **What it shows:** "Bookworm" and the tagline "Read books. Raise insects." over a scatter of placeholder insects.
+- **When:** for 3 seconds, only when the app is opened in a new window or tab (`sessionStorage`). Reloads within the tab, such as switching country, don't show it. Tap to skip.
+- **In tests:** automated test browsers skip it unless the address has `?splash`.
+
+### Defaults chosen (easy to change)
+- Medals apply to the sightings achievements too.
+- "Every life stage" for Life Cycle Watcher means the larva, the pupa and **any one** adult form.
+- Search results from other countries can't open a full card, because that country's notes aren't loaded.
+- The splash tagline is a first draft.
+
+## EPUB Library and reader
+
+Bookworm can keep a Library of EPUB e-books and open them in its own reader, which counts the pages you actually read.
+
+### Library
+
+- **Where:** a Library card on the Reading screen, below Want To Read. **Add EPUBs** picks files; **Add a folder** imports every `.epub` in a folder (shown where the browser supports folder picking). Folder import is a one-off copy, not a live link to the folder.
+- **Storage:** books are kept in this browser's IndexedDB (database `bookworm-library`: `meta` holds each book's details and reading record, `files` holds the EPUB). The Library is shared by every country. It isn't included in Export Save, which would make save files huge. Bookworm asks the browser to keep this storage (`navigator.storage.persist`).
+- **DRM:** only DRM-free EPUBs work. A book with `META-INF/rights.xml`, or anything in `META-INF/encryption.xml` other than font obfuscation, is refused with a message naming the file. Duplicates (same title, author and file size) are skipped.
+- **Rows:** title, author, page count and either "Not started", the % read, or the larva the book is feeding. **Read** opens the reader. The full list (See the whole Library) also has **Start a larva** and **Remove** (tap twice).
+
+### Pages
+
+- Each section of the book is split into **pages of about 250 words** (1,250 non-space characters, `PIECE`), so counts don't match a printed copy. An invisible marker goes where each page starts, at a word boundary.
+- **Only the main text counts.** Left out: the cover, title page, contents, copyright page, dedication, index, glossary, notes, bibliography, acknowledgements, appendices and other front and back matter, plus spine items marked `linear="no"` and image-only pages. These are found from EPUB 3 landmarks and `epub:type`, EPUB 2 `<guide>` entries, or (only when a book has neither) file names such as `index.xhtml` or `glossary.html`. Calibre-style names like `index_split_001.html` aren't caught.
+- A larva started from the Library uses the book's main page count. A book already being read (with its own printed page count) can be **linked** instead, and reader pages are scaled to its pages.
+
+### The reader
+
+- One section at a time, laid out in CSS columns, one screen per column. Previous and next buttons, tapping the left or right third of the page, swiping, and arrow keys all turn pages. Contents (from the EPUB 3 nav or EPUB 2 NCX), text size buttons, and a **Back** button after following a link inside the book.
+- Book styles and scripts are removed and Bookworm's own typography is used, so nothing in a book can run. Images are shown from the EPUB; outside links open in a new tab.
+- It opens at the first main section, then remembers your place, even after a text-size change or a rotation.
+- Written from scratch with no outside libraries: a small ZIP reader using the browser's `DecompressionStream`, then `container.xml` → OPF → nav or NCX.
+
+### Automatic tracking (Settings → Epub Reader, on by default)
+
+- **What counts:** every second the reader is on screen, each page of text on the current screen gets time (shared out if it spans several screens). A page is read once it has had long enough to read it: its length at 80 characters a second (`READ_CPS`, about 800 words a minute, a fast skim), and at least 3 seconds. That's about 15 to 20 seconds for a full page.
+- **What doesn't:** flicking past pages, time in the background (the timer pauses when the tab is hidden, and gaps of more than 5 seconds are capped), time with the contents open, and rereading. Jumping to the index or glossary and back doesn't count the pages in between, and the index and glossary themselves never count.
+- **Nothing is fed automatically.** Closing the reader shows a summary: new pages this session (and about how many words), any earlier pages not yet fed, and the % of the book read. It offers **Feed** (or **Morph** for a pupa), **Log feeding manually instead** (marks those pages as handled and puts the cursor in the book's log box) and **Not now**. It also says that automatic tracking can be turned off in Settings → Epub Reader.
+- Each linked book remembers how many reader pages have been fed (`libFed`), so pages are never fed twice. Unfed pages also show on the book's page, with a Feed button.
+- **Finishing:** once the last main page and at least 90% of the main pages have been read (`FINISH_SHARE`), feeding finishes the book, so a skipped page or two doesn't stop a larva emerging.
+- An unlinked book's summary offers **Start a larva with this book**; the pages already read are then ready to feed. Linking an EPUB to a book already in progress doesn't feed pages read before the link.
+- With tracking off, the reader still remembers your place, but no pages are counted and no summary is shown.
 
 ## Species cards
 
@@ -462,6 +632,46 @@ The raw fact-check results are in `fc/result*.json`. For every claim they record
     - Yucca Moth: "native yuccas such as Adam's needle".
     - Clymene Moth's larval food is now bonesets, white snakeroot, oaks and willows.
   - **Could be added later:** the official US spelling "Indianmeal Moth".
+- **Butterflies (October 2026):** checked in two halves at the same time. 595 fields: 402 ok, 180 corrected, 9 replaced, 4 unverified.
+  - **Corrections:** most are wingspans (often too narrow, e.g. Giant Swallowtail 117–188 mm) and flight seasons. Many southern species now fly longer, or all year in the Deep South.
+  - **Wrong claims fixed:**
+    - The Eastern Tiger Swallowtail is Virginia's state *insect*. It's the state butterfly of Georgia, Delaware, Alabama and the Carolinas.
+    - Cloudless Sulphur caterpillars don't build leaf tents.
+    - Mourning Cloak: "Camberwell Beauty" is the British name.
+  - **Status updates:**
+    - Monarch: proposed as federally threatened in December 2024; the final decision is due fall 2026 at the earliest.
+    - Regal Fritillary: proposed for protection in 2024; in the East it survives at one site in Pennsylvania.
+    - Miami Blue: the last confirmed wild adult was seen in July 2022 (US Fish & Wildlife Service 2024 review).
+    - Atala: spreading north with coontie gardens.
+  - **Scientific names:**
+    - Schaus' Swallowtail: *Heraclides aristodemus ponceanus*.
+    - Karner Blue: *Lycaeides melissa samuelis*, its federal listing name.
+    - Miami Blue: *Cyclargus thomasi bethunebakeri*.
+    - Common Checkered-Skipper: *Burnsius communis*.
+    - Zabulon Skipper: *Lon zabulon*.
+
+    The Butterflies and Moths of North America pages for the last three changes are still under their old names, so `BAMONA_SLUG` pins them. The Karner Blue was already pinned.
+  - **Gardening tips:** fennel was dropped everywhere (invasive in California).
+    - Black Swallowtail: dill, parsley and golden Alexanders.
+    - Anise Swallowtail: native biscuitroots and other carrot-family herbs.
+    - Spring Azure: flowering dogwood and New Jersey tea.
+    - West Coast Lady: native mallows or hollyhocks.
+    - Silver-spotted Skipper: false indigo or native American wisteria, plus blazing star.
+  - **Shared butterflies:** all five are the same species in the US. Their British field notes were also checked for American readers (`uk_facts_shown_in_us`). The rewrites are stored as `swap` pairs on `US_CHECKED.notes` and are swapped in before British place names are filtered out.
+    - **Monarch:** one distance, "about 3,000 miles (4,800 km)", from the US Fish & Wildlife Service and the US Forest Service. Other new notes: the Western Monarchs' shorter trip to the California coast, the Mexican fir-forest roosts, and corrected toxin and scent-patch wording.
+    - **Painted Lady:** the North American migration from northern Mexico to Canada and Alaska replaces the Africa to Arctic one. It also gets the 2017 Denver radar swarm and the northern US winter.
+    - **Red Admiral:** spring recolonization from the South, winter survival only in the South, and tree sap and fermenting fruit.
+    - **American Copper:** grey hindwing with an orange-red edge. It's thought to spend the winter as a chrysalis in North America.
+  - **Checker suggestions** for the design notes (Aphrodite and Northern Crescent counting as the same collectible) couldn't be confirmed from the pages opened, so they're marked unverified.
+  - **A few sources are outside the preferred list:**
+    - Miami Blue review copy on miamiblue.org;
+    - Viceroy as Kentucky's state butterfly (Bernheim Arboretum);
+    - Giant Swallowtail spreading north (bioRxiv preprint).
+- **Units, improved:**
+  - Distance ranges convert both ends, e.g. "300 to 990 miles (480 to 1,600 km)".
+  - Heights in metres get feet: "7,900 to 11,800 ft (2,400 to 3,600 m)" in the US, and the other way round in the UK and Ireland.
+  - Text that already has both units is put in the right order for the country.
+- **Duplicate facts:** these are removed after conversion, so a rewritten fact and a winter note that say the same thing only show once.
 - **Wording:**
   - In American English, true flies are two words, as in American field guides: "crane flies", "horse flies", "robber flies", "snipe flies", "soldier flies". Caddisflies and alderflies stay one word.
   - The "best guess" note now says "season" instead of "when to see it".
@@ -534,7 +744,10 @@ The raw fact-check results are in `fc/result*.json`. For every claim they record
 | `index.html` | The built page that goes to GitHub Pages. |
 | `bookworm.v*.html` | Backups from earlier versions. |
 | `fc/` | Fact-check batches (`batch*.json`), results (`result*.json`) and the checker instructions (`INSTRUCTIONS.md`). American ones are `us_batch_*.json`, `us_result_*.json`, `US_INSTRUCTIONS.md`, `merge_us.py` and the combined `us_checked_all.json`. |
+| `art/`, `embed_art.py` | Real artwork (transparent WebP, one per species and stage), the clean-up script and its recipes; `embed_art.py` puts the images into `bookworm.html`. |
+| `build_index.js` | Rebuilds `SEARCH_INDEX` (every country's species, for the collection search) inside `bookworm.html`. Run after changing species data. |
 | `*_test.js` | Playwright test scripts. |
+| `make_test_epubs.py`, `test_epubs/` | Builds three small test EPUBs: an EPUB 3 book (nav, landmarks, glossary, index, an image and an internal link), an EPUB 2 book (NCX and guide) and a "DRM" book. |
 
 ## How the code is organised
 
@@ -609,6 +822,13 @@ The Playwright scripts run with `NODE_PATH=$(npm root -g) node <script>.js`. Out
   - every season parses to months;
   - gardening tips show only where intended;
   - every card has sources.
+- **New:**
+  - `ui_test.js`: dates, favourites, Completed Books to species card, Want To Read reordering, About, sources and the fed-today heart;
+  - `medal_test.js`: medal stages and the new achievements;
+  - `transfer_test.js` and `transfer2_test.js`: taking books to another country and back, freezing, crediting home and release;
+  - `index_test.js`: the search index is up to date, and search works;
+  - `spell_test.js` and `lang_test.js`: language;
+  - `epub_test.js`: importing (including DRM and duplicates), which sections count, the reader, dwell tracking, links and Back, text size, the close summary (Feed, Log feeding manually instead, start a larva), finishing a book, and the Settings switch. It uses Playwright's clock to fast-forward reading time.
 - **Outdated:** several older scripts (`ie_test.js`, `merge_test.js`, `saw_test.js`, `meta_test.js`) still expect earlier species counts and wording, so they report stale failures. Update them during the tidy-up.
 
 ## Before the Android build
@@ -624,6 +844,7 @@ The Playwright scripts run with `NODE_PATH=$(npm root -g) node <script>.js`. Out
 5. **Re-check the 15 unconfirmed details**, flagged in `unv` and on the cards.
 6. **Replace placeholder art**: a larva, a pupa and an adult for each category, or for each species.
 7. **Swap `localStorage` for proper app storage** on Android, and keep the save-migration map (`MERGED`).
+8. **EPUB folders on Android:** use the Storage Access Framework (a persistent folder permission) so the Library can watch a chosen folder for new books, instead of a one-off import. Move the Library from IndexedDB to app storage.
 
 ## Placeholder artwork
 
@@ -653,6 +874,27 @@ The monarch artwork used everywhere has been replaced by **temporary placeholder
   - a caddisfly larva in its case;
   - an antlion's sand pit.
 
+## Real artwork
+
+Placeholder art is being replaced species by species with hand-drawn artwork. The first is the **Red Admiral** by Tara Carter: a coloured-pencil adult, plus pencil sketches of the caterpillar and chrysalis.
+
+- **Files:** `art/<species-id>-adult.webp`, `-larva.webp` and `-pupa.webp` are transparent WebP images.
+  - `python3 embed_art.py` embeds them into `bookworm.html` (the `ART_DATA` block) as data URIs.
+  - `ART_INFO` records where the adult's body is (`bodyX`, as a share of the width) and who drew it.
+  - The species card shows "Artwork by …" under collected species with real art.
+- **Cleaning up a photographed drawing:** `art/clean_art.py` does this automatically. The commands used for the Red Admiral are in `art/README.txt`.
+  1. **Even out the paper:** it estimates the paper, including lighting and shadows, and divides it out, so the page becomes clean white and colours stay true.
+  2. **Find the outline:** strokes are joined with a round brush, holes filled, specks and frame lines dropped. Inside the outline the art is opaque, so white wing spots stay white on a dark screen. Thin parts (antennae, spines) stay as soft pencil lines.
+  3. **Tidy the tones:** levels make the darkest pencil near-black, then a gamma curve, a gentle colour boost and softened paper specks.
+  4. **Sketches:** darker lines and whiter paper, plus an optional soft colour wash. The Red Admiral caterpillar and chrysalis have a light brown-grey wash.
+- **How it's shown:**
+  - **Adult:** drawn twice, clipped at the body line, so each half can flap in the existing wing animation.
+  - **Caterpillar:** grows with each stage on the leaf, with the hungry thought bubble on top. It has no face, so the mood chip and bubble show hunger.
+  - **Chrysalis:** hangs from the twig and sways.
+  - **Uncollected species:** the art still shows as a silhouette.
+- **Size:** about 290 KB for the three Red Admiral images. Roughly 650 species with three images each would make the page very large, so before the Android build, artwork should move into separate files rather than being embedded.
+- **Photo tips:** even daylight, no shadow across the page, camera straight above, and a little space around each drawing.
+
 ## Ideas for later
 
 1. **Species-specific growth-stage trivia.** At each growth stage, show larva and pupa trivia for that particular species where it's known, instead of the general larva facts. Use the species' own life-cycle data (`DUR`) in the blurbs that appear as the larva reaches each new growth stage. Examples:
@@ -674,6 +916,7 @@ The monarch artwork used everywhere has been replaced by **temporary placeholder
 - **Gardening tips:** shown before raising, alongside the links, because they're useful straight away.
 - **Unlock order:** after Bees & Wasps, the order is Beetles, Flies, Ants, then Other insects, two butterflies apart each time. Change `UNLOCKS` to adjust.
 - **Male and female forms:** only one larva of a species can be raised at a time, even when the other form is still missing.
+- **EPUB tracking:** feeding from the reader is offered, never automatic, and counts pages actually viewed rather than the farthest point reached, so jumping to the back of a book and returning doesn't count everything in between. Built without outside libraries (the package registry was blocked, and this keeps it working offline).
 - **Queens and workers:** caste follows feeding rather than chance, which rewards steady reading and mirrors the real biology. The Common Wasp and Hornet have forms too, even though few people will ever tell their queens from workers in the wild, because collecting is the fun.
 
 ---
