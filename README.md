@@ -14,6 +14,7 @@ It's meant to be educational and friendly for beginners in entomology. Every spe
 - [How the game works](#how-the-game-works)
 - [The species](#the-species)
 - [Countries: United Kingdom and Ireland](#countries-united-kingdom-and-ireland)
+- [Insect organisations](#insect-organisations)
 - [EPUB Library and reader](#epub-library-and-reader)
 - [Species cards](#species-cards)
 - [Testing notes, October 2026](#testing-notes-october-2026)
@@ -261,16 +262,16 @@ Old saves are migrated automatically through the `MERGED` alias map.
     - **Achievement and unlock:** the achievement is "Stars, Stripes & Stingers", and the category unlocks after 4 butterflies.
   - **Moth forms and unlocks:** six moths have male and female forms (Promethea, Io, Salt Marsh, Spongy, White-marked Tussock and Bagworm). In the US, moths unlock after 2 butterflies, as elsewhere. Their achievement is "Porch-Light Parade".
   - **How it was written:** the American species notes, rarity, sizes, seasons, life cycles, habitats, gardening tips and male/female forms were first **written from general knowledge**. They're being fact-checked one category at a time, smallest first, against US sources (see [Fact-checking American species](#fact-checking-american-species)). Cards that haven't been checked yet say so.
-  - **Fact-check progress:** every American category is checked ✅ (Ants, Other insects, Flies, Bees & Wasps, Beetles, Moths and Butterflies, October 2026). Larva and pupa durations and habitats (`US_DUR`, `US_HAB`) haven't been checked yet; they could get their own pass.
+  - **Fact-check progress:** every American category is checked ✅ (Ants, Other insects, Flies, Bees & Wasps, Beetles, Moths and Butterflies, October 2026). Larva and pupa durations and habitats were checked too (see below).
   - **Language:** British or American English can be chosen separately from the country. See [Language and units](#language-and-units).
   - **Look-alikes:** these are folded in the same way as for the UK and Ireland, e.g. Canadian into Eastern Tiger Swallowtail, Eastern Comma into Question Mark, Northern into Pearl Crescent, Five-spotted Hawk Moth into Carolina Sphinx, Snowberry into Hummingbird Clearwing, and Forest into Eastern Tent Caterpillar Moth.
   - **What it has:** category achievements ("Star-Spangled Wings" for butterflies, "Porch-Light Parade" for moths) and a meta achievement, "Collect All American Species".
   - **Learn More links:** Butterflies and Moths of North America (each species page was checked), the North American Butterfly Association and the Xerces Society.
   - **Habitats:** the same eight habitats have American names and descriptions (`HABITATS_US`): Woodland & Forest; Prairies, Meadows & Deserts; Mountains & Shrublands; Wetlands & Swamps; Rivers, Ponds & Lakes; Coasts & Beaches; Farms & Orchards; and Backyards, Towns & Homes.
   - **Inches:** every size shows in inches first, with metric in brackets, e.g. "3.1–5.5 in (79–140 mm)". That covers wingspans, body lengths, sizes in facts and form descriptions, the larva's length chip and the growth screens. The UK and Ireland show metric first with imperial in brackets. See [Language and units](#language-and-units).
-  - **Still to do:**
-    - verify the BugGuide search links;
-    - check American larva and pupa durations and habitats.
+  - **BugGuide links (checked October 2026):** BugGuide's search page ignores the search words in a link, so the old "search for…" links didn't work. Every American and Canadian species now links to its own BugGuide guide page. Butterfly and moth cards show it right beside the Butterflies and Moths of North America page, which is run by a small company, so a public, university-hosted source always gets equal weight. The 122 species that aren't butterflies or moths link (`BUGGUIDE` in the page, `fc/bg_all.json`), each opened and checked. The search link is kept only as a fallback for a species without a checked page. `bg_test.js` opens every card to confirm.
+  - **Durations and habitats (checked October 2026):** all 210 American-only species were checked against US sources (`fc/US_DURHAB.md`, merged by `fc/merge_durhab.py` into the `US_DURHAB` block and `fc/us_durhab_all.json`). 91 have species-level figures, 47 genus-level and 72 family-level estimates, which the Life cycle row flags. 49 habitat lists changed. The biggest timing corrections were long-lived larvae that had been overestimated, such as the Black Blister Beetle, Giant Ichneumon Wasp and Red Milkweed Beetle. Habitats for the Rusty Patched and Brown-belted Bumblebees and the Bombardier Beetle's wetland habitat weren't confirmed by a source.
+  - **Season and food for species shared with the UK (October 2026):** these 33 species still showed the British season and food in the US (for example the Monarch's "after strong westerly winds"). They were checked against US sources (`fc/US_SHARED.md`); 16 seasons and 12 food lines were corrected, and the rest were already right or couldn't be confirmed. They're in `US_SHARED`, which Canada also uses unless its own check found something different.
 
     The Fall Webworm and Virginian Tiger Moth pages on Butterflies and Moths of North America were confirmed in the Moths check.
 - **Coverage.** The **United Kingdom collection includes Northern Ireland**. Both countries get the complete experience.
@@ -285,8 +286,10 @@ Old saves are migrated automatically through the `MERGED` alias map.
 
 
 ### Canada (added October 2026)
-- **How it was written:** from general knowledge and **not yet fact-checked**. The plan is to check it after the American checks are finished. Cards say what has and hasn't been checked.
-- **195 species:**
+- **How it was written:** from general knowledge, then fact-checked one category at a time against Canadian sources (`fc/CA_INSTRUCTIONS.md`, merged by `fc/merge_ca.py` into the `CA_CHECKED` block and `fc/ca_checked_all.json`). Cards say what has and hasn't been checked.
+- **Fact-check progress:** every Canadian category is checked ✅ (Ants, Other insects, Flies, Bees & Wasps, Beetles, Moths and Butterflies, October 2026). For each species the check covers the Canadian rarity, status line, Canadian note, Canadian season, food, the usual Canadian name, and any shared field note that's wrong for Canada (rewritten or hidden in Canada). Canada-only species get their whole card checked, including durations and habitats.
+  - **Main findings so far:** the Cottonwood Borer has no Canadian records, so it was removed from the Canadian collection (Beetles 34, 194 species in all). The Hanging Scorpionfly's species doesn't reach Canada, so in Canada the card is *Bittacus* species, the genus of Ontario's three hangingflies. Several ranges were narrowed (for example the Greenhead to Nova Scotia, the Big Dipper Firefly to Ontario, now Rare), and the Yellow-banded Bumblebee's status is now "Special Concern in Canada". Names: Multicoloured Asian Lady Beetle, Bicoloured Striped Sweat Bee, Greater Bee Fly, European Crane Fly, Alderfly and Summer Fishfly.
+- **195 species** (as written; 194 after the check removed the Cottonwood Borer):
 
   | Category | Species |
   |---|---|
@@ -334,7 +337,9 @@ Old saves are migrated automatically through the `MERGED` alias map.
   - the meta achievement "Collect All Canadian Species".
 - **Learn More links:** as in the US: Butterflies and Moths of North America, or a BugGuide search, plus NABA and Xerces.
 - **Flag:** red-white-red with a simplified maple leaf.
-- **To fact-check later:** every Canadian rarity, status and note, the Canada-only species, and Canadian seasons, which are often shorter than American ones.
+- **Moths:** most Canadian seasons are shorter (Canadian moths usually have one brood), food plants were swapped for Canadian ones, and British-only notes (blue tits, mild winter nights) were rewritten. Three Canadian names were suggested but are on hold (`keep_name` in `fc/ca_over.json`): European Yellow Underwing, Pepper-and-salt Geometer and Western Sheepmoth. For now each appears as a field note on the Canadian card (`aka`), e.g. "In Canada it's also called the European Yellow Underwing."
+- **Butterflies:** checked mainly against *Butterflies of Canada* (the Canadian Biodiversity Information Facility text, read on the Toronto Entomologists' Association copy) and Government of Canada Monarch pages. Seasons are now Canadian months, food plants are Canadian (the Monarch's British "not native to Britain" is gone), the Monarch's migration distance follows the federal management plan (up to 3,600 km), and the Painted Lady and Eastern Tailed-Blue are now Uncommon. Names: Grey Hairstreak and Little Wood-Satyr.
+- **Name-swap fix:** the rule that renames British species for North America was also renaming them inside longer names, giving "Pipevine Old World Swallowtail" and "Canadian Tiger Old World Swallowtail". `countryText` now only swaps a name that stands alone (not right after another capitalised word).
 
 ## Settings
 
@@ -419,6 +424,14 @@ Changes made from a batch of testing notes (21 items).
 - Search results from other countries can't open a full card, because that country's notes aren't loaded.
 - The splash tagline is a first draft.
 
+## Insect organisations
+
+Bookworm points curious readers to the organisations that know these insects best, rather than to Wikipedia or a search engine.
+- **Directory (`ORGS`):** for each country and insect group (plus "Insects in general"), charities, learned societies, recording schemes, museums, universities and public bodies, as [name, link, kind, what you'll find]. Every page was opened and checked in October 2026 (`fc/ORGS.md`, built by `fc/build_orgs.py` from `fc/orgs_<country>.json`). Companies, retailers, blogs, forums and Wikipedia are never included.
+- **Species cards:** "Want To Learn More?" shows the species' own pages (in North America, BugGuide on every card, and for butterflies and moths also Butterflies and Moths of North America), then up to two organisations for its insect group (skipping any site already listed). In North America it adds the Xerces Society, and NABA on butterfly cards. A **More insect organisations in…** button at the end opens the full list.
+- **Settings → Insect Organisations:** the full directory for the current country, grouped by insect group, with what each organisation is and what a beginner will find there.
+- **Gaps:** Ireland has no beginner-friendly organisation page for lacewings, caddisflies and similar insects yet, and some Canadian groups lean on E-Fauna BC (University of British Columbia) and BugGuide. Worth revisiting when new pages appear.
+
 ## EPUB Library and reader
 
 Bookworm can keep a Library of EPUB e-books and open them in its own reader, which counts the pages you actually read.
@@ -443,15 +456,24 @@ Bookworm can keep a Library of EPUB e-books and open them in its own reader, whi
 - It opens at the first main section, then remembers your place, even after a text-size change or a rotation.
 - Written from scratch with no outside libraries: a small ZIP reader using the browser's `DecompressionStream`, then `container.xml` → OPF → nav or NCX.
 
+### Marking pages and chapters as read
+
+For books partly read somewhere else.
+- **Contents:** every entry covering main text has a check box on the right. It's ticked when every page in that part is read, half-ticked when some are, and it ticks itself when the timer finishes a whole chapter. Ticking it marks every page in the part as read; unticking removes them. An entry covers its file up to the next entry's file, so books split into many files still work.
+- **Marked as read:** a small box at the top right of every screen of main text. With automatic tracking on, it ticks itself, with a little pulse, the moment the screen has been on show long enough to count. That also tells fast readers when they're near skimming speed. Ticking it by hand counts that screen; unticking it removes the pages on it (a page that runs onto the next screen is removed whole).
+- **When hand-marked pages count:** feeding takes the larva to the higher of (a) its growth now plus any timer-read pages that haven't counted yet, and (b) the book's total % read in the reader. So hand-marked pages only add growth once the whole book is further on than the larva. Pages in a hand-ticked chapter count as hand-marked even if the timer had read them.
+- **Never twice, never backwards:** each linked book keeps the pages that have counted towards growth (`b.libFedK`). They never count again, even if unticked and ticked again. When there's nothing to add (the book is behind the larva), the read pages are recorded as counted straight away. Unticking never removes growth.
+- **Linking an EPUB to a book already in progress** treats pages already read in the reader like hand-marked ones.
+
 ### Automatic tracking (Settings → Epub Reader, on by default)
 
-- **What counts:** every second the reader is on screen, each page of text on the current screen gets time (shared out if it spans several screens). A page is read once it has had long enough to read it: its length at 80 characters a second (`READ_CPS`, about 800 words a minute, a fast skim), and at least 3 seconds. That's about 15 to 20 seconds for a full page.
+- **What counts:** tracking works screen by screen. A screen counts once it has been on show long enough to read its share of the section at 80 characters a second (`READ_CPS`, about 800 words a minute, a fast skim), and at least 3 seconds: about 10 to 20 seconds, depending on how much text fits. A page (piece) is read once every screen it covers has counted.
 - **What doesn't:** flicking past pages, time in the background (the timer pauses when the tab is hidden, and gaps of more than 5 seconds are capped), time with the contents open, and rereading. Jumping to the index or glossary and back doesn't count the pages in between, and the index and glossary themselves never count.
 - **Nothing is fed automatically.** Closing the reader shows a summary: new pages this session (and about how many words), any earlier pages not yet fed, and the % of the book read. It offers **Feed** (or **Morph** for a pupa), **Log feeding manually instead** (marks those pages as handled and puts the cursor in the book's log box) and **Not now**. It also says that automatic tracking can be turned off in Settings → Epub Reader.
-- Each linked book remembers how many reader pages have been fed (`libFed`), so pages are never fed twice. Unfed pages also show on the book's page, with a Feed button.
+- Pages ready to feed also show on the book's page, with a Feed button and the growth they'd give.
 - **Finishing:** once the last main page and at least 90% of the main pages have been read (`FINISH_SHARE`), feeding finishes the book, so a skipped page or two doesn't stop a larva emerging.
 - An unlinked book's summary offers **Start a larva with this book**; the pages already read are then ready to feed. Linking an EPUB to a book already in progress doesn't feed pages read before the link.
-- With tracking off, the reader still remembers your place, but no pages are counted and no summary is shown.
+- With tracking off, the reader still remembers your place and pages can still be marked by hand, but nothing is counted automatically and no summary is shown.
 
 ## Species cards
 
@@ -828,6 +850,8 @@ The Playwright scripts run with `NODE_PATH=$(npm root -g) node <script>.js`. Out
   - `transfer_test.js` and `transfer2_test.js`: taking books to another country and back, freezing, crediting home and release;
   - `index_test.js`: the search index is up to date, and search works;
   - `spell_test.js` and `lang_test.js`: language;
+  - `orgs_test.js`: every country's cards show organisation links for each insect group, and the directory opens from a card;
+  - `epub2_test.js`: marking chapters and screens as read, the self-ticking box, and the feeding rules for hand-marked pages (behind the larva, past it, unticking, re-ticking);
   - `epub_test.js`: importing (including DRM and duplicates), which sections count, the reader, dwell tracking, links and Back, text size, the close summary (Feed, Log feeding manually instead, start a larva), finishing a book, and the Settings switch. It uses Playwright's clock to fast-forward reading time.
 - **Outdated:** several older scripts (`ie_test.js`, `merge_test.js`, `saw_test.js`, `meta_test.js`) still expect earlier species counts and wording, so they report stale failures. Update them during the tidy-up.
 
