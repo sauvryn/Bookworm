@@ -857,6 +857,7 @@ The Playwright scripts run with `NODE_PATH=$(npm root -g) node <script>.js`. Out
   - `epub2_test.js`: marking chapters and screens as read, the self-ticking box, and the feeding rules for hand-marked pages (behind the larva, past it, unticking, re-ticking);
   - `epub_test.js`: importing (including DRM and duplicates), which sections count, the reader, dwell tracking, links and Back, text size, the close summary (Feed, Log feeding manually instead, start a larva), finishing a book, and the Settings switch. It uses Playwright's clock to fast-forward reading time.
 - **Updated October 2026:** `ie_test.js`, `merge_test.js` and `saw_test.js` now expect the current species counts and wording (and `ie_test.js` clears the save between rounds, since Reset App keeps current books). `meta_test.js` was written for the old achievements screen; `medal_test.js` covers the same ground, so it's retired to `old_tests/`.
+- **`dup_test.js`:** no card in any country repeats a field note (added October 2026, after the Small Copper said it spends the winter as a small caterpillar twice).
 - **Audit scripts:** `audit_dump.js` and `audit_cards.js` dump every card in every country (text, sources, habitats, life cycle, gardening tip) to `fc/audit_all.json` and `fc/audit_cards.json` for automated checks: garbled text, British places on North American cards, unchecked notes, missing sources and so on.
 
 ## Before the Android build
@@ -950,7 +951,26 @@ Placeholder art is being replaced species by species with hand-drawn artwork. Th
 ---
 
 
+### Repeated field notes (fixed 15 October 2026)
+Each card gets an automatic "how it spends the winter" note from the life-cycle data. On about 120 cards it repeated a checked field note, sometimes word for word (the Small Copper said "It spends the winter as a small caterpillar" twice). Now:
+- if the winter note nearly copies a field note, the more detailed of the two is kept ("…on sorrel leaves");
+- if another note left on the card already describes winter, the automatic one is dropped. This is checked after each country's notes are settled, so Irish cards, which hide British-only notes, keep their winter note;
+- a final pass removes any two notes that share most of their words or where one is the other plus a few words, keeping the longer (`nearDup`, `dedupeFacts`). This also catches country notes that repeat a shared note, such as the Canadian Spring Azure.
+
 ## Flagged For Manual Fact-Checking
+
+### Decisions needed from Tara
+
+These need a decision before the Android release. The details are in the sections below.
+1. **Life-cycle timings that differ between countries:** should each species use one figure everywhere? Eight species differ (section 1).
+2. **Honey Bee timings:** should they describe a worker or a queen (section 2)?
+3. **Cottonwood Borer:** keep it out of the Canadian collection? No Canadian record was found (section 2).
+4. **Asian Longhorned Beetle:** keep it in the Canadian collection? The Canadian Food Inspection Agency says it has been eradicated from Canada (section 2).
+5. **Canadian deer fly:** switch from *Chrysops callidus* (Ontario only) to *Chrysops excitans*, the most common deer fly across Canada (section 2)?
+6. **Hanging Scorpionfly in Canada:** keep the switch to *Bittacus* species (section 2)?
+7. **Butterflies and Moths of North America and UKMoths:** both are kept as sources (section 2). Confirm that's acceptable under the source rules.
+8. **Scientific names that differ from BugGuide's**, including the two fritillaries filed under different genera: pick one name for each (section 1).
+9. **Held-back Canadian moth names** (European Yellow Underwing, Pepper-and-salt Geometer, Western Sheepmoth): use them as the main names, or keep them as field notes (section 1)?
 
 Things a person should look at before the Android release: inconsistencies between countries, decisions made during checking that deserve a second opinion, figures that look surprising, and details no source could confirm. Compiled 9 October 2026 from the checking files in `fc/` and the card audit (`audit_dump.js`, `audit_cards.js`).
 
@@ -982,13 +1002,19 @@ Things a person should look at before the Android release: inconsistencies betwe
 - Miami Blue: BugGuide has no page for the subspecies *bethunebakeri*; the link goes to *Cyclargus thomasi*.
 - Burying and carrion beetles: the app gives the family as Silphidae; BugGuide now treats them as a subfamily (Silphinae) of the rove beetles (Staphylinidae).
 
+**Irish Wood Ant name (fixed 15 October 2026).** The Irish card named *Formica rufa*, which the National Parks and Wildlife Service says isn't recorded in Ireland. It now reads *Formica lugubris* and *F. aquilonia*, Ireland's two wood ants; the British card keeps *Formica rufa and relatives*.
+
 **Common names that differ between sources.** Not errors, but worth a look: BugGuide calls the Polka-dot Wasp Moth the "Oleander Moth", the Bess Beetle the "Horned Passalid", the Big Poplar Sphinx the "Modest Sphinx", the Sheep Moth the "Elegant Sheep Moth" and *Utetheisa ornatrix* the "Ornate Bella Moth". Canada's three held-back moth names (European Yellow Underwing, Pepper-and-salt Geometer, Western Sheepmoth) are shown as field notes for now.
 
 ### 2. Decisions made during checking
 
 - **Cottonwood Borer removed from Canada:** no Canadian record was found. Worth a check against a Canadian beetle checklist before it's gone for good.
-- **Hanging Scorpionfly in Canada:** its species, *Hylobittacus apicalis*, isn't known from Canada, so the Canadian card is *Bittacus* species (Ontario has three hangingflies). Its Canadian season and some facts are still the American ones.
-- **Deer Fly in Canada:** *Chrysops callidus* is only known from Ontario, so it's now Uncommon. *C. excitans* would be a more typical Canadian deer fly.
+- **Hanging Scorpionfly in Canada:** its species, *Hylobittacus apicalis*, isn't known from Canada, so the Canadian card is *Bittacus* species (Ontario has three hangingflies). Its Canadian season is now June–September, with a new note on how hangingflies hunt.
+- **Seasons resting on few records:** several Canadian seasons now come from BugGuide's Canadian photo records, which can be thin (for example the Virginia Flower Fly, one Ontario record; the Eastern Eyed Click Beetle, 19 records). A few US seasons come from regional sources (the Black Carpenter Ant from New York, the Black Horse Fly from Florida horse flies in general).
+- **Canadian rarity from national ranks (done 15 October 2026):** 26 Canadian rarity ratings now follow Canada's national general-status ranks (Wild Species 2020, search.wildspecies.ca): N5 Secure = Common; N3 or only one or two provinces = Uncommon. Eleven were confirmed and fifteen changed, for example the Elderberry Borer from Rare to Common (N5, Ontario to Newfoundland), and the Bess Beetle and Fiery Searcher from Rare to Uncommon; their status lines and Canadian notes were updated to match. The Great Golden Digger Wasp, Blue Mud Dauber, Black-and-yellow Mud Dauber and Great Black Wasp aren't in Wild Species, so their rarity is judged from how many provinces they're recorded in. The Wool Carder Bee is listed as introduced with no abundance rank, so its "Uncommon" is still a guess.
+- **Black Soldier Fly in Canada:** an Entomological Society of Ontario paper says it's probably established only in southern Ontario, which would make a good Canadian note.
+- **Asian Longhorned Beetle in Canada:** the Canadian Food Inspection Agency says it has been eradicated from Canada (the Toronto and Mississauga outbreaks). Decide whether it should stay in the Canadian collection, like the Cottonwood Borer question.
+- **Deer Fly in Canada:** *Chrysops callidus* is only known from Ontario, so it's now Uncommon. *C. excitans* would be a more typical Canadian deer fly: the University of Alberta museum calls it the single most common deer fly in Canada, found right across the country, flying early June to late August.
 - **Honey Bee timings in North America:** the checker used worker figures (6 days open larva, 12 sealed) and counted about 2 sealed days as larva, which is its own estimate. The British card's 7/7 may have been meant for a queen. Decide which caste the app's figure should describe.
 - **Box-tree Moth pupa:** kept at 14 days as a cooler outdoor value, although the only source (a lab study at 25°C) gives 6–8 days.
 - **Butterflies and Moths of North America** is run by a small company. It's kept as a species link on North American butterfly and moth cards, always with the BugGuide page beside it.
@@ -996,63 +1022,50 @@ Things a person should look at before the Android release: inconsistencies betwe
 
 ### 3. Figures that look surprising
 
-- **Western Thatching Ant:** pupa 60 days against a 20-day larva (Animal Diversity Web gives a pupa of 31–93 days), so this ant pupates at only 25% of the book.
-- **Mud daubers:** both sources say they spend the winter as pupae; they're usually described as resting larvae.
-- **Banded Alder Borer:** UC IPM says it spends the winter as a pupa, which is unusual for a longhorn beetle.
-- **Dogbane Leaf Beetle:** recorded as spending the winter as a larva, but one source says adults do.
-- **Black Fly (Canada):** the 5-day pupa is an estimate from the 3–4 week life cycle; the scientific name "*Simulium* species" and its woodland habitat weren't confirmed.
-- **Macoun's Arctic:** 200 larva days is estimated from the feeding months; the 14-day pupa and its wild food plant are unknown.
-- **Arctic Woolly Bear Moth:** wingspan, flight months and larva/pupa days aren't confirmed by any source.
-- **Monarch (US season):** "March–October" — the sources don't give a March start; it was inferred from the spring return to Texas.
-- **Seasons that may be too long for Canada:** Caddisfly (February–November), American Hover Fly (April–December), European Hornet (April–November) and Blue Orchard Mason Bee (March–May).
+*Checked 15 October 2026: the results are in brackets after each item.*
+
+- **Western Thatching Ant:** pupa 60 days against a 20-day larva (Animal Diversity Web gives a pupa of 31–93 days), so this ant pupates at only 25% of the book. *(Now 40 days, chosen from the source's range for summer worker pupae; no source gives a single figure.)*
+- **Mud daubers:** both sources say they spend the winter as pupae; they're usually described as resting larvae. *(Corrected: Purdue Extension says the larvae spin a cocoon and don't pupate until spring. Both cards now say they spend the winter as a resting larva.)*
+- **Banded Alder Borer:** UC IPM says it spends the winter as a pupa, which is unusual for a longhorn beetle. *(Confirmed by UC IPM.)*
+- **Dogbane Leaf Beetle:** recorded as spending the winter as a larva, but one source says adults do. *(Larva kept: a Dalhousie study found pupae in early June and new adults from late June, which only fits larvae spending the winter. Worth a final look.)*
+- **Black Fly (Canada):** the 5-day pupa is an estimate from the 3–4 week life cycle; the scientific name "*Simulium* species" and its woodland habitat weren't confirmed. *(Pupa confirmed: Texas A&M and Oklahoma State give 2–6 days in many species. Habitats still not checked directly.)*
+- **Macoun's Arctic:** 200 larva days is estimated from the feeding months; the 14-day pupa and its wild food plant are unknown. *(The two-year feeding pattern supports about 200 days; the food line now says it probably eats grasses, and that caterpillars raised in captivity eat grasses and sedges. The pupa is still unsourced.)*
+- **Arctic Woolly Bear Moth:** wingspan, flight months and larva/pupa days aren't confirmed by any source. *(Mostly consistent with research: caterpillars feed about 3 weeks a year for about 7 years, and adults fly in June. The wingspan comes from a measurement of the alpine subspecies, and the 20-day pupa is still unsourced.)*
+- **Monarch (US season):** "March–October" — the sources don't give a March start; it was inferred from the spring return to Texas. *(Confirmed: Monarch Watch and Journey North record returning adults reaching Texas in early to mid March.)*
+- **Seasons that may be too long for Canada:** Caddisfly (February–November), American Hover Fly (April–December), European Hornet (April–November) and Blue Orchard Mason Bee (March–May). *(Caddisfly now May–September and European Hornet May–October. The Blue Orchard Mason Bee's March–May matches BugGuide's Canadian records, though one source gives April–June. The American Hover Fly is still unresolved.)*
 - **Canadian ranges based on BugGuide photo records,** which can be incomplete: several flies (for example the Greenhead in Nova Scotia only, Virginia Flower Fly in Ontario only), the Allegheny Mound Ant (Ontario and Nova Scotia), the Hag Moth (Quebec named, Ontario assumed), the Juniper Hairstreak (BC not checked) and the Squash Vine Borer (one Ontario sighting).
-- **Asian Tiger Mosquito in Canada:** it isn't yet confirmed that it survives Canadian winters.
+- **Asian Tiger Mosquito in Canada:** it isn't yet confirmed that it survives Canadian winters. *(The Canadian note now says it has turned up in traps in Windsor-Essex every year since 2016; whether it survives the winter there is still unconfirmed.)*
 - **Durations estimated from relatives:** many cards use genus- or family-level figures (in the US, 47 genus-level and 72 family-level among the American-only species). The Life cycle row says so on each card.
 
 ### 4. Details no source could confirm
 
-Each card already tells readers which of its details are a best guess. Mostly these are flight seasons that no source gives in months for that country.
+Each card already tells readers which of its details are a best guess. Mostly these are flight seasons that no source gives in months for that country. *(15 October 2026: three more rounds of checks confirmed or corrected most of these, cutting the cards with a best guess from 156 to 23. What's left is mostly seasons for species with too few records in that country, and Irish details with no Irish source.)*
 
-- **United Kingdom** (12 cards):
-  - *season:* Cream-spot Ladybird, Wood Ant, Red Ant, Yellow Meadow Ant, Black Garden Ant, Cat Flea, Brown Lacewing.
-  - *size:* Bee-wolf, Patchwork Leaf-cutter Bee, Nomad Bee, Common Banded Hoverfly.
-  - *season or size or UK status:* Argent & Sable.
-- **Ireland** (11 cards):
-  - *season:* Cream-spot Ladybird, Wood Ant, Red Ant, Yellow Meadow Ant, Black Garden Ant, Cat Flea, Brown Lacewing.
-  - *size:* Patchwork Leaf-cutter Bee, Nomad Bee, Common Banded Hoverfly.
-  - *season or size or UK status or Irish status:* Argent & Sable.
-- **United States** (54 cards):
-  - *season:* Checkered White, Red-spotted Purple, Virginian Tiger Moth, Fall Webworm, Milkweed Tussock Moth, Common Eastern Bumblebee, American Bumblebee, Yellow-faced Bumblebee, Eastern Yellowjacket, Bald-faced Hornet, Northern Paper Wasp, Great Golden Digger Wasp, Tarantula Hawk, Black-and-yellow Mud Dauber, Fraternal Potter Wasp, Giant Ichneumon Wasp, Pigeon Tremex, Eastern Hercules Beetle, Rainbow Scarab, Spotted Cucumber Beetle, Golden Tortoise Beetle, Asian Longhorned Beetle, Bombardier Beetle, Convergent Lady Beetle, Twice-stabbed Lady Beetle, Giant Water Scavenger Beetle, Diabolical Ironclad Beetle, Pleasing Fungus Beetle, Boll Weevil, Black Horse Fly, Common Green Bottle Fly, Asian Tiger Mosquito, Feather-legged Fly, Golden-backed Snipe Fly, European Fire Ant, Black Carpenter Ant, Red Imported Fire Ant, Odorous House Ant, Pavement Ant, Red Harvester Ant, Honeypot Ant, Cat Flea, Brown Lacewing, Owlfly, Snakefly.
-  - *season or size:* European Paper Wasp, Long-legged Fly, Rabbit Bot Fly.
-  - *size:* Bicolored Striped Sweat Bee, Greenhead.
-  - *food:* Transverse Flower Fly, Hanging Scorpionfly.
-  - *American status:* Cecropia Moth.
-  - *season or size or American status:* Long-horned Bee.
-- **Canada** (79 cards):
-  - *season:* Catalpa Sphinx, Giant Leopard Moth, Virginian Tiger Moth, Milkweed Tussock Moth, European Hornet, Yellow-faced Bumblebee, Alfalfa Leafcutter Bee, Eastern Yellowjacket, Bald-faced Hornet, Pigeon Tremex, Fourteen-spotted Lady Beetle, Multicoloured Asian Lady Beetle, Seven-spotted Lady Beetle, Two-spotted Lady Beetle, Big Dipper Firefly, Asian Longhorned Beetle, Emerald Ash Borer, Twice-stabbed Lady Beetle, House Fly, Black Soldier Fly, American Hover Fly, Virginia Flower Fly, Feather-legged Fly, Phantom Crane Fly, Rabbit Bot Fly, Pavement Ant, Allegheny Mound Ant, Caddisfly, Brown Lacewing, Antlion, Snakefly, Summer Fishfly, Hanging Scorpionfly, Earwigfly.
-  - *Canadian rarity and season:* European Wool Carder Bee, Brown-belted Bumblebee, Eastern Carpenter Bee, Blue Orchard Mason Bee, Squash Bee, Bicoloured Striped Sweat Bee, Long-horned Bee, European Paper Wasp, Northern Paper Wasp, Great Golden Digger Wasp, Blue Mud Dauber, Fraternal Potter Wasp, Reddish-brown Stag Beetle, Ten-lined June Beetle, Eastern Eyed Click Beetle, Golden Tortoise Beetle, Elderberry Borer, Bess Beetle, Bombardier Beetle, Fiery Searcher, Black Blister Beetle, Giant Water Scavenger Beetle, Pleasing Fungus Beetle, Banded Alder Borer.
-  - *food:* Transverse Flower Fly, Deer Fly, Asian Tiger Mosquito, Golden-backed Snipe Fly, European Fire Ant, Odorous House Ant.
-  - *Canadian rarity:* Luna Moth, Spotted Cucumber Beetle, Dogbane Leaf Beetle, Locust Borer.
-  - *Canadian note:* Hummingbird Clearwing, Squash Vine Borer.
-  - *season and food:* Honey Bee, Long-legged Fly.
-  - *season and size:* Arctic Woolly Bear Moth.
-  - *Canadian rarity, Canadian status and season:* Great Black Wasp.
-  - *Canadian rarity, Canadian note and season:* Black-and-yellow Mud Dauber.
-  - *Canadian status:* Common June Beetle.
-  - *Canadian status, Canadian note and season:* Convergent Lady Beetle.
-  - *size:* Whitespotted Sawyer.
-  - *Canadian rarity, Canadian status, Canadian note, season and food:* Common Fruit Fly.
+- **United Kingdom** (2 cards):
+  - *season:* Red Ant, Yellow Meadow Ant.
+- **Ireland** (6 cards):
+  - *season:* Cream-spot Ladybird, Red Ant, Yellow Meadow Ant, Black Garden Ant, Cat Flea, Brown Lacewing.
+- **United States** (3 cards):
+  - *size:* European Paper Wasp, Long-legged Fly.
+  - *season:* Cat Flea.
+- **Canada** (12 cards):
+  - *season:* Reddish-brown Stag Beetle, Ten-lined June Beetle, Big Dipper Firefly, Bombardier Beetle, Giant Water Scavenger Beetle, Pleasing Fungus Beetle, House Fly, American Hover Fly, Allegheny Mound Ant.
+  - *size:* Arctic Woolly Bear Moth, Whitespotted Sawyer.
+  - *Canadian rarity:* European Wool Carder Bee.
 
 ### 5. Links not opened directly
 
-These were confirmed another way (a search result title, a breadcrumb on another page, or one of the page's own tabs) because the site refused too many requests. They're very likely right but worth clicking once.
+*Done 15 October 2026: all 14 BugGuide pages were opened and their titles or breadcrumbs checked; every link was right. BugGuide has no species page for the Arctic Woolly Bear, so the genus page stays. The Montréal Insectarium and Mission Monarch links now go to their main English pages.*
+
+These were confirmed another way at first (a search result title, a breadcrumb on another page, or one of the page's own tabs) because the site refused too many requests.
 - **BugGuide pages:** Harvester (467), Northern Metalmark (127617), Grey Hairstreak (579), West Coast Lady (12876), White Peacock (566, no title shown), Regal Moth (3559), Catalpa Sphinx (4597), Great Golden Digger Wasp (414), Red Imported Fire Ant (30648), Honeypot Ant (567395), American Burying Beetle (12445), Black Blister Beetle (23806), the *Gynaephora* genus page for the Arctic Woolly Bear (1198373, taken from a breadcrumb), and the Atala (no breadcrumb shown).
 - **Organisation pages:** the Insectarium de Montréal link is page 2 of a blog category, Mission Monarch is on the mobile site, the Nova Scotia hover fly page dates from 1995, the Irish ant entry is a data map rather than a guide, Invertebrate Ireland Online dates from 2006, and CEDaR and Butterflies and Moths of Northern Ireland cover Northern Ireland only. Three addresses were tidied to their main form after checking (Bumblebee Conservation Trust species guide, Xerces Society home page, Smithsonian bees and wasps page).
 
 ### 6. Gaps to fill when new pages appear
 
-- Ireland has no beginner-friendly organisation page for lacewings, caddisflies and similar insects.
-- Canada's fly, ant and "Other insects" links lean on E-Fauna BC and BugGuide; the Canadian Wildlife Federation, Canadian Museum of Nature and Royal Ontario Museum had no usable insect pages.
+- Ireland now has three "Other insects" links (the Irish Biogeographical Society, and the National Biodiversity Data Centre's lacewing and sawfly maps), but none is a beginner's guide.
+- Canada's fly and ant links now include The Canadian Encyclopedia (Historica Canada, a charity); "Other insects" still leans on E-Fauna BC and BugGuide. The Canadian Wildlife Federation, Canadian Museum of Nature and Royal Ontario Museum had no usable insect pages.
+- The Irish Clouded Yellow and 7-spot Ladybird cards each have a new Irish field note (from National Museums NI's habitas.org.uk).
 - Placeholder artwork is still used for every species except the Red Admiral.
 
 ## Copyright
