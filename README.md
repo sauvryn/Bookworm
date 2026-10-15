@@ -957,6 +957,14 @@ Each card gets an automatic "how it spends the winter" note from the life-cycle 
 - if another note left on the card already describes winter, the automatic one is dropped. This is checked after each country's notes are settled, so Irish cards, which hide British-only notes, keep their winter note;
 - a final pass removes any two notes that share most of their words or where one is the other plus a few words, keeping the longer (`nearDup`, `dedupeFacts`). This also catches country notes that repeat a shared note, such as the Canadian Spring Azure.
 
+### "Fall" in season texts (fixed 15 October 2026)
+The season reader (`parseMonths`), which turns each card's "when to see it" text into the months it counts as in season, only knew "autumn". American and Canadian texts that say "fall" were misread, which affected the "In season now!" leaf and which insects are favoured when an egg hatches. Now "fall" means the same as autumn (September–November), and a month can run to a season or the other way round ("April to fall" = April–November). Three cards changed:
+- US Boll Weevil, "April to fall": was April only, now April–November;
+- US Brown Lacewing, "Spring to fall; into winter in the South": was December–May, now March–November;
+- Canadian Common Fruit Fly, "Mostly late summer and fall, indoors": was August only, now August–November.
+
+Every other card with a season word also names months, which take priority, so none of them changed. `season_test.js` covers this.
+
 ## Flagged For Manual Fact-Checking
 
 ### Decisions needed from Tara
